@@ -12,7 +12,7 @@ void setup(void)
     // initialize washers
     for(int i = 0; i < NUMBER_OF_WASHERS; i++)
     {
-        washer_init(i, WASHER_COM_PIN[i], WASHER_VALVE[i], WASHER_ID[i]);
+        washer_init(i, WASHER_COM_PIN[i], NUMBER_OF_PINS, WASHER_VALVE[i], WASHER_ID[i]);
     }
 
     // initialize washer interupts
