@@ -1,9 +1,9 @@
 #include "washer.h"
-#include "detergent.h"
-#include "pump.h"
-#include "display.h"
-#include "flowmeter.h"
-#include "logging.h"
+//#include "detergent.h"
+//#include "pump.h"
+//#include "display.h"
+//#include "flowmeter.h"
+//#include "logging.h"
 #include "constants.h"
 
 washer_t = washer[NUMBER_OF_WASHERS];
