@@ -19,3 +19,7 @@ void washer_init(washer_t *unit, const uint8_t com_pin[4], const uint8_t number_
     }
 }
 
+void washer_print_info(washer_t unit)
+{
+    printf(" Washer ID: %d, communication pins are: %d, %d, %d, %d, valve on pin: %d \n", unit.id, unit.com_pin[0], unit.com_pin[1], unit.com_pin[2], unit.com_pin[3], unit.valve_pin);
+}
