@@ -1,19 +1,21 @@
-#include "washer.h"
-#include "detergent.h"
-#include "pump.h"
-#include "display.h"
-#include "flowmeter.h"
-#include "logging.h"
+#include <stdio.h>
+#include <stdint.h>
 #include "constants.h"
+#include "washer.h"
+//#include "detergent.h"
+//#include "pump.h"
+//#include "display.h"
+//#include "flowmeter.h"
+//#include "logging.h"
 
-washer_t = washer[NUMBER_OF_WASHERS];
+washer_t washer[NUMBER_OF_WASHERS];
 
 void setup(void)
 {
     // initialize washers
     for(int i = 0; i < NUMBER_OF_WASHERS; i++)
     {
-        washer_init(washer[i], WASHER_COM_PIN[i], NUMBER_OF_PINS, WASHER_VALVE[i], WASHER_ID[i]);
+        washer_init(&washer[i], WASHER_COM_PINS[i], NUMBER_OF_PINS, WASHER_VALVE[i], WASHER_ID[i]);
     }
 
     // initialize washer interupts
