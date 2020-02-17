@@ -1,6 +1,6 @@
 //washer constants
-#define NUMBER_OF_WASHERS 
-#define NUMBER_OF_PINS 
+const uint8_t NUMBER_OF_WASHERS = ;
+const uint8_t NUMBER_OF_PINS = ;
 const uint8_t WASHER_COM_PINS[NUMBER_OF_WASHERS][NUMBER_OF_PINS] = 
     {
     };
