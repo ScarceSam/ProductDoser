@@ -18,23 +18,23 @@ volatile uint8_t DETERGENT_CALL_ISR_FLAG[NUMBER_OF_WASHERS][2] = {0};
 static uint8_t DETERGENT_CALL_BUFFER[NUMBER_OF_WASHERS][2] = {0};
 
 //detergent constants
-const uint8_t NUMBER_OF_DETERGENTS = ;
+#define NUMBER_OF_DETERGENTS = ;
 const uint8_t DETERGENT_VALVE[NUBER_OF_DETERGENTS] = 
     {
     };
-const uint8_t WATER_VALVE = ;
-const uint8_t DRAIN_VALVE = ;
+#define WATER_VALVE = ;
+#define DRAIN_VALVE = ;
 
 
 //pump constants
-const uint8_t PUMP_PIN = ;
+#define PUMP_PIN = ;
 
 
 //display constants
 
 
 //flowmeter constants
-const uint8_t FLOW_PIN = ;
+#define FLOW_PIN = ;
 
 //logging constants
 
