@@ -9,6 +9,7 @@
 #include "logging.h"
 
 washer_t washer[NUMBER_OF_WASHERS];
+detergent_t detergent[NUMBER_OF_DETERGENTS];
 
 void setup(void)
 {
@@ -22,9 +23,10 @@ void setup(void)
     // initialize washer interupts
 
     // initialize detergents
-    for(int i = 0; i < NUMBER_OF_DETERGENTS; I++)
+    for(int i = 0; i < NUMBER_OF_DETERGENTS; i++)
     {
-        detergent_init(i, DETERGENT_VALVE[i]);
+        detergent_init(&detergent[i], (i + 1), DETERGENT_VALVE[i]);
+        detergent_print_info(detergent[i]);
     }
 
     // initialize pump
