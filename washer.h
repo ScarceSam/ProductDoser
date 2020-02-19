@@ -10,7 +10,7 @@ typedef struct {
 
 
 
-void washer_init(washer_t *unit, int number, uint8_t com_pin[NUMBER_OF_PINS],
+void washer_init(washer_t *unit, int number, const uint8_t com_pin[NUMBER_OF_PINS],
                  uint8_t number_of_pins, uint8_t valve_pin, uint8_t id)
 {
     unit->number = number;
@@ -27,7 +27,7 @@ void washer_print_info(washer_t unit)
 //TODO: will print the washer ID to connection number to the screen
 {
     printf(" Washer#%d, ID: %d, valve on pin: %d, communication pins are: %d"
-	   ,unit.number, unit.id, unit.com_pin[0], unit.valve_pin, unit.com_pin[0]);
+	   ,unit.number, unit.id, unit.valve_pin, unit.com_pin[0]);
 
     for(int i = 1; i < NUMBER_OF_WASHERS; i++)
     {
