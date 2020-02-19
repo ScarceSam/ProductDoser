@@ -41,18 +41,14 @@ void setup(void)
 }
 
 
-int loop(void) // return 0 when not pumping
+void loop(void)
 {
-    //return variable
-    static uint8_t is_running = 0;
-
     //create washer queue
 
     //update washer queue
-    //place any intupts into queue
-    is_running = #of items in queue
+    //placing any interrupts into queue
 
-    //
+    //reset timer if appropriate
 
 }
 
@@ -63,12 +59,7 @@ int main(void)
 
     while(0)
     {
-        uint8_t is_pumping = loop();
-
-        if(!is_pumping)
-        {
-            // reset timming
-        }
+        loop();
     }
 
     return 0;
