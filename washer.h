@@ -22,6 +22,15 @@ void washer_init(washer_t *unit, int number, const uint8_t com_pin[NUMBER_OF_PIN
 }
 
 void washer_print_info(washer_t unit)
+//currently prints detergent strct info to the command line
+//TODO: will print the washer ID to connection number to the screen
 {
-    printf(" Washer ID: %d, communication pins are: %d, %d, %d, %d, valve on pin: %d \n", unit.id, unit.com_pin[0], unit.com_pin[1], unit.com_pin[2], unit.com_pin[3], unit.valve_pin);
+    printf(" Washer#%d, ID: %d, valve on pin: %d, communication pins are: %d"
+	,unit.number, unit.id, unit.com_pin[0], unit.valve_pin, unit.com_pin[0]);
+
+    for(int i = 1; i < NUMBER_OF_WASHERS; i++)
+    {
+        printf(", %d", unit.com_pin[i]);
+    }
+    printf("\n");
 }
