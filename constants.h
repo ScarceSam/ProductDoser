@@ -19,7 +19,7 @@ static uint8_t DETERGENT_CALL_BUFFER[NUMBER_OF_WASHERS][2] = {0};
 
 //detergent constants
 #define NUMBER_OF_DETERGENTS 
-const uint8_t DETERGENT_VALVE[NUBER_OF_DETERGENTS] = 
+const uint8_t DETERGENT_VALVE[NUMBER_OF_DETERGENTS] = 
     {
     };
 #define WATER_VALVE 
