@@ -22,11 +22,17 @@
 # Development environment
 
   *Arduino IDE v1.8.12
+
+  *Download Repo
+
+  *Unzip into Arduino Sketch folder
+  
   *File > Preferences > Additional Boards Manager URLs:
 	https://raw.githubusercontent.com/sparkfun/Arduino_Boards/master/IDE_Board_Manager/package_sparkfun_index.json
-  *
 
 # Hardware components
+
+  *SparkFun RedBoard Artemis ATP - https://www.sparkfun.com/products/15442
 
 # Hardware setup
 
