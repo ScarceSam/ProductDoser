@@ -19,7 +19,12 @@
   * flowmeter.h
 
 
-# How to set up the development environment
+# Development environment
+
+  *Arduino IDE v1.8.12
+  *File > Preferences > Additional Boards Manager URLs:
+	https://raw.githubusercontent.com/sparkfun/Arduino_Boards/master/IDE_Board_Manager/package_sparkfun_index.json
+  *
 
 # Hardware components
 
