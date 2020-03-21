@@ -30,3 +30,19 @@ void washer_init(void)
     }
   }
 }
+
+uint8_t washer_ready(void)
+{
+  return 1;
+}
+
+void washer_get_next(uint8_t next_in_queue[])
+{
+  next_in_queue[0] = 1;
+  next_in_queue[1] = 1;
+}
+
+washer_t washer_get_data(uint8_t washer_number)
+{
+  return washer[washer_number - 1];
+}

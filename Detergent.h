@@ -20,4 +20,6 @@ extern detergent_t g_detergent[NUMBER_OF_DETERGENTS];
 
 void detergent_init(void);
 
+detergent_t detergetent_get_data(uint8_t detergent_number);
+
 #endif

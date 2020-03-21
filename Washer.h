@@ -25,4 +25,10 @@ extern washer_t washer[NUMBER_OF_WASHERS];
 
 void washer_init(void);
 
+uint8_t washer_ready(void);
+
+void washer_get_next(uint8_t next_in_queue[]);
+
+washer_t washer_get_data(uint8_t washer_number);
+
 #endif

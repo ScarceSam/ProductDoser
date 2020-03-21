@@ -20,3 +20,8 @@ void detergent_init(void)
     g_detergent[i].valve_pin = VALVE_PIN[i];
   }
 }
+
+detergent_t detergetent_get_data(uint8_t detergent_number)
+{
+  return g_detergent[detergent_number - 1];
+}

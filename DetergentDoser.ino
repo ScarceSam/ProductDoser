@@ -1,36 +1,43 @@
 #include "Washer.h"
+#include "Detergent.h"
+#include "System.h"
 
-void setup() {
-  
-  Serial.begin(115200);
+void setup()
+{
+  //Initialize sub systems
   washer_init();
+  detergent_init();
+
+  //pull saved data from SD card
+  //check SD card for data
+
+  //if there is data confirm usage
+
+  //load saved data
 
 }
 
-void loop() {
-
-  for(int i = 0; i < NUMBER_OF_WASHERS; i++)
+void loop()
+{
+  if (washer_ready() && system_idle())
   {
-    Serial.print("Washer number: ");
-    Serial.println(washer[i].number);
-    Serial.print("I2C address: ");
-    Serial.println(washer[i].i2cAddress);
-    Serial.print("Com pins: ");
-    Serial.print(washer[i].com_pin[0]);
-    Serial.print(", ");
-    Serial.print(washer[i].com_pin[1]);
-    Serial.print(", ");
-    Serial.print(washer[i].com_pin[2]);
-    Serial.print(", ");
-    Serial.println(washer[i].com_pin[3]);
-    Serial.print("Valve Pin: ");
-    Serial.println(washer[i].valve_pin);
-    Serial.print("Washer Size: ");
-    Serial.println(washer[i].washerSize);
-    Serial.print("Washer ID: ");
-    Serial.println(washer[i].washerId);
-    Serial.println();
-  }
-  delay(100000000);
+    //pull the next washer out of queue
+    uint8_t next[2] = {0, 0};
+    washer_get_next(next);
 
+    //pull washer and detergent structs for passing
+    washer_t next_washer = washer_get_data(next[0]);
+    detergent_t next_detergent = detergetent_get_data(next[1]);
+
+    //start dosing
+    system_dose(next_washer, next_detergent);
+  }
+
+
+//  washer_update();
+//  system_update();
+//  button_update();
+//  interface_update();
+
+//  delay(1000000);
 }
