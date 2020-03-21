@@ -72,10 +72,10 @@ A35|-
 44|-
 42|-
 43|-
-0|- Detergetn 4 Valve
-1|- Detergetn 3 Valve
-2|- Detergetn 2 Valve
-45|- Detergetn 1 Valve
+0|- Detergent 4 Valve
+1|- Detergent 3 Valve
+2|- Detergent 2 Valve
+45|- Detergent 1 Valve
 41|- Detergent 4 Flow sensor
 17|- Detergent 3 Flow sensor
 A31|- Detergent 2 Flow sensor
@@ -85,11 +85,11 @@ A34|- Detergent 3 Level sensor
 A11|- Detergent 2 Level sensor
 A29|- Detergent 1 Level sensor
 
-## I/O Expander
+## I/O Expanders
 (W= Washer, R= Relay, VA- Valve)
 
 Pin|Address 0x20|Address 0x21|Address 0x22|Address 0x23|Address 0x24|Address 0x25|Address 0x26|Address 0x27
----------|----------|----------|----------|----------|----------|----------|----------|
+---------|----------|----------|----------|----------|----------|----------|----------|----------
 PA0|W1 R1|W4 R1|W7 R1|W10 R1|W13 R1|W16 R1|W19 R1|W22 R1
 PA1|W1 R2|W4 R2|W7 R2|W10 R2|W13 R2|W16 R2|W19 R2|W22 R2
 PA2|W1 R3|W4 R3|W7 R3|W10 R3|W13 R3|W16 R3|W19 R3|W22 R3
