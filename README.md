@@ -44,6 +44,54 @@
   * Washer valves
     * Outputs from port expanders
 
+# Pinouts
+## Artemis
+Pin|Use
+---------|----------
+SCL & SDA|- I2C Buss
+D5(SCK)|-
+D6(MISO)|-
+D7(MOSI)|-
+A13|-
+A12|-
+A32|-
+28|-
+27|-
+23|-
+22|-
+4|-
+A35|-
+24(TX1)|-
+25(RX1)|-
+14|-
+8|-
+10|-
+9|-
+26|-
+15|-
+19|-
+18|-
+3|-
+36|-
+38|-
+37|-
+44|-
+42|-
+43|-
+0|- Detergetn 4 Valve
+1|- Detergetn 3 Valve
+2|- Detergetn 2 Valve
+45|- Detergetn 1 Valve
+41|- Detergent 4 Flow sensor
+17|- Detergent 3 Flow sensor
+A31|- Detergent 2 Flow sensor
+A16|- Detergent 1 Flow sensor
+A33|- Detergent 4 Level sensor
+A34|- Detergent 3 Level sensor
+A11|- Detergent 2 Level sensor
+A29|- Detergent 1 Level sensor
+
+
 # Glossary of project terms
 
 # Coding style guidelines
