@@ -1,6 +1,4 @@
-
-
-# List of development priorities
+[comment]: # (# List of development priorities)
 
 # Code organization
 
@@ -107,7 +105,7 @@ PB5|W3 R4|W6 R4|W9 R4|W12 R4|W15 R4|W18 R4|W21 R4|W24 R4
 PB6|W3 VA|W6 VA|W9 VA|W12 VA|W15 VA|W18 VA|W21 VA|W24 VA
 PB7|
 
-# Glossary of project terms
+[comment]: # (# Glossary of project terms)
 
 # Coding style guidelines
 
