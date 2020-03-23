@@ -1,7 +1,13 @@
 #include <Arduino.h>
 #include "Washer.h"
 
-washer_t washer[NUMBER_OF_WASHERS];
+#define NUMBER_OF_WASHERS 24
+#define I2C_START_ADDRESS 0x20
+#define INPUTS_PER_EXPANSION 16
+#define WASHERS_PER_EXPANSION (INPUTS_PER_EXPANSION / NUMBER_OF_PINS) 
+#define USED_PINS_PER_EXPANSION (WASHERS_PER_EXPANSION * NUMBER_OF_PINS)
+
+static washer_t washer[NUMBER_OF_WASHERS];
 
 void washer_init(void)
 {
