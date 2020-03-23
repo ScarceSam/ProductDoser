@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 #define ID_LIMIT 16
-#define NUMBER_OF_DETERGENTS 4
 
 typedef struct{
   uint8_t number;
@@ -15,8 +14,6 @@ typedef struct{
   uint8_t ounces_per_5minutes;
   char detergent_name[ID_LIMIT];
 } detergent_t;
-
-extern detergent_t g_detergent[NUMBER_OF_DETERGENTS];
 
 void detergent_init(void);
 
