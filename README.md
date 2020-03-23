@@ -55,11 +55,11 @@ A32|-
 A35|-
 24(TX1)|-
 25(RX1)|-
-14|-
-8|-
-10|-
-9|-
-26|-
+14|- Pump
+8|- Drain Valve
+10|- Water Valve
+9|- System Flow
+26|- Rinse Valve
 15|-
 19|-
 18|-
