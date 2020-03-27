@@ -20,5 +20,13 @@ uint8_t system_idle(void)
 
 void system_dose(washer_t washer, detergent_t detergent)
 {
+  //find dosing amount for specific washer detergent combo
+  // lbs . oz . milliseconds . 5min
+  //       lb       5min        oz
+  uint8_t lbs = washer.washer_size;
+  uint8_t oz_lb = detergent.ounces_per_pound;
+  uint16_t mill_oz = 300000 / detergent.ounces_per_5minutes;
+  uint32_t dosage_time = lbs * oz_lb * mill_oz;
+
   
 }
