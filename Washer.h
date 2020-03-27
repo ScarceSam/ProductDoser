@@ -11,8 +11,8 @@ typedef struct {
   uint8_t i2cAddress;
   uint8_t com_pin[NUMBER_OF_PINS];
   uint8_t valve_pin;
-  uint8_t washerSize;
-  char washerId[ID_LIMIT];
+  uint8_t washer_size;
+  char washer_id[ID_LIMIT];
 } washer_t;
 
 void washer_init(void);
