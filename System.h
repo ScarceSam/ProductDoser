@@ -5,6 +5,8 @@
 #include "Washer.h"
 #include "Detergent.h"
 
+void system_init(void);
+
 uint8_t system_idle(void);
 
 void system_dose(washer_t washer, detergent_t detergent);

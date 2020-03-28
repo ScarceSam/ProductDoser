@@ -13,6 +13,11 @@ typedef struct {
 
 static system_t system_info;
 
+void system_init(void)
+{
+  pinMode(system_info.pump_pin, OUTPUT);
+}
+
 uint8_t system_idle(void)
 {
   return !system_info.pump_running;
