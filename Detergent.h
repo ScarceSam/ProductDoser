@@ -19,4 +19,8 @@ void detergent_init(void);
 
 detergent_t detergetent_get_data(uint8_t detergent_number);
 
+void detergent_open_valve(uint8_t detergent_number);
+
+void detergent_close_valve(uint8_t detergent_number);
+
 #endif

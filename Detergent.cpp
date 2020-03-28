@@ -30,3 +30,13 @@ detergent_t detergetent_get_data(uint8_t detergent_number)
 {
   return detergent[detergent_number - 1];
 }
+
+void detergent_open_valve(uint8_t detergent_number)
+{
+  digitalWrite(detergent[detergent_number - 1].valve_pin, VALVE_OPEN);
+}
+
+void detergent_close_valve(uint8_t detergent_number)
+{
+  digitalWrite(detergent[detergent_number - 1].valve_pin, !VALVE_OPEN);
+}
