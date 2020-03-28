@@ -1,16 +1,25 @@
 #include <Arduino.h>
 #include "Washer.h"
+#include <Wire.h>
+#include "Adafruit_MCP23017.h"
 
 #define NUMBER_OF_WASHERS 24
-#define I2C_START_ADDRESS 0x20
+#define I2C_START_ADDRESS 0
 #define INPUTS_PER_EXPANSION 16
 #define WASHERS_PER_EXPANSION (INPUTS_PER_EXPANSION / NUMBER_OF_PINS) 
 #define USED_PINS_PER_EXPANSION (WASHERS_PER_EXPANSION * NUMBER_OF_PINS)
+#define VALVE_OPEN HIGH
 
 static washer_t washer[NUMBER_OF_WASHERS];
+static Adafruit_MCP23017 mcp[7];
 
 void washer_init(void)
 {
+  for(int i = 0; i < 8; i++)
+  {
+    mcp[i].begin(i);
+  }
+
   for(int i = 0; i < NUMBER_OF_WASHERS; i++)
   {
     //chronologically label the washers
@@ -32,6 +41,8 @@ void washer_init(void)
       else
       {
         washer[i].valve_pin = (((i % USED_PINS_PER_EXPANSION) * NUMBER_OF_PINS) + j) % USED_PINS_PER_EXPANSION;
+        mcp[washer[i].i2cAddress].pinMode(washer[i].valve_pin, OUTPUT);
+        mcp[washer[i].i2cAddress].digitalWrite(washer[i].valve_pin, !VALVE_OPEN);
       }
     }
   }
