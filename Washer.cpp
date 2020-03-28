@@ -63,3 +63,13 @@ washer_t washer_get_data(uint8_t washer_number)
 {
   return washer[washer_number - 1];
 }
+
+void washer_open_valve(uint8_t washer_number)
+{
+  mcp[washer[washer_number - 1].i2cAddress].digitalWrite(washer[washer_number - 1].valve_pin, VALVE_OPEN);
+}
+
+void washer_close_valve(uint8_t washer_number)
+{
+  mcp[washer[washer_number - 1].i2cAddress].digitalWrite(washer[washer_number - 1].valve_pin, !VALVE_OPEN);
+}

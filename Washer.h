@@ -23,4 +23,8 @@ void washer_get_next(uint8_t next_in_queue[]);
 
 washer_t washer_get_data(uint8_t washer_number);
 
+void washer_open_valve(uint8_t washer_number);
+
+void washer_close_valve(uint8_t washer_number);
+
 #endif
