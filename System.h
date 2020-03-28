@@ -13,4 +13,8 @@ void system_dose(washer_t washer, detergent_t detergent);
 
 uint32_t dosage_time_calc(washer_t washer, detergent_t detergent);
 
+void system_pump_on(void);
+
+void system_pump_off(void);
+
 #endif
