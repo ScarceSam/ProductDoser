@@ -2,6 +2,7 @@
 #include "Detergent.h"
 
 #define NUMBER_OF_DETERGENTS 4
+#define VALVE_OPEN HIGH
 
 static const uint8_t LEVEL_PIN[] = {29, 11, 34, 33};
 static const uint8_t FLOW_PIN[] = {16, 31, 17, 41};
@@ -20,6 +21,8 @@ void detergent_init(void)
     detergent[i].level_pin = LEVEL_PIN[i];
     detergent[i].flow_pin = FLOW_PIN[i];
     detergent[i].valve_pin = VALVE_PIN[i];
+    pinMode(VALVE_PIN[i], OUTPUT);
+    digitalWrite(VALVE_PIN[i], !VALVE_OPEN);
   }
 }
 
