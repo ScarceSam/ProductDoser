@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "System.h"
 
-#define PUMP_ON HIGH
 #define UPDATE_INTERVAL 100
 
 typedef struct {
@@ -35,7 +34,7 @@ void system_start_dose(washer_t washer, detergent_t detergent)
   system_info.next_step_time = system_info.pump_start_time+ dosage_milli;
   detergent_open_valve(detergent.number);
   washer_open_valve(washer.number);
-  system_pump_on();
+  system_pump(PUMP_ON);
 }
 
 uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
@@ -50,14 +49,9 @@ uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
   return dosage_time_milli;
 }
 
-void system_pump_on(void)
+void system_pump(uint8_t state)
 {
-  digitalWrite(system_info.pump_pin, PUMP_ON);
-}
-
-void system_pump_off(void)
-{
-  digitalWrite(system_info.pump_pin, !PUMP_ON);
+  digitalWrite(system_info.pump_pin, state);
 }
 
 void system_update(void)
