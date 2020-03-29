@@ -23,4 +23,6 @@ void detergent_open_valve(uint8_t detergent_number);
 
 void detergent_close_valve(uint8_t detergent_number);
 
+void detergent_close_all_valves(void);
+
 #endif

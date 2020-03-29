@@ -40,3 +40,11 @@ void detergent_close_valve(uint8_t detergent_number)
 {
   digitalWrite(detergent[detergent_number - 1].valve_pin, !VALVE_OPEN);
 }
+
+void detergent_close_all_valves(void)
+{
+  for(int i = 0; i < NUMBER_OF_DETERGENTS; i++)
+  {
+    digitalWrite(detergent[i].valve_pin, !VALVE_OPEN);
+  }
+}
