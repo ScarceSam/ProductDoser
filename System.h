@@ -7,6 +7,8 @@
 
 #define PUMP_ON HIGH
 #define PUMP_OFF !PUMP_ON
+#define VALVE_OPEN HIGH
+#define VALVE_CLOSE !VALVE_OPEN
 
 void system_init(void);
 
