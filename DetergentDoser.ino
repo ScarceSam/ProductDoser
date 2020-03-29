@@ -31,7 +31,7 @@ void loop()
     detergent_t next_detergent = detergetent_get_data(next[1]);
 
     //start dosing
-    system_dose(next_washer, next_detergent);
+    system_start_dose(next_washer, next_detergent);
   }
 
 

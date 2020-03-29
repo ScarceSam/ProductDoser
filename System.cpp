@@ -24,10 +24,14 @@ uint8_t system_idle(void)
   return !system_info.pump_running;
 }
 
-void system_dose(washer_t washer, detergent_t detergent)
+void system_start_dose(washer_t washer, detergent_t detergent)
 {
   uint32_t dosage_milli = dosage_time_calc(washer, detergent);
-  
+  system_info.pump_start_time = millis();
+  system_info.next_step_time = system_info.pump_start_time+ dosage_milli;
+  detergent_open_valve(detergent.number);
+  washer_open_valve(washer.number);
+  system_pump_on();
 }
 
 uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
