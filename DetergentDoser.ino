@@ -36,7 +36,8 @@ void loop()
 
 
 //  washer_update();
-//  system_update();
+//  detergent_update();
+  system_update();
 //  button_update();
 //  interface_update();
 
