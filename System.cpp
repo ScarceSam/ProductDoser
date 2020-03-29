@@ -49,6 +49,11 @@ uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
   return dosage_time_milli;
 }
 
+uint32_t water_flush_time(void)
+{
+  return millis() + 1000;
+}
+
 void system_pump(uint8_t state)
 {
   digitalWrite(system_info.pump_pin, state);

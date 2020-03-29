@@ -20,4 +20,6 @@ void system_pump(uint8_t state);
 
 void system_update(void);
 
+uint32_t water_flush_time(void);
+
 #endif
