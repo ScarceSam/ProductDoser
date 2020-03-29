@@ -7,6 +7,7 @@ void setup()
   //Initialize sub systems
   washer_init();
   detergent_init();
+  system_init();
 
   //pull saved data from SD card
   //check SD card for data
