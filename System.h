@@ -26,4 +26,6 @@ void system_update(void);
 
 uint32_t water_flush_time(void);
 
+void system_advance_step(void);
+
 #endif

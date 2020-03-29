@@ -4,6 +4,7 @@
 #define UPDATE_INTERVAL 100
 
 enum valves{ DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
+enum steps{ IDLE_STEP, DOSE_STEP, FLUSH_STEP, RINSE_STEP };
 
 typedef struct {
   const uint8_t pump_pin = 14;
@@ -27,7 +28,7 @@ void system_init(void)
 
 uint8_t system_idle(void)
 {
-  return !system_info.pump_running;
+  return !system_info.current_step;
 }
 
 void system_start_dose(washer_t washer, detergent_t detergent)
@@ -38,6 +39,7 @@ void system_start_dose(washer_t washer, detergent_t detergent)
   detergent_open_valve(detergent.number);
   washer_open_valve(washer.number);
   system_pump(PUMP_ON);
+  system_info.current_step = DOSE_STEP;
 }
 
 uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
@@ -84,12 +86,37 @@ void system_valve(uint8_t valve, uint8_t state)
 
 void system_update(void)
 {
-  if(system_info.pump_running && (system_info.last_update + UPDATE_INTERVAL < millis()))
+  if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis()))
   {
     if(system_info.next_step_time < millis())
     {
-      system_pump_off();
-      detergent_close_all_valves();
+      system_advance_step();
     }
+  }
+}
+
+void system_advance_step(void)
+{
+  switch(system_info.current_step)
+  {
+    case DOSE_STEP:
+      detergent_close_all_valves();
+      system_valve(WATER_VALVE, VALVE_OPEN);
+      system_info.next_step_time = (millis() + 1000);
+      system_info.current_step = FLUSH_STEP;
+      break;
+    case FLUSH_STEP:
+      system_pump(PUMP_OFF);
+      system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+      //washer valve close
+      system_info.next_step_time = (millis() + 1000);
+      system_info.current_step = RINSE_STEP;
+      break;
+    case RINSE_STEP:
+      system_valve(ALL_VALVES, VALVE_CLOSE);
+      washer_close_valve(1);
+      system_info.current_step = IDLE_STEP;
+      delay(1000);
+      break;
   }
 }
