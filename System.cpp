@@ -3,15 +3,15 @@
 
 #define UPDATE_INTERVAL 100
 
-enum valves{ DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
+enum valves{ LINE_DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
 enum steps{ IDLE_STEP, DOSE_STEP, FLUSH_STEP, RINSE_STEP };
 
 typedef struct {
   const uint8_t pump_pin = 14;
-  const uint8_t drain_valve_pin = 0;
-  const uint8_t water_valve_pin = 0;
+  const uint8_t line_drain_valve_pin = 8;
+  const uint8_t water_valve_pin = 10;
   const uint8_t system_flow_sensor = 0;
-  const uint8_t manifold_drain_pin = 0;
+  const uint8_t manifold_drain_valve_pin = 26;
   uint8_t pump_running = 0;
   uint32_t pump_start_time = 0;
   uint8_t current_step = 0;
@@ -24,6 +24,9 @@ static system_t system_info;
 void system_init(void)
 {
   pinMode(system_info.pump_pin, OUTPUT);
+  pinMode(system_info.line_drain_valve_pin, OUTPUT);
+  pinMode(system_info.water_valve_pin, OUTPUT);
+  pinMode(system_info.manifold_drain_valve_pin, OUTPUT);
 }
 
 uint8_t system_idle(void)
@@ -71,16 +74,16 @@ void system_valve(uint8_t valve, uint8_t state)
     case WATER_VALVE:
       digitalWrite(system_info.water_valve_pin, state);
       break;
-    case DRAIN_VALVE:
-      digitalWrite(system_info.drain_valve_pin, state);
+    case LINE_DRAIN_VALVE:
+      digitalWrite(system_info.line_drain_valve_pin, state);
       break;
     case MANIFOLD_DRAIN_VALVE:
-      digitalWrite(system_info.manifold_drain_pin, state);
+      digitalWrite(system_info.manifold_drain_valve_pin, state);
       break;
     case ALL_VALVES:
       digitalWrite(system_info.water_valve_pin, state);
-      digitalWrite(system_info.drain_valve_pin, state);
-      digitalWrite(system_info.manifold_drain_pin, state);
+      digitalWrite(system_info.line_drain_valve_pin, state);
+      digitalWrite(system_info.manifold_drain_valve_pin, state);
   }
 }
 
