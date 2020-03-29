@@ -20,6 +20,8 @@ uint32_t dosage_time_calc(washer_t washer, detergent_t detergent);
 
 void system_pump(uint8_t state);
 
+void system_valve(uint8_t valve, uint8_t state);
+
 void system_update(void);
 
 uint32_t water_flush_time(void);
