@@ -17,4 +17,6 @@ void system_pump_on(void);
 
 void system_pump_off(void);
 
+void system_update(void);
+
 #endif

@@ -2,6 +2,7 @@
 #include "System.h"
 
 #define PUMP_ON HIGH
+#define UPDATE_INTERVAL 100
 
 typedef struct {
   const uint8_t pump_pin = 14;
@@ -10,6 +11,9 @@ typedef struct {
   const uint8_t system_flow_sensor = 0;
   uint8_t pump_running = 0;
   uint32_t pump_start_time = 0;
+  uint8_t current_step = 0;
+  uint32_t next_step_time = 0;
+  uint32_t last_update = 0;
 }system_t;
 
 static system_t system_info;
@@ -54,4 +58,16 @@ void system_pump_on(void)
 void system_pump_off(void)
 {
   digitalWrite(system_info.pump_pin, !PUMP_ON);
+}
+
+void system_update(void)
+{
+  if(system_info.pump_running && (system_info.last_update + UPDATE_INTERVAL < millis()))
+  {
+    if(system_info.next_step_time < millis())
+    {
+      system_pump_off();
+      detergent_close_all_valves();
+    }
+  }
 }
