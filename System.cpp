@@ -12,8 +12,8 @@ typedef struct {
   const uint8_t water_valve_pin = 10;
   const uint8_t system_flow_sensor = 0;
   const uint8_t manifold_drain_valve_pin = 26;
-  uint8_t pump_running = 0;
-  uint32_t pump_start_time = 0;
+  uint8_t pump_running = 0;//#TODO remove?
+  uint32_t pump_start_time = 0;//#TODO remove?
   uint8_t current_step = 0;
   uint32_t next_step_time = 0;
   uint32_t last_update = 0;
@@ -59,7 +59,7 @@ uint32_t dosage_time_calc(washer_t washer, detergent_t detergent)
 
 uint32_t water_flush_time(void)
 {
-  return millis() + 1000;
+  return millis() + 1000; // #TODO actually calculate time
 }
 
 void system_pump(uint8_t state)
@@ -89,7 +89,7 @@ void system_valve(uint8_t valve, uint8_t state)
 
 void system_update(void)
 {
-  if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis()))
+  if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis())) //#TODO update last_update variable
   {
     if(system_info.next_step_time < millis())
     {
@@ -105,19 +105,19 @@ void system_advance_step(void)
     case DOSE_STEP:
       detergent_close_all_valves();
       system_valve(WATER_VALVE, VALVE_OPEN);
-      system_info.next_step_time = (millis() + 1000);
+      system_info.next_step_time = (millis() + 1000);//#TODO add data and function to caculate flush time
       system_info.current_step = FLUSH_STEP;
       break;
     case FLUSH_STEP:
       system_pump(PUMP_OFF);
       system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-      //washer valve close
-      system_info.next_step_time = (millis() + 1000);
+      //washer valve close //#TODO - simplify washer valve & move here
+      system_info.next_step_time = (millis() + 1000);//#TODO add rinse time to Struct
       system_info.current_step = RINSE_STEP;
       break;
     case RINSE_STEP:
       system_valve(ALL_VALVES, VALVE_CLOSE);
-      washer_close_valve(1);
+      washer_close_valve(1); //#TODO Wrong spot
       system_info.current_step = IDLE_STEP;
       delay(1000);
       break;
