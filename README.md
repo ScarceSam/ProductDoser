@@ -17,16 +17,39 @@
 * System.cpp
 
 
-# Development environment
+# Development environment setup
 
-  * Arduino IDE v1.8.12
+  * Install Arduino IDE (v1.8.12 used for development)
 
-  * Download Repo
+  * Install required Arduino IDE Lbraries:
 
-  * Unzip into Arduino Sketch folder
+    -[Adafruit MCP23017 Arduino Library](https://github.com/adafruit/Adafruit-MCP23017-Arduino-Library) (Use [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries))
 
-  * File > Preferences > Additional Boards Manager URLs:
-	https://raw.githubusercontent.com/sparkfun/Arduino_Boards/master/IDE_Board_Manager/package_sparkfun_index.json
+  * Install Arduino IDE board support for Sparkfun Artemis ATP:
+
+    -[Sparkfun Artemis ArduinoIDE-installation tutorial](https://learn.sparkfun.com/tutorials/artemis-development-with-arduino/all#arduino-installation)
+
+  * Either clone repo with git or download zip
+
+  * Install Git
+
+    -[Git installers](https://git-scm.com/downloads)
+
+    -Create a folder in the Arduino Sketch folder labled "DetergentDoser"
+
+    -Navigate to the ~/Ardino/DetergentDoser folder in your Command Line Interpreter
+
+    -Clone repository with command "git clone https://github.com/ScarceSam/DetergentDoser.git
+
+  * Download Zip
+
+    -[DetergentDoser-master.zip](https://github.com/ScarceSam/DetergentDoser/archive/master.zip)
+
+    -Unzip file into Arduino Sketch folder
+
+    -Remove "-master" from folder name
+
+  * DetergentDoser.ino can now be opened with Arduino IDE and loaded onto an Artemis ATP
 
 # Hardware components
 
