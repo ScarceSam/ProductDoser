@@ -79,10 +79,10 @@ A35|-
 24(TX1)|-
 25(RX1)|-
 14|- Pump
-8|- Drain Valve
+8|- Line Drain Valve
 10|- Water Valve
 9|- System Flow
-26|- Rinse Valve
+26|- Manifold Drain Valve
 15|-
 19|-
 18|-
