@@ -111,13 +111,12 @@ void system_advance_step(void)
     case FLUSH_STEP:
       system_pump(PUMP_OFF);
       system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-      //washer valve close //#TODO - simplify washer valve & move here
+      washer_close_all_valves();
       system_info.next_step_time = (millis() + 1000);//#TODO add rinse time to Struct
       system_info.current_step = RINSE_STEP;
       break;
     case RINSE_STEP:
       system_valve(ALL_VALVES, VALVE_CLOSE);
-      washer_close_valve(1); //#TODO Wrong spot
       system_info.current_step = IDLE_STEP;
       delay(1000);
       break;
