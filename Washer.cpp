@@ -55,8 +55,14 @@ uint8_t washer_ready(void)
 
 void washer_get_next(uint8_t next_in_queue[])
 {
-  next_in_queue[0] = 1;
-  next_in_queue[1] = 1;
+  static uint8_t test_zero = 0;
+  static uint8_t test_one = 4;
+  test_zero++;
+  test_one--;
+  test_zero = (test_zero > 3) ? 1 : test_zero;
+  test_one = (test_one < 1) ? 4 : test_one; 
+  next_in_queue[0] = test_zero;
+  next_in_queue[1] = test_one;
 }
 
 washer_t washer_get_data(uint8_t washer_number)
