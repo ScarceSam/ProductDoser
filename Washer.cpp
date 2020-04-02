@@ -73,3 +73,8 @@ void washer_close_valve(uint8_t washer_number)
 {
   mcp[washer[washer_number - 1].i2cAddress].digitalWrite(washer[washer_number - 1].valve_pin, !VALVE_OPEN);
 }
+
+uint8_t washer_size(uint8_t washer_number)
+{
+  return washer[washer_number - 1].washer_size;
+}

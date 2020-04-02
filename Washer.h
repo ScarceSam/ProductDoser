@@ -27,4 +27,6 @@ void washer_open_valve(uint8_t washer_number);// #TODO simplify opening and clos
 
 void washer_close_valve(uint8_t washer_number);// #TODO simplify opening and closing
 
+uint8_t washer_size(uint8_t washer_number);
+
 #endif
