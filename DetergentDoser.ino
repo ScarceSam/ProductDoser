@@ -28,7 +28,7 @@ void loop()
 
     //pull washer and detergent structs for passing
     uint8_t next_washer = next[0];// #TODO implement queue and remove test code
-    detergent_t next_detergent = detergetent_get_data(1);//next[1]); #TODO implement queue and remove test code
+    uint8_t next_detergent = next[1];// #TODO implement queue and remove test code
 
     //start dosing
     system_start_dose(next_washer, next_detergent);

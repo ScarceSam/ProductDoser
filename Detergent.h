@@ -25,4 +25,8 @@ void detergent_close_valve(uint8_t detergent_number); // #TODO simplify opening 
 
 void detergent_close_all_valves(void);
 
+uint8_t ounces_per_pound(uint8_t detergent_number);
+
+uint16_t ounces_per_5minutes(uint8_t detergent_number);
+
 #endif

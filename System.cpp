@@ -34,25 +34,25 @@ uint8_t system_idle(void)
   return !system_info.current_step;
 }
 
-void system_start_dose(uint8_t washer, detergent_t detergent)
+void system_start_dose(uint8_t washer, uint8_t detergent)
 {
   uint32_t dosage_milli = dosage_time_calc(washer, detergent);
   system_info.pump_start_time = millis();
   system_info.next_step_time = system_info.pump_start_time+ dosage_milli;
-  detergent_open_valve(detergent.number);
+  detergent_open_valve(detergent);
   washer_open_valve(washer);
   system_pump(PUMP_ON);
   system_info.current_step = DOSE_STEP;
 }
 
-uint32_t dosage_time_calc(uint8_t washer, detergent_t detergent)
+uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
 {
   //find dosing amount for specific washer detergent combo
   // lbs . oz . milliseconds . 5min
   //       lb       5min        oz
   uint8_t lbs = washer_size(washer);
-  uint8_t oz_lb = detergent.ounces_per_pound;
-  uint16_t mill_oz = 300000 / detergent.ounces_per_5minutes;
+  uint8_t oz_lb = ounces_per_pound(detergent);
+  uint16_t mill_oz = 300000 / ounces_per_5minutes(detergent);
   uint32_t dosage_time_milli = lbs * oz_lb * mill_oz;
   return dosage_time_milli;
 }

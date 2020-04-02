@@ -48,3 +48,13 @@ void detergent_close_all_valves(void)
     digitalWrite(detergent[i].valve_pin, !VALVE_OPEN);
   }
 }
+
+uint8_t ounces_per_pound(uint8_t detergent_number)
+{
+  return detergent[detergent_number -1].ounces_per_pound;
+}
+
+uint16_t ounces_per_5minutes(uint8_t detergent_number)
+{
+  return detergent[detergent_number - 1].ounces_per_5minutes;
+}
