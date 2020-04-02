@@ -12,8 +12,6 @@ typedef struct {
   const uint8_t water_valve_pin = 10;
   const uint8_t system_flow_sensor = 0;
   const uint8_t manifold_drain_valve_pin = 26;
-  uint8_t pump_running = 0;//#TODO remove?
-  uint32_t pump_start_time = 0;//#TODO remove?
   uint8_t current_step = 0;
   uint32_t next_step_time = 0;
   uint32_t last_update = 0;
@@ -42,8 +40,7 @@ uint8_t system_idle(void)
 void system_start_dose(uint8_t washer, uint8_t detergent)
 {
   uint32_t dosage_milli = dosage_time_calc(washer, detergent);
-  system_info.pump_start_time = millis();
-  system_info.next_step_time = system_info.pump_start_time+ dosage_milli;
+  system_info.next_step_time = millis() + dosage_milli;
   detergent_open_valve(detergent);
   washer_open_valve(washer);
   system_pump(PUMP_ON);
