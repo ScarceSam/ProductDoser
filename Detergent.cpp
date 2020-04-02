@@ -49,7 +49,12 @@ uint8_t ounces_per_pound(uint8_t detergent_number)
   return detergent[detergent_number -1].ounces_per_pound;
 }
 
-uint16_t ounces_per_5minutes(uint8_t detergent_number)
+uint16_t calibration_volume_oz(uint8_t detergent_number)
 {
-  return detergent[detergent_number - 1].ounces_per_5minutes;
+  return detergent[detergent_number - 1].calibration_volume_oz;
+}
+
+uint16_t calibration_time_sec(uint8_t detergent_number)
+{
+  return detergent[detergent_number - 1].calibration_time_sec;
 }
