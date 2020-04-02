@@ -17,6 +17,11 @@ typedef struct {
   uint8_t current_step = 0;
   uint32_t next_step_time = 0;
   uint32_t last_update = 0;
+  uint16_t tube_ID = 125;
+  uint16_t tube_length = 120;
+  uint16_t calibration_volume_oz = 128;
+  uint16_t calibration_time_sec = 300;
+  uint16_t rinse_time_sec = 25;
 }system_t;
 
 static system_t system_info;
