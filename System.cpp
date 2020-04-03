@@ -52,9 +52,12 @@ uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
   // lbs . oz . milliseconds . 5min
   //       lb       5min        oz
   uint8_t lbs = washer_size(washer);
-  uint8_t oz_lb = ounces_per_pound(detergent);
-  uint16_t mill_oz = (calibration_time_sec(detergent) * 1000) / calibration_volume_oz(detergent);
-  uint32_t dosage_time_milli = lbs * oz_lb * mill_oz;
+  uint16_t oz_lb_x100 = ounces_per_pound_x100(detergent);
+  uint16_t volume_oz_x100 = (lbs * oz_lb_x100);
+  uint32_t cal_time_milli = (calibration_time_sec(detergent) * 1000);
+  uint64_t time_volume = (cal_time_milli * volume_oz_x100);
+  uint32_t cal_oz_x100 = (calibration_volume_oz(detergent) * 100);
+  uint32_t dosage_time_milli = (time_volume/cal_oz_x100);
   return dosage_time_milli;
 }
 

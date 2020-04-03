@@ -44,9 +44,9 @@ void detergent_close_all_valves(void)
   }
 }
 
-uint8_t ounces_per_pound(uint8_t detergent_number)
+uint16_t ounces_per_pound_x100(uint8_t detergent_number)
 {
-  return detergent[detergent_number -1].ounces_per_pound;
+  return detergent[detergent_number -1].ounces_per_pound_x100;
 }
 
 uint16_t calibration_volume_oz(uint8_t detergent_number)
