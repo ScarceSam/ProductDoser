@@ -15,9 +15,8 @@ typedef struct {
   uint8_t current_step = 0;
   uint32_t next_step_time = 0;
   uint32_t last_update = 0;
-  uint16_t tube_ID = 125;
-  uint16_t tube_length = 120;
-  uint16_t calibration_volume_oz = 128;
+  uint32_t flush_oz_x1000 = 2000;
+  uint16_t calibration_volume_oz = 87;
   uint16_t calibration_time_sec = 300;
   uint16_t rinse_time_sec = 25;
 }system_t;
@@ -59,9 +58,14 @@ uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
   return dosage_time_milli;
 }
 
-uint32_t water_flush_time(void)
+uint32_t water_flush_time_milli(void)
 {
-  return millis() + 1000; // #TODO actually calculate time
+  uint32_t volume_oz_x1000 = (system_info.flush_oz_x1000);
+  uint32_t cal_time_milli = (system_info.calibration_time_sec * 1000);
+  uint64_t time_volume = (cal_time_milli * volume_oz_x1000);
+  uint32_t cal_oz_x1000 = (system_info.calibration_volume_oz * 1000);
+  uint32_t rinse_time_milli = (time_volume / cal_oz_x1000);
+  return rinse_time_milli;
 }
 
 void system_pump(uint8_t state)
@@ -107,7 +111,7 @@ void system_advance_step(void)
     case DOSE_STEP:
       detergent_close_all_valves();
       system_valve(WATER_VALVE, VALVE_OPEN);
-      system_info.next_step_time = (millis() + 1000);//#TODO add data and function to caculate flush time
+      system_info.next_step_time = (millis() + water_flush_time_milli());
       system_info.current_step = FLUSH_STEP;
       break;
     case FLUSH_STEP:

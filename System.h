@@ -24,7 +24,7 @@ void system_valve(uint8_t valve, uint8_t state);
 
 void system_update(void);
 
-uint32_t water_flush_time(void);
+uint32_t water_flush_time_milli(void);
 
 void system_advance_step(void);
 
