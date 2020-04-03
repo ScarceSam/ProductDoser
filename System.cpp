@@ -18,7 +18,7 @@ typedef struct {
   uint32_t flush_oz_x1000 = 2000;
   uint16_t calibration_volume_oz = 87;
   uint16_t calibration_time_sec = 300;
-  uint16_t rinse_time_sec = 25;
+  uint16_t rinse_time_sec = 10;
 }system_t;
 
 static system_t system_info;
@@ -118,7 +118,7 @@ void system_advance_step(void)
       system_pump(PUMP_OFF);
       system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
       washer_close_all_valves();
-      system_info.next_step_time = (millis() + 1000);//#TODO add rinse time to Struct
+      system_info.next_step_time = (millis() + (system_info.rinse_time_sec * 1000));
       system_info.current_step = RINSE_STEP;
       break;
     case RINSE_STEP:
