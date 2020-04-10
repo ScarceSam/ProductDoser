@@ -8,6 +8,17 @@ static const uint8_t LEVEL_PIN[] = {29, 11, 34, 33};
 static const uint8_t FLOW_PIN[] = {16, 31, 17, 41};
 static const uint8_t VALVE_PIN[] = {45, 2, 1, 0};
 
+typedef struct{
+  uint8_t number;
+  uint8_t level_pin;
+  uint8_t flow_pin;
+  uint8_t valve_pin;
+  uint16_t ounces_per_pound_x100 = 20;
+  uint16_t calibration_volume_oz = 87;
+  uint16_t calibration_time_sec = 300;
+  char detergent_name[ID_LIMIT];
+} detergent_t;
+
 static detergent_t detergent[NUMBER_OF_DETERGENTS];
 
 void detergent_init(void)
@@ -24,11 +35,6 @@ void detergent_init(void)
     pinMode(VALVE_PIN[i], OUTPUT);
     digitalWrite(VALVE_PIN[i], !VALVE_OPEN);
   }
-}
-
-detergent_t detergetent_get_data(uint8_t detergent_number)
-{
-  return detergent[detergent_number - 1];
 }
 
 void detergent_open_valve(uint8_t detergent_number)
