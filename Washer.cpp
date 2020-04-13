@@ -76,11 +76,11 @@ uint8_t washer_ready(void)
 
 void washer_get_next(uint8_t next_in_queue[])
 {
-  next_in_queue[0] = washer_queue[enqueue_cursor][0];
-  washer_queue[enqueue_cursor][0] = 0;
-  next_in_queue[1] = washer_queue[enqueue_cursor][1];
-  washer_queue[enqueue_cursor][1] = 0;
-  enqueue_cursor = ((1 + enqueue_cursor) % NUMBER_OF_WASHERS);
+  next_in_queue[0] = washer_queue[dequeue_cursor][0];
+  washer_queue[dequeue_cursor][0] = 0;
+  next_in_queue[1] = washer_queue[dequeue_cursor][1];
+  washer_queue[dequeue_cursor][1] = 0;
+  dequeue_cursor = ((1 + dequeue_cursor) % NUMBER_OF_WASHERS);
   washers_enqueued--;
 }
 
@@ -131,10 +131,10 @@ void washer_update(void)
       }
       else if ((check == RELAY_ACTIVE) && (current_check > (time_temp_queue[qwasher][qpin] + WASHER_DEBOUNCE)) && (temp_queued[qwasher][qpin] == 0))
       {
-        washer_queue[dequeue_cursor][0] = qwasher + 1;
-        washer_queue[dequeue_cursor][1] = qpin + 1;
+        washer_queue[enqueue_cursor][0] = qwasher + 1;
+        washer_queue[enqueue_cursor][1] = qpin + 1;
         temp_queued[qwasher][qpin] = 1;
-        dequeue_cursor = ((1 + dequeue_cursor) % NUMBER_OF_WASHERS);
+        enqueue_cursor = ((1 + enqueue_cursor) % NUMBER_OF_WASHERS);
         washers_enqueued++;
       }
     }
