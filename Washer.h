@@ -19,4 +19,6 @@ uint8_t washer_size(uint8_t washer_number);
 
 void washer_update(void);
 
+uint8_t washer_peek_detergent_in_queue(void);
+
 #endif

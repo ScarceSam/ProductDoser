@@ -141,3 +141,8 @@ void washer_update(void)
   }
   last_check = millis();
 }
+
+uint8_t washer_peek_detergent_in_queue(uint8_t queue_position)
+{
+  return washer_queue[dequeue_cursor + queue_position][1];
+}
