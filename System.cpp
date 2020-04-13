@@ -127,7 +127,7 @@ void system_advance_step(void)
     case RINSE_STEP:
       system_valve(ALL_VALVES, VALVE_CLOSE);
       system_info.current_step = IDLE_STEP;
-      delay(1000);
+      //delay(1000);
       break;
   }
 }
