@@ -32,8 +32,6 @@ static uint8_t washers_enqueued = 0;
 
 void washer_init(void)
 {
-  Serial.begin(115200);
-  Serial.println("working");
   for(int i = 0; i < 8; i++)
   {
     mcp[i].begin(i);
@@ -83,20 +81,6 @@ void washer_get_next(uint8_t next_in_queue[])
   washer_queue[temp_queue_cursor][1] = 0;
   temp_queue_cursor = ((1 + temp_queue_cursor) % NUMBER_OF_WASHERS);
   washers_enqueued--;
-
-  Serial.print("\n\n\nRemove\n");
-  for (int i = 0; i < 24; i++)
-  {
-    Serial.print("spot: ");
-    Serial.print(i);
-    if(i<10)
-      Serial.print(",  Washer: ");
-    else
-      Serial.print(", Washer: ");
-    Serial.print(washer_queue[i][0]);
-    Serial.print(", Detergent: ");
-    Serial.println(washer_queue[i][1]);
-  }
 }
 
 void washer_open_valve(uint8_t washer_number)
@@ -152,20 +136,6 @@ void washer_update(void)
         temp_queued[qwasher][qpin] = 1;
         temp_queue_cursor = ((1 + temp_queue_cursor) % NUMBER_OF_WASHERS);
         washers_enqueued++;
-
-        Serial.print("\n\n\nAdd\n");
-        for (int i = 0; i < 24; i++)
-        {
-          Serial.print("spot: ");
-          Serial.print(i);
-          if(i<10)
-            Serial.print(",  Washer: ");
-          else
-            Serial.print(", Washer: ");
-          Serial.print(washer_queue[i][0]);
-          Serial.print(", Detergent: ");
-          Serial.println(washer_queue[i][1]);
-        }
       }
     }
   }
