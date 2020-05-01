@@ -13,6 +13,8 @@ typedef struct {
   const uint8_t system_flow_sensor = 0;
   const uint8_t manifold_drain_valve_pin = 26;
   uint8_t current_step = 0;
+  uint8_t current_washer = 0;
+  uint8_t current_detergent = 0;
   uint32_t next_step_time = 0;
   uint32_t last_update = 0;
   uint32_t flush_oz_x1000 = 2000;
@@ -44,6 +46,8 @@ void system_start_dose(uint8_t washer, uint8_t detergent)
   washer_open_valve(washer);
   system_pump(PUMP_ON);
   system_info.current_step = DOSE_STEP;
+  system_info.current_washer = washer;
+  system_info.current_detergent = detergent;
 }
 
 uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
@@ -109,22 +113,27 @@ void system_update(void)
 
 void system_advance_step(void)
 {
+  system_info.current_step++;
+
   switch(system_info.current_step)
   {
-    case DOSE_STEP:
+    case FLUSH_STEP:
       detergent_close_all_valves();
       system_valve(WATER_VALVE, VALVE_OPEN);
       system_info.next_step_time = (millis() + water_flush_time_milli());
       system_info.current_step = FLUSH_STEP;
       break;
-    case FLUSH_STEP:
-      system_pump(PUMP_OFF);
-      system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-      washer_close_all_valves();
-      system_info.next_step_time = (millis() + (system_info.rinse_time_sec * 1000));
-      system_info.current_step = RINSE_STEP;
-      break;
     case RINSE_STEP:
+      system_pump(PUMP_OFF);
+      washer_close_all_valves();
+      if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
+      {
+        system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+        system_info.next_step_time = (millis() + (system_info.rinse_time_sec * 1000));
+        system_info.current_step = RINSE_STEP;
+        break;
+      }
+    case IDLE_STEP:
       system_valve(ALL_VALVES, VALVE_CLOSE);
       system_info.current_step = IDLE_STEP;
       //delay(1000);
