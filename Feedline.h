@@ -1,5 +1,5 @@
-#ifndef System_h
-#define System_h
+#ifndef Feedline_h
+#define Feedline_h
 
 #include <Arduino.h>
 #include "Washer.h"
