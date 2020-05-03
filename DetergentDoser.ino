@@ -122,7 +122,7 @@ void advance_step(void)
         system_info.current_step = RINSE_STEP;
         break;
       }
-    case IDLE_STEP:
+    default:
       feedline_valve(ALL_VALVES, VALVE_CLOSE);
       system_info.current_step = IDLE_STEP;
       break;
