@@ -10,7 +10,7 @@ typedef struct {
   const uint8_t pump_pin = 14;
   const uint8_t line_drain_valve_pin = 8;
   const uint8_t water_valve_pin = 10;
-  const uint8_t system_flow_sensor = 0;
+  const uint8_t feedline_flow_sensor = 0;
   const uint8_t manifold_drain_valve_pin = 26;
   uint8_t current_step = 0;
   uint8_t current_washer = 0;
@@ -21,33 +21,33 @@ typedef struct {
   uint16_t calibration_volume_oz = 87;
   uint16_t calibration_time_sec = 300;
   uint16_t rinse_time_sec = 10;
-}system_t;
+}feedline_t;
 
-static system_t system_info;
+static feedline_t feedline_info;
 
-void system_init(void)
+void feedline_init(void)
 {
-  pinMode(system_info.pump_pin, OUTPUT);
-  pinMode(system_info.line_drain_valve_pin, OUTPUT);
-  pinMode(system_info.water_valve_pin, OUTPUT);
-  pinMode(system_info.manifold_drain_valve_pin, OUTPUT);
+  pinMode(feedline_info.pump_pin, OUTPUT);
+  pinMode(feedline_info.line_drain_valve_pin, OUTPUT);
+  pinMode(feedline_info.water_valve_pin, OUTPUT);
+  pinMode(feedline_info.manifold_drain_valve_pin, OUTPUT);
 }
 
-uint8_t system_idle(void)
+uint8_t feedline_idle(void)
 {
-  return !system_info.current_step;
+  return !feedline_info.current_step;
 }
 
-void system_start_dose(uint8_t washer, uint8_t detergent)
+void feedline_start_dose(uint8_t washer, uint8_t detergent)
 {
   uint32_t dosage_milli = dosage_time_calc(washer, detergent);
-  system_info.next_step_time = millis() + dosage_milli;
+  feedline_info.next_step_time = millis() + dosage_milli;
   detergent_open_valve(detergent);
   washer_open_valve(washer);
-  system_pump(PUMP_ON);
-  system_info.current_step = DOSE_STEP;
-  system_info.current_washer = washer;
-  system_info.current_detergent = detergent;
+  feedline_pump(PUMP_ON);
+  feedline_info.current_step = DOSE_STEP;
+  feedline_info.current_washer = washer;
+  feedline_info.current_detergent = detergent;
 }
 
 uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
@@ -67,75 +67,75 @@ uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent)
 
 uint32_t water_flush_time_milli(void)
 {
-  uint32_t volume_oz_x1000 = (system_info.flush_oz_x1000);
-  uint32_t cal_time_milli = (system_info.calibration_time_sec * 1000);
+  uint32_t volume_oz_x1000 = (feedline_info.flush_oz_x1000);
+  uint32_t cal_time_milli = (feedline_info.calibration_time_sec * 1000);
   uint64_t time_volume = (cal_time_milli * volume_oz_x1000);
-  uint32_t cal_oz_x1000 = (system_info.calibration_volume_oz * 1000);
+  uint32_t cal_oz_x1000 = (feedline_info.calibration_volume_oz * 1000);
   uint32_t rinse_time_milli = (time_volume / cal_oz_x1000);
   return rinse_time_milli;
 }
 
-void system_pump(uint8_t state)
+void feedline_pump(uint8_t state)
 {
-  digitalWrite(system_info.pump_pin, state);
+  digitalWrite(feedline_info.pump_pin, state);
 }
 
-void system_valve(uint8_t valve, uint8_t state)
+void feedline_valve(uint8_t valve, uint8_t state)
 {
   switch(valve)
   {
     case WATER_VALVE:
-      digitalWrite(system_info.water_valve_pin, state);
+      digitalWrite(feedline_info.water_valve_pin, state);
       break;
     case LINE_DRAIN_VALVE:
-      digitalWrite(system_info.line_drain_valve_pin, state);
+      digitalWrite(feedline_info.line_drain_valve_pin, state);
       break;
     case MANIFOLD_DRAIN_VALVE:
-      digitalWrite(system_info.manifold_drain_valve_pin, state);
+      digitalWrite(feedline_info.manifold_drain_valve_pin, state);
       break;
     case ALL_VALVES:
-      digitalWrite(system_info.water_valve_pin, state);
-      digitalWrite(system_info.line_drain_valve_pin, state);
-      digitalWrite(system_info.manifold_drain_valve_pin, state);
+      digitalWrite(feedline_info.water_valve_pin, state);
+      digitalWrite(feedline_info.line_drain_valve_pin, state);
+      digitalWrite(feedline_info.manifold_drain_valve_pin, state);
   }
 }
 
-void system_update(void)
+void feedline_update(void)
 {
-  if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis())) //#TODO update last_update variable
+  if(feedline_info.current_step && (feedline_info.last_update + UPDATE_INTERVAL < millis())) //#TODO update last_update variable
   {
-    if(system_info.next_step_time < millis())
+    if(feedline_info.next_step_time < millis())
     {
-      system_advance_step();
+      feedline_advance_step();
     }
   }
 }
 
-void system_advance_step(void)
+void feedline_advance_step(void)
 {
-  system_info.current_step++;
+  feedline_info.current_step++;
 
-  switch(system_info.current_step)
+  switch(feedline_info.current_step)
   {
     case FLUSH_STEP:
       detergent_close_all_valves();
-      system_valve(WATER_VALVE, VALVE_OPEN);
-      system_info.next_step_time = (millis() + water_flush_time_milli());
-      system_info.current_step = FLUSH_STEP;
+      feedline_valve(WATER_VALVE, VALVE_OPEN);
+      feedline_info.next_step_time = (millis() + water_flush_time_milli());
+      feedline_info.current_step = FLUSH_STEP;
       break;
     case RINSE_STEP:
-      system_pump(PUMP_OFF);
+      feedline_pump(PUMP_OFF);
       washer_close_all_valves();
-      if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
+      if(washer_peek_detergent_in_queue(0) != feedline_info.current_detergent)
       {
-        system_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-        system_info.next_step_time = (millis() + (system_info.rinse_time_sec * 1000));
-        system_info.current_step = RINSE_STEP;
+        feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+        feedline_info.next_step_time = (millis() + (feedline_info.rinse_time_sec * 1000));
+        feedline_info.current_step = RINSE_STEP;
         break;
       }
     case IDLE_STEP:
-      system_valve(ALL_VALVES, VALVE_CLOSE);
-      system_info.current_step = IDLE_STEP;
+      feedline_valve(ALL_VALVES, VALVE_CLOSE);
+      feedline_info.current_step = IDLE_STEP;
       //delay(1000);
       break;
   }

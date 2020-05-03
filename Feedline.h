@@ -10,22 +10,22 @@
 #define VALVE_OPEN HIGH
 #define VALVE_CLOSE !VALVE_OPEN
 
-void system_init(void);
+void feedline_init(void);
 
-uint8_t system_idle(void);
+uint8_t feedline_idle(void);
 
-void system_start_dose(uint8_t washer, uint8_t detergent);
+void feedline_start_dose(uint8_t washer, uint8_t detergent);
 
 uint32_t dosage_time_calc(uint8_t washer, uint8_t detergent);
 
-void system_pump(uint8_t state);
+void feedline_pump(uint8_t state);
 
-void system_valve(uint8_t valve, uint8_t state);
+void feedline_valve(uint8_t valve, uint8_t state);
 
-void system_update(void);
+void feedline_update(void);
 
 uint32_t water_flush_time_milli(void);
 
-void system_advance_step(void);
+void feedline_advance_step(void);
 
 #endif
