@@ -52,7 +52,7 @@ void loop()
     //start dosing
     start_dosing(next_washer, next_detergent);
   }else{
-    if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis())) //#TODO update last_update variable
+    if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis()))
     {
       if(system_info.next_step_time < millis())
       {
@@ -64,6 +64,9 @@ void loop()
 
   washer_update();
 }
+
+
+
 
 uint8_t if_idle(void)
 {
