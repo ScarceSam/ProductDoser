@@ -74,7 +74,7 @@ uint8_t washer_ready(void)
   return washers_enqueued;
 }
 
-void washer_get_next(uint8_t next_in_queue[])
+void washer_dequeue_next(uint8_t next_in_queue[])
 {
   next_in_queue[0] = washer_queue[dequeue_cursor][0];
   washer_queue[dequeue_cursor][0] = 0;

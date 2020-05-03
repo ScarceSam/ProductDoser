@@ -22,9 +22,9 @@ void loop()
 {
   if (washer_ready() && system_idle())
   {
-    //pull the next washer out of queue
+    //dequeue the next washer in queue
     uint8_t next[2] = {0, 0};
-    washer_get_next(next);
+    washer_dequeue_next(next);
 
     uint8_t next_washer = next[0];
     uint8_t next_detergent = next[1];

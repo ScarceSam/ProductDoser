@@ -9,7 +9,7 @@ void washer_init(void);
 
 uint8_t washer_ready(void);
 
-void washer_get_next(uint8_t next_in_queue[]);
+void washer_dequeue_next(uint8_t next_in_queue[]);
 
 void washer_open_valve(uint8_t washer_number);
 
