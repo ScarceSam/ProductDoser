@@ -26,9 +26,8 @@ void loop()
     uint8_t next[2] = {0, 0};
     washer_get_next(next);
 
-    //pull washer and detergent structs for passing
-    uint8_t next_washer = next[0];// #TODO implement queue and remove test code
-    uint8_t next_detergent = next[1];// #TODO implement queue and remove test code
+    uint8_t next_washer = next[0];
+    uint8_t next_detergent = next[1];
 
     //start dosing
     system_start_dose(next_washer, next_detergent);
@@ -41,5 +40,4 @@ void loop()
 //  button_update();
 //  interface_update();
 
-//  delay(1000000);
 }
