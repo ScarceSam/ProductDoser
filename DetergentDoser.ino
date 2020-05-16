@@ -10,7 +10,8 @@ typedef struct {
   uint8_t current_step = 0;
   uint8_t current_washer = 0;
   uint8_t current_detergent = 0;
-  uint32_t next_step_time = 0;
+  uint32_t step_length_millis = 0;
+  uint32_t step_start_millis = 0;
   uint32_t last_update = 0;
   uint16_t rinse_time_sec = 10;
 }system_t;
@@ -52,9 +53,9 @@ void loop()
     //start dosing
     start_dosing(next_washer, next_detergent);
   }else{
-    if(system_info.current_step && (system_info.last_update + UPDATE_INTERVAL < millis()))
+    if(system_info.current_step && ((uint32_t)(millis() - system_info.last_update) > UPDATE_INTERVAL))
     {
-      if(system_info.next_step_time < millis())
+      if((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis)
       {
         advance_step();
       }
@@ -76,7 +77,8 @@ uint8_t if_idle(void)
 void start_dosing(uint8_t washer, uint8_t detergent)
 {
   uint32_t dosage_milli = dosage_time_calc(washer, detergent);
-  system_info.next_step_time = millis() + dosage_milli;
+  system_info.step_length_millis = dosage_milli;
+  system_info.step_start_millis = millis();
   detergent_open_valve(detergent);
   washer_open_valve(washer);
   feedline_pump(PUMP_ON);
@@ -109,7 +111,8 @@ void advance_step(void)
     case FLUSH_STEP:
       detergent_close_all_valves();
       feedline_valve(WATER_VALVE, VALVE_OPEN);
-      system_info.next_step_time = (millis() + feedline_flush_time_milli());
+      system_info.step_length_millis = feedline_flush_time_milli();
+      system_info.step_start_millis = millis();
       system_info.current_step = FLUSH_STEP;
       break;
     case RINSE_STEP:
@@ -118,7 +121,8 @@ void advance_step(void)
       if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
       {
         feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-        system_info.next_step_time = (millis() + (system_info.rinse_time_sec * 1000));
+        system_info.step_length_millis = (uint32_t)(system_info.rinse_time_sec * 1000);
+        system_info.step_start_millis = millis();
         system_info.current_step = RINSE_STEP;
         break;
       }
