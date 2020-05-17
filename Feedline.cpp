@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include "Feedline.h"
+#include "Pinmap.h"
 
 typedef struct {
-  const uint8_t pump_pin = 14;
-  const uint8_t line_drain_valve_pin = 8;
-  const uint8_t water_valve_pin = 10;
-  const uint8_t feedline_flow_sensor = 0;
-  const uint8_t manifold_drain_valve_pin = 26;
+  const uint8_t pump_pin = FEEDLINE_PUMP_PIN;
+  const uint8_t line_drain_valve_pin = FEEDLINE_END_DRAIN_VALVE_PIN;
+  const uint8_t water_valve_pin = FEEDLINE_WATER_VALVE_PIN;
+  const uint8_t feedline_flow_sensor = FEEDLINE_FLOW_PIN;
+  const uint8_t manifold_drain_valve_pin = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
   uint32_t flush_oz_x1000 = 2000;
   uint16_t calibration_volume_oz = 87;
   uint16_t calibration_time_sec = 300;
