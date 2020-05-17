@@ -1,12 +1,16 @@
 #include <Arduino.h>
 #include "Detergent.h"
+#include "Pinmap.h"
 
 #define NUMBER_OF_DETERGENTS 4
 #define VALVE_OPEN HIGH
 
-static const uint8_t LEVEL_PIN[] = {29, 11, 34, 33};
-static const uint8_t FLOW_PIN[] = {16, 31, 17, 41};
-static const uint8_t VALVE_PIN[] = {45, 2, 1, 0};
+static const uint8_t LEVEL_PIN[] = {DETERGENT_1_LEVEL_PIN, DETERGENT_2_LEVEL_PIN,
+                                    DETERGENT_3_LEVEL_PIN, DETERGENT_4_LEVEL_PIN};
+static const uint8_t FLOW_PIN[] = {DETERGENT_1_FLOW_PIN, DETERGENT_2_FLOW_PIN,
+                                   DETERGENT_3_FLOW_PIN, DETERGENT_4_FLOW_PIN};
+static const uint8_t VALVE_PIN[] = {DETERGENT_1_VALVE_PIN, DETERGENT_2_VALVE_PIN,
+                                    DETERGENT_3_VALVE_PIN, DETERGENT_4_VALVE_PIN};
 
 typedef struct{
   uint8_t number;
