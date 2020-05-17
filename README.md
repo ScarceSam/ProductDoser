@@ -25,9 +25,9 @@
 
     -[Adafruit MCP23017 Arduino Library](https://github.com/adafruit/Adafruit-MCP23017-Arduino-Library) (Use [Arduino Library Manager](https://www.arduino.cc/en/guide/libraries))
 
-  * Install Arduino IDE board support for Sparkfun Artemis ATP:
+  * Install Arduino IDE board support for Teensy 4.1:
 
-    -[Sparkfun Artemis ArduinoIDE-installation tutorial](https://learn.sparkfun.com/tutorials/artemis-development-with-arduino/all#arduino-installation)
+    -[The Teensy Loader Application](https://www.pjrc.com/teensy/loader.html)
 
   * Either clone repo with git or download zip
 
@@ -53,58 +53,40 @@
 
 # Hardware components
 
-  * SparkFun RedBoard Artemis ATP - https://www.sparkfun.com/products/15442
+  * PJRC Teensy 4.1 - https://www.pjrc.com/store/teensy41.html
 
   * 8 of 16-Bit I/O Expander with I2C Interface - MCP23017
 
 
 # Hardware setup
 
-## Artemis
+## Teensy 4.1
 Pin|Use
 ---------|----------
-SCL & SDA|- I2C Buss
-D5(SCK)|-
-D6(MISO)|-
-D7(MOSI)|-
-A13|-
-A12|-
-A32|-
-28|-
-27|-
-23|-
-22|-
-4|-
-A35|-
-24(TX1)|-
-25(RX1)|-
-14|- Pump
-8|- Line Drain Valve
-10|- Water Valve
-9|- System Flow
-26|- Manifold Drain Valve
-15|-
-19|-
-18|-
-3|-
-36|-
-38|-
-37|-
-44|-
-42|-
-43|-
-0|- Detergent 4 Valve
-1|- Detergent 3 Valve
-2|- Detergent 2 Valve
-45|- Detergent 1 Valve
-41|- Detergent 4 Flow sensor
-17|- Detergent 3 Flow sensor
-A31|- Detergent 2 Flow sensor
-A16|- Detergent 1 Flow sensor
-A33|- Detergent 4 Level sensor
-A34|- Detergent 3 Level sensor
-A11|- Detergent 2 Level sensor
-A29|- Detergent 1 Level sensor
+10|- Display CS
+11|- Display SDI
+12|- Display SDO
+13|- Display SCK
+18|- All GPIO Expanders SDA
+19|- All GPIO Expanders SLC
+25|- Feedline Pump
+26|- Feedline Line-End Drain Valve
+27|- Feedline Water Valve
+28|- Feedline Manifold Drain Valve
+29|- Detergent 1 Valve
+30|- Detergent 2 Valve
+31|- Detergent 3 Valve
+32|- Detergent 4 Valve
+33|- Detergent 1 Flow sensor
+34|- Detergent 2 Flow sensor
+35|- Detergent 3 Flow sensor
+36|- Detergent 4 Flow sensor
+37|- Feedline Flow sensor
+38|- Detergent 1 Level sensor
+39|- Detergent 2 Level sensor
+40|- Detergent 3 Level sensor
+41|- Detergent 4 Level sensor
+
 
 ## I/O Expanders
 (W= Washer, R= Relay, VA- Valve)
