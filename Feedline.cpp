@@ -2,8 +2,16 @@
 #include "Feedline.h"
 #include "Pinmap.h"
 
+
 typedef struct {
-  const uint8_t pump_pin = FEEDLINE_PUMP_PIN;
+  const uint8_t COIL_A = PUMP_COIL_A_PIN;
+  const uint8_t COIL_B = PUMP_COIL_B_PIN;
+  const bool    POSITION_A = 0;
+  const bool    POSITION_B = !POSITION_A;
+  const uint8_t COIL_MAX_PULSE_PER_SEC = 5;
+  const uint8_t Pump_MAX_PULSE_PER_SEC = 5;
+  const uint8_t MILLI_PER_PULSE = (1000/PULSE_PER_SEC);
+  const uint8_t TENTH_OUNCE_PER_PULSE = 5;
   const uint8_t line_drain_valve_pin = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t water_valve_pin = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t feedline_flow_sensor = FEEDLINE_FLOW_PIN;
