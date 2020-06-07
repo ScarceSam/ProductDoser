@@ -17,9 +17,7 @@ typedef struct{
   uint8_t level_pin;
   uint8_t flow_pin;
   uint8_t valve_pin;
-  uint16_t ounces_per_pound_x100 = 20;
-  uint16_t calibration_volume_oz = 87;
-  uint16_t calibration_time_sec = 300;
+  uint16_t half_oz_per_ten_lbs = 10;
   char detergent_name[ID_LIMIT];
 } detergent_t;
 
@@ -54,17 +52,7 @@ void detergent_close_all_valves(void)
   }
 }
 
-uint16_t ounces_per_pound_x100(uint8_t detergent_number)
+uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number)
 {
-  return detergent[detergent_number -1].ounces_per_pound_x100;
-}
-
-uint16_t calibration_volume_oz(uint8_t detergent_number)
-{
-  return detergent[detergent_number - 1].calibration_volume_oz;
-}
-
-uint16_t calibration_time_sec(uint8_t detergent_number)
-{
-  return detergent[detergent_number - 1].calibration_time_sec;
+  return detergent[detergent_number -1].half_oz_per_ten_lbs;
 }

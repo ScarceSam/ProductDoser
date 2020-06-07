@@ -14,10 +14,18 @@ enum valves{ LINE_DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
 
 void feedline_init(void);
 
-void feedline_pump(uint8_t state);
+uint32_t feedline_pump_start(uint8_t volume_oz);
 
 void feedline_valve(uint8_t valve, uint8_t state);
 
 uint32_t feedline_flush_time_milli(void);
+
+void pulse_pump(void);
+
+uint8_t feedline_flush_oz(void);
+
+void feedline_update(void);
+
+bool feedline_pumping(void);
 
 #endif
