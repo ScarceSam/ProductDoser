@@ -41,22 +41,20 @@ void feedline_init(void)
   {
     feedline_update();
   }
-  feedline_valve(WATER_VALVE, VALVE_CLOSE);
-  feedline_valve(LINE_DRAIN_VALVE, VALVE_CLOSE);
-  
+  feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
 uint32_t feedline_pump_start(uint8_t volume_half_oz)
 {
-  //Save number of pulses needed for tracking pumping
+  //save number of pulses needed for tracking pumping
   feedline_info.remaining_pump_pulses = volume_half_oz;
 
-  //Caculate estimated time to finish pumping
+  //caculate estimated time to finish pumping
   uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
 
   pulse_pump();
 
-  //Remember the start of the above pulse 
+  //remember the start of the above pulse
   feedline_info.pulse_start_millis = millis();
 
   //return the estimated time
@@ -98,7 +96,7 @@ void pulse_pump(void)
     feedline_info.position_A = true;
   }
 
-  //Update pulses tracking info
+  //update pulses tracking info
   feedline_info.remaining_pump_pulses--;
 }
 
@@ -111,7 +109,7 @@ void feedline_update(void)
 {
   if((feedline_info.remaining_pump_pulses) && ((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI))
   {
-    //Pulse the pump and update tracking if last pulse is done
+    //pulse the pump and update tracking if last pulse is done
     pulse_pump();
     feedline_info.pulse_start_millis = millis();
   }

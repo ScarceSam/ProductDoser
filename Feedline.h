@@ -10,7 +10,7 @@
 #define VALVE_OPEN HIGH
 #define VALVE_CLOSE !VALVE_OPEN
 
-//Valve names for use with valve function
+//valve names for use with valve function
 enum valves{ LINE_DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
 
 //initializing function
