@@ -63,13 +63,19 @@
 ## Teensy 4.1
 Pin|Use
 ---------|----------
-10|- Display CS
-11|- Display SDI
-12|- Display SDO
-13|- Display SCK
+0|- Display RS
+1|- Display E
+2|- Display D4
+3|- Display D5
+4|- Display D6
+5|- Display D7
+6|- Display R cathode
+7|- Display G cathode
+8|- Display B cathode
 18|- All GPIO Expanders SDA
 19|- All GPIO Expanders SLC
-25|- Feedline Pump
+24|- Feedline Pump coil A
+25|- Feedline Pump coil B
 26|- Feedline Line-End Drain Valve
 27|- Feedline Water Valve
 28|- Feedline Manifold Drain Valve

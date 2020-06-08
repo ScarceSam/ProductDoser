@@ -2,10 +2,15 @@
 
 #if defined(ARDUINO_TEENSY41)
 
-#define DISPLAY_CS_PIN 10
-#define DISPLAY_SDI_PIN 11
-#define DISPLAY_SDO_PIN 12
-#define DISPLAY_SCK_PIN 13
+#define DISPLAY_RS_PIN 0
+#define DISPLAY_E_PIN 1
+#define DISPLAY_D4_PIN 2
+#define DISPLAY_D5_PIN 3
+#define DISPLAY_D6_PIN 4
+#define DISPLAY_D7_PIN 5
+#define DISPLAY_R_PIN 6
+#define DISPLAY_G_PIN 7
+#define DISPLAY_B_PIN 8
 #define SX1509_SDA_PIN 18
 #define SX1509_SCL_PIN 19
 #define MCP23017_SDA_PIN 18
