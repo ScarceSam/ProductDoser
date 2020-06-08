@@ -2,6 +2,9 @@
 #include "Feedline.h"
 #include "Pinmap.h"
 
+//file scoped functions
+void pulse_pump(void);
+
 typedef struct {
   const uint8_t COIL_A = FEEDLINE_PUMP_COIL_A_PIN;
   const uint8_t COIL_B = FEEDLINE_PUMP_COIL_B_PIN;
@@ -31,10 +34,18 @@ void feedline_init(void)
 
 uint32_t feedline_pump_start(uint8_t volume_half_oz)
 {
+  //Save number of pulses needed for tracking pumping
   feedline_info.remaining_pump_pulses = volume_half_oz;
+
+  //Caculate estimated time to finish pumping
   uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
+
   pulse_pump();
+
+  //Remember the start of the above pulse 
   feedline_info.pulse_start_millis = millis();
+
+  //return the estimated time
   return time_to_complete;  
 }
 
@@ -72,7 +83,8 @@ void pulse_pump(void)
     digitalWrite(feedline_info.COIL_A, HIGH);
     feedline_info.position_A = true;
   }
-  
+
+  //Update pulses tracking info
   feedline_info.remaining_pump_pulses--;
 }
 
@@ -85,6 +97,7 @@ void feedline_update(void)
 {
   if((feedline_info.remaining_pump_pulses) && ((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI))
   {
+    //Pulse the pump and update tracking if last pulse is done
     pulse_pump();
     feedline_info.pulse_start_millis = millis();
   }
@@ -92,5 +105,6 @@ void feedline_update(void)
 
 bool feedline_pumping(void)
 {
+  //is the pump running?
   return !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI);
 }
