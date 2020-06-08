@@ -56,7 +56,7 @@ void loop()
     system_info.step_length_millis = start_dosing(washer, detergent);
     system_info.step_start_millis = millis();
   }
-  else if((!feedline_pumping()) && ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis))
+  else if((!feedline_is_pumping()) && ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis))
   {
     system_info.step_length_millis = advance_step();
     system_info.step_start_millis = millis();

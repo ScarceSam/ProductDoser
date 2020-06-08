@@ -23,7 +23,7 @@ void feedline_update(void);
 uint32_t feedline_pump_start(uint8_t volume_oz);
 
 //is the pump active
-bool feedline_pumping(void);
+bool feedline_is_pumping(void);
 
 //operate valves
 void feedline_valve(uint8_t valve, uint8_t state);

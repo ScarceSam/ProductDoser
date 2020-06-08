@@ -30,6 +30,20 @@ void feedline_init(void)
   pinMode(feedline_info.LINE_DRAIN_VALVE_PIN, OUTPUT);
   pinMode(feedline_info.WATER_VAVLE_PIN, OUTPUT);
   pinMode(feedline_info.MANIFOLD_DRAIN_VALVE_PIN, OUTPUT);
+
+  //purge feedline with water 
+  //TODO: - watch for flow meter
+  feedline_valve(WATER_VALVE, VALVE_OPEN);
+  feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
+  uint32_t temp_pause_time = feedline_pump_start(20);
+  feedline_info.pulse_start_millis = millis();
+  while(feedline_is_pumping())
+  {
+    feedline_update();
+  }
+  feedline_valve(WATER_VALVE, VALVE_CLOSE);
+  feedline_valve(LINE_DRAIN_VALVE, VALVE_CLOSE);
+  
 }
 
 uint32_t feedline_pump_start(uint8_t volume_half_oz)
@@ -103,8 +117,14 @@ void feedline_update(void)
   }
 }
 
-bool feedline_pumping(void)
+bool feedline_is_pumping(void)
 {
   //is the pump running?
-  return !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI);
+  bool return_value = 0;
+  
+  return_value = !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI);
+
+  return_value = (return_value) || (feedline_info.remaining_pump_pulses > 0);
+
+  return (0 != return_value);
 }
