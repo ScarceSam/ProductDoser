@@ -32,3 +32,5 @@ void feedline_valve(uint8_t valve, uint8_t state);
 uint8_t feedline_flush_oz(void);
 
 bool feedline_load(void);
+
+void feedline_flush(void);

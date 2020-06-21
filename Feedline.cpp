@@ -31,7 +31,10 @@ void feedline_init(void)
   pinMode(feedline_info.LINE_DRAIN_VALVE_PIN, OUTPUT);
   pinMode(feedline_info.WATER_VAVLE_PIN, OUTPUT);
   pinMode(feedline_info.MANIFOLD_DRAIN_VALVE_PIN, OUTPUT);
+}
 
+void feedline_flush(void)
+{
   //purge feedline with water 
   //TODO: - watch for flow meter
   feedline_valve(WATER_VALVE, VALVE_OPEN);
