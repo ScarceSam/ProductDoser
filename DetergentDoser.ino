@@ -35,6 +35,7 @@ void setup()
   //if there is data confirm usage
 
   //load saved data
+  feedline_flush();
 
 }
 
