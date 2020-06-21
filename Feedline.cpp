@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Feedline.h"
 #include "Pinmap.h"
+#include "SDcard.h"
 
 //file scoped functions
 void pulse_pump(void);
@@ -18,7 +19,7 @@ typedef struct {
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t FEEDLINE_FLOW_SENSOR = FEEDLINE_FLOW_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
-  uint8_t flush_oz = 10;
+  uint8_t flush_oz = 0;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -125,4 +126,15 @@ bool feedline_is_pumping(void)
   return_value = (return_value) || (feedline_info.remaining_pump_pulses > 0);
 
   return (0 != return_value);
+}
+
+bool feedline_load(void)
+{
+  uint32_t volume = SDcard_read_int("system", "flushvolumeoz");
+
+  Serial.println(volume);
+
+  feedline_info.flush_oz = volume;
+
+  return volume;
 }

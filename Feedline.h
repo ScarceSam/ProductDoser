@@ -30,3 +30,5 @@ void feedline_valve(uint8_t valve, uint8_t state);
 
 //return the flush volume
 uint8_t feedline_flush_oz(void);
+
+bool feedline_load(void);
