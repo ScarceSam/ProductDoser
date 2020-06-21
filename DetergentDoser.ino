@@ -1,6 +1,7 @@
 #include "Washer.h"
 #include "Detergent.h"
 #include "Feedline.h"
+#include "SDcard.h"
 
 #define UPDATE_INTERVAL 100
 
@@ -28,7 +29,19 @@ void setup()
   washer_init();
   detergent_init();
   feedline_init();
+  if(!sdcard_init())
+  {
+    while(true)
+    {
+      ;
+    }
+  }
 
+
+  if(!feedline_load())
+  {
+    //halt and alarm
+  }
   //pull saved data from SD card
   //check SD card for data
 
