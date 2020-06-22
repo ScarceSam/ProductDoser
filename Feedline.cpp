@@ -20,6 +20,7 @@ typedef struct {
   const uint8_t FEEDLINE_FLOW_SENSOR = FEEDLINE_FLOW_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
   uint8_t flush_oz = 0;
+  uint8_t manifold_oz = 5;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -107,6 +108,11 @@ void pulse_pump(void)
 uint8_t feedline_flush_oz(void)
 {
   return feedline_info.flush_oz;
+}
+
+uint8_t feedline_manifold_oz(void)
+{
+  return feedline_info.manifold_oz;
 }
 
 void feedline_update(void)

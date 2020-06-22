@@ -3,8 +3,6 @@
 #include "Feedline.h"
 #include "SDcard.h"
 
-#define UPDATE_INTERVAL 100
-
 enum steps{ IDLE_STEP, DOSE_STEP, FLUSH_STEP, RINSE_STEP };
 
 typedef struct {
@@ -13,7 +11,6 @@ typedef struct {
   uint8_t current_detergent = 0;
   uint32_t step_length_millis = 0;
   uint32_t step_start_millis = 0;
-  uint16_t rinse_time_sec = 5;
 }system_t;
 
 static system_t system_info;
@@ -123,7 +120,7 @@ uint32_t advance_step(void)
       if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
       {
         feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
-        step_length_millis = (uint32_t)(system_info.rinse_time_sec * 1000);
+        step_length_millis = feedline_pump_start(feedline_manifold_oz() * 2);
         system_info.current_step = RINSE_STEP;
         break;
       }
