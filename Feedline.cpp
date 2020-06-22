@@ -20,7 +20,7 @@ typedef struct {
   const uint8_t FEEDLINE_FLOW_SENSOR = FEEDLINE_FLOW_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
   uint8_t flush_oz = 0;
-  uint8_t manifold_oz = 5;
+  uint8_t manifold_oz = 0;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -139,11 +139,24 @@ bool feedline_is_pumping(void)
 
 bool feedline_load(void)
 {
+  bool return_value = 1;
+
   uint32_t volume = SDcard_read_int("system", "flushvolumeoz");
+  feedline_info.flush_oz = (uint8_t)volume;
 
-  Serial.println(volume);
+  if(volume == 0)
+  {
+    return_value = 0;
+  }
 
-  feedline_info.flush_oz = volume;
+  volume = 0;
+  volume = SDcard_read_int("system", "manifoldvolumeoz");
+  //feedline_info.manifold_oz = (uint8_t)volume;
 
-  return volume;
+  if(volume == 0)
+  {
+    return_value = 0;
+  }
+
+  return return_value;
 }
