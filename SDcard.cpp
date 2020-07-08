@@ -35,11 +35,16 @@ String SDcard_read_string(String device, String setting)
   return value;
 }
 
-uint32_t SDcard_read_int(String device, String setting)
+int32_t SDcard_read_int(String device, String setting)
 {
   String value = SDcard_read_string(device, setting); 
 
-  uint32_t number = value.toInt();
+  int32_t number = -1;
+
+  if('\0' != value[0])
+  {
+    number = value.toInt();
+  }
 
   return number;
 }
