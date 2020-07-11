@@ -151,7 +151,7 @@ bool feedline_load(void)
 
   volume = 0;
   volume = SDcard_read_int("system", "manifoldvolumeoz");
-  //feedline_info.manifold_oz = (uint8_t)volume;
+  feedline_info.manifold_oz = (uint8_t)volume;
 
   if(volume == 0)
   {
