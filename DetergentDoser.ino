@@ -85,10 +85,22 @@ uint8_t if_idle(void)
 uint32_t start_dosing(uint8_t washer, uint8_t detergent)
 {
   uint8_t dosage_oz = dosage_oz_calc(washer, detergent);
-  detergent_open_valve(detergent);
-  washer_open_valve(washer);
-  system_info.current_step = DOSE_STEP;
-  return feedline_pump_start(dosage_oz);
+  uint32_t return_value = 0;
+
+  if(0 == dosage_oz)
+  {
+    //TODO: Error handle
+    return_value = 0;
+  }
+  else
+  {
+    detergent_open_valve(detergent);
+    washer_open_valve(washer);
+    system_info.current_step = DOSE_STEP;
+    return_value = feedline_pump_start(dosage_oz);
+  }
+
+  return return_value;
 }
 
 uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)
