@@ -102,6 +102,9 @@ uint32_t find_device_info(String device)
   
   saveFile.close();
 
+  if(end_of_file)
+    return_value = 0;
+
   return return_value;
 }
 
@@ -157,6 +160,9 @@ uint32_t find_setting_info(uint32_t start, String setting)
   uint32_t return_value = saveFile.position();
   
   saveFile.close();
+
+  if(end_of_file)
+    return_value = 0;
 
   return return_value;
 }
