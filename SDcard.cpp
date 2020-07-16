@@ -175,10 +175,14 @@ String fetch_setting(uint32_t start)
 
   for(int i = 0; i < 60; i++)
   {
-    working_array[i] = saveFile.read();
-    if (working_array[i] == '\n')
+    if(saveFile.available())
     {
-      i = 60;
+      working_array[i] = saveFile.read();
+
+      if (working_array[i] == '\n')
+      {
+        i = 60;
+      }
     }
   }
     
