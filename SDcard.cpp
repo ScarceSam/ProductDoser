@@ -24,15 +24,25 @@ uint8_t sdcard_init(void)
 
 String SDcard_read_string(String device, String setting)
 {
-  uint32_t location_in_file = find_device_info(device);
+  String return_string;
+  uint32_t location_in_file = 0;
 
-  location_in_file = find_setting_info(location_in_file, setting);
+  location_in_file = find_device_info(device);
 
-  String value = fetch_setting(location_in_file); 
+  if(location_in_file > 0)
+    location_in_file = find_setting_info(location_in_file, setting);
 
-  String cleaned_return = clean_setting(value);
+  if(location_in_file == 0)
+  {
+    return_string =  "\0";
+  }
+  else
+  {
+    return_string = fetch_setting(location_in_file);
+    return_string = clean_setting(return_string);
+  }
 
-  return value;
+  return return_string;
 }
 
 int32_t SDcard_read_int(String device, String setting)
