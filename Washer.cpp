@@ -2,6 +2,7 @@
 #include "Washer.h"
 #include <Wire.h>
 #include "Adafruit_MCP23017.h"
+#include "SDcard.h"
 
 #define NUMBER_OF_WASHERS 24
 #define NUMBER_OF_COM_PINS 4
@@ -20,7 +21,7 @@ typedef struct {
   uint8_t i2cAddress;
   uint8_t com_pin[NUMBER_OF_PINS];
   uint8_t valve_pin;
-  uint8_t washer_size = 20;
+  uint8_t washer_size = 0;
   char washer_id[ID_LIMIT];
 } washer_t;
 
@@ -145,4 +146,25 @@ void washer_update(void)
 uint8_t washer_peek_detergent_in_queue(uint8_t queue_position)
 {
   return washer_queue[dequeue_cursor + queue_position][1];
+}
+
+uint8_t washer_load(void)
+{
+  uint8_t washers_loaded = 0;
+
+  for (uint8_t i = 0; i <= NUMBER_OF_WASHERS; i++)
+  {
+    String washer_name = "washer";
+    int washer_number = i + 1;
+    washer_name += washer_number;
+
+    int32_t washer_capacity = SDcard_read_int(washer_name, "capacitylbs");
+    if(washer_capacity > 0)
+    {
+      washer[i].washer_size = washer_capacity;
+      washers_loaded++;
+    }
+  }
+
+  return washers_loaded;
 }

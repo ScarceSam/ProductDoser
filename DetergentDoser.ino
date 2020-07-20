@@ -39,8 +39,7 @@ void setup()
   {
     //halt and alarm
   }
-  //pull saved data from SD card
-  //check SD card for data
+  washer_load();
 
   //if there is data confirm usage
 

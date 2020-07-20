@@ -21,4 +21,6 @@ void washer_update(void);
 
 uint8_t washer_peek_detergent_in_queue(uint8_t queue_position);
 
+uint8_t washer_load(void);
+
 #endif
