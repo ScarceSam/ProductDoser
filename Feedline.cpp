@@ -123,6 +123,11 @@ void feedline_update(void)
     pulse_pump();
     feedline_info.pulse_start_millis = millis();
   }
+  else if((!feedline_info.remaining_pump_pulses) && ((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI))
+  {
+    digitalWrite(feedline_info.COIL_B, LOW);
+    digitalWrite(feedline_info.COIL_A, LOW);
+  }
 }
 
 bool feedline_is_pumping(void)
