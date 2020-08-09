@@ -131,7 +131,7 @@ uint32_t advance_step(void)
       washer_close_all_valves();
       if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
       {
-        feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+        feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
         step_length_millis = feedline_pump_start(feedline_manifold_oz() * 2);
         system_info.current_step = RINSE_STEP;
         break;
