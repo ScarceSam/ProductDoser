@@ -40,6 +40,7 @@ void setup()
     //halt and alarm
   }
   washer_load();
+  detergent_load();
 
   //if there is data confirm usage
 

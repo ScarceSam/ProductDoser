@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Detergent.h"
 #include "Pinmap.h"
+#include "SDcard.h"
 
 #define NUMBER_OF_DETERGENTS 4
 #define VALVE_OPEN HIGH
@@ -17,7 +18,7 @@ typedef struct{
   uint8_t level_pin;
   uint8_t flow_pin;
   uint8_t valve_pin;
-  uint16_t half_oz_per_ten_lbs = 10;
+  uint16_t half_oz_per_ten_lbs = 0;
   char detergent_name[ID_LIMIT];
 } detergent_t;
 
@@ -55,4 +56,25 @@ void detergent_close_all_valves(void)
 uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number)
 {
   return detergent[detergent_number -1].half_oz_per_ten_lbs;
+}
+
+uint8_t detergent_load(void)
+{
+  uint8_t detergents_loaded = 0;
+
+  for (uint8_t i = 0; i < NUMBER_OF_DETERGENTS; i++)
+  {
+    String detergent_name = "product";
+    int detergent_number = i + 1;
+    detergent_name += detergent_number;
+
+    int32_t detergent_dosage = SDcard_read_int(detergent_name, "dosage");
+    if(detergent_dosage > 0)
+    {
+      detergent[i].half_oz_per_ten_lbs = detergent_dosage;
+      detergents_loaded++;
+    }
+  }
+
+  return detergents_loaded;
 }
