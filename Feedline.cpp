@@ -4,13 +4,13 @@
 #include "SDcard.h"
 
 //file scoped functions
-void pulse_pump(void);
+void pulse_pump(int);
 
 typedef struct {
   const uint8_t COIL_A = FEEDLINE_PUMP_COIL_A_PIN;
   const uint8_t COIL_B = FEEDLINE_PUMP_COIL_B_PIN;
   bool position_A = 0;
-  uint8_t remaining_pump_pulses = 0;
+  uint32_t pump_time = 0;
   uint32_t pulse_start_millis = 0;
   const uint8_t COIL_MAX_PULSE_PER_SEC = 5;
   const uint8_t PUMP_MAX_PULSE_PER_SEC = 5;
@@ -21,6 +21,7 @@ typedef struct {
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
   uint8_t flush_oz = 0;
   uint8_t manifold_oz = 0;
+  uint8_t oz_per_min = 40;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -52,18 +53,18 @@ void feedline_flush(void)
 uint32_t feedline_pump_start(uint8_t volume_half_oz)
 {
   //save number of pulses needed for tracking pumping
-  feedline_info.remaining_pump_pulses = volume_half_oz;
+  feedline_info.pump_time = (((60000 / feedline_info.oz_per_min) * volume_half_oz) / 2);
 
   //caculate estimated time to finish pumping
-  uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
+  //uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
 
-  pulse_pump();
+  pulse_pump(1);
 
   //remember the start of the above pulse
   feedline_info.pulse_start_millis = millis();
 
   //return the estimated time
-  return time_to_complete;  
+  return feedline_info.pump_time;//time_to_complete;  
 }
 
 void feedline_valve(uint8_t valve, uint8_t state)
@@ -86,23 +87,10 @@ void feedline_valve(uint8_t valve, uint8_t state)
   }
 }
 
-void pulse_pump(void)
+void pulse_pump(int power)
 {
-  if(feedline_info.position_A)
-  {
-    digitalWrite(feedline_info.COIL_A, LOW);
-    digitalWrite(feedline_info.COIL_B, HIGH);
-    feedline_info.position_A = false;
-  }
-  else
-  {
-    digitalWrite(feedline_info.COIL_B, LOW);
-    digitalWrite(feedline_info.COIL_A, HIGH);
-    feedline_info.position_A = true;
-  }
-
-  //update pulses tracking info
-  feedline_info.remaining_pump_pulses--;
+  digitalWrite(feedline_info.COIL_A,power);
+  digitalWrite(feedline_info.COIL_B,power);
 }
 
 uint8_t feedline_flush_oz(void)
@@ -117,16 +105,9 @@ uint8_t feedline_manifold_oz(void)
 
 void feedline_update(void)
 {
-  if((feedline_info.remaining_pump_pulses) && ((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI))
+  if((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.pump_time)
   {
-    //pulse the pump and update tracking if last pulse is done
-    pulse_pump();
-    feedline_info.pulse_start_millis = millis();
-  }
-  else if((!feedline_info.remaining_pump_pulses) && ((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI))
-  {
-    digitalWrite(feedline_info.COIL_B, LOW);
-    digitalWrite(feedline_info.COIL_A, LOW);
+    pulse_pump(0);
   }
 }
 
@@ -135,11 +116,9 @@ bool feedline_is_pumping(void)
   //is the pump running?
   bool return_value = 0;
   
-  return_value = !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.PULSE_TIME_MILLI);
+  return_value = !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.pump_time);
 
-  return_value = (return_value) || (feedline_info.remaining_pump_pulses > 0);
-
-  return (0 != return_value);
+  return return_value;
 }
 
 bool feedline_load(void)
