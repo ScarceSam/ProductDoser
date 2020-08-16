@@ -18,7 +18,9 @@ typedef struct{
   uint8_t level_pin;
   uint8_t flow_pin;
   uint8_t valve_pin;
-  uint16_t half_oz_per_ten_lbs = 0;
+  uint16_t half_oz_per_ten_lbs = 0;// change to tenths_oz_per_ten_lbs
+//TODO:  uint16_t cal_vol_tenths_oz = 0;
+//TODO:  uint16_t cal_time_seconds = 0;
   char detergent_name[ID_LIMIT];
 } detergent_t;
 
