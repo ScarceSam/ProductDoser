@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Pinmap.h"
 
 static volatile uint32_t pulseTime[256] = {0};
 static volatile uint8_t timeCursor = 0;
@@ -11,9 +12,9 @@ void incrementCount()
     pulseTime[timeCursor] = millis();
 }
 
-void flowsensor_init(int pin)
+void flowsensor_init(void)
 {
-  attachInterrupt(digitalPinToInterrupt(pin), incrementCount, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FLOWSENSOR_PIN), incrementCount, CHANGE);
 }
 
 bool flowsensor_is_flowing(void)
