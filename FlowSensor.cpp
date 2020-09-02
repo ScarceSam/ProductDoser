@@ -3,8 +3,8 @@
 
 static volatile uint32_t pulseTime[256] = {0};
 static volatile uint8_t timeCursor = 0;
-static uint8_t minTime = 200;
-static uint8_t maxTime = 750;
+static uint16_t minTime = 200;
+static uint16_t maxTime = 750;
 
 void incrementCount()
 {
