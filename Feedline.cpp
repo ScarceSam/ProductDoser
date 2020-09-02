@@ -2,6 +2,7 @@
 #include "Feedline.h"
 #include "Pinmap.h"
 #include "SDcard.h"
+#include "FlowSensor.h"
 
 //file scoped functions
 void pulse_pump(int);
@@ -21,6 +22,7 @@ typedef struct {
   uint8_t flush_oz = 0;
   uint8_t manifold_oz = 0;
   uint8_t oz_per_min = 40;
+  uint8_t flush_seconds = 10;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -37,15 +39,16 @@ void feedline_init(void)
 void feedline_flush(void)
 {
   //purge feedline with water 
-  //TODO: - watch for flow meter
   feedline_valve(WATER_VALVE, VALVE_OPEN);
   feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
-  uint32_t temp_pause_time = feedline_pump_start(20);
-  feedline_info.pulse_start_millis = millis();
-  while(feedline_is_pumping())
+  pulse_pump(HIGH);
+  uint32_t start_time = millis();
+  while((uint32_t)(millis() - start_time) < (feedline_info.flush_seconds * 1000))
   {
-    feedline_update();
+    if(!flowsensor_is_flowing())
+        start_time = millis();
   }
+  pulse_pump(LOW);
   feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
