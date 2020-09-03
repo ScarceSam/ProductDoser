@@ -8,8 +8,7 @@
 void pulse_pump(int);
 
 typedef struct {
-  const uint8_t COIL_A = FEEDLINE_PUMP_COIL_A_PIN;
-  const uint8_t COIL_B = FEEDLINE_PUMP_COIL_B_PIN;
+  const uint8_t PUMP_PIN = FEEDLINE_PUMP_PIN;
   bool position_A = 0;
   uint32_t pump_time = 0;
   uint32_t pulse_start_millis = 0;
@@ -29,8 +28,7 @@ static feedline_t feedline_info;
 
 void feedline_init(void)
 {
-  pinMode(feedline_info.COIL_A, OUTPUT);
-  pinMode(feedline_info.COIL_B, OUTPUT);
+  pinMode(feedline_info.PUMP_PIN, OUTPUT);
   pinMode(feedline_info.LINE_DRAIN_VALVE_PIN, OUTPUT);
   pinMode(feedline_info.WATER_VAVLE_PIN, OUTPUT);
   pinMode(feedline_info.MANIFOLD_DRAIN_VALVE_PIN, OUTPUT);
@@ -91,8 +89,7 @@ void feedline_valve(uint8_t valve, uint8_t state)
 
 void pulse_pump(int power)
 {
-  digitalWrite(feedline_info.COIL_A,power);
-  digitalWrite(feedline_info.COIL_B,power);
+  digitalWrite(feedline_info.PUMP_PIN, power);
 }
 
 uint8_t feedline_flush_oz(void)
