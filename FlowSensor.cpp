@@ -4,8 +4,7 @@
 static bool ignore_flowsensor = false;
 static volatile uint32_t pulseTime[256] = {0};
 static volatile uint8_t timeCursor = 0;
-static uint16_t minTime = 200;
-static uint16_t maxTime = 750;
+static uint16_t maxPulseDelta = 750;
 
 void incrementCount()
 {
@@ -22,7 +21,7 @@ bool flowsensor_is_flowing(void)
 {
   bool return_value = false;
 
-  return_value = (uint32_t)(millis() - pulseTime[timeCursor - 1] < minTime) || (uint32_t)(millis() - pulseTime[timeCursor - 1] < maxTime);
+  return_value = (uint32_t)(millis() - pulseTime[timeCursor - 1] < maxPulseDelta);
 
   if(ignore_flowsensor)
       return_value = true;
