@@ -8,15 +8,12 @@
 
 static const uint8_t LEVEL_PIN[] = {DETERGENT_1_LEVEL_PIN, DETERGENT_2_LEVEL_PIN,
                                     DETERGENT_3_LEVEL_PIN, DETERGENT_4_LEVEL_PIN};
-static const uint8_t FLOW_PIN[] = {DETERGENT_1_FLOW_PIN, DETERGENT_2_FLOW_PIN,
-                                   DETERGENT_3_FLOW_PIN, DETERGENT_4_FLOW_PIN};
 static const uint8_t VALVE_PIN[] = {DETERGENT_1_VALVE_PIN, DETERGENT_2_VALVE_PIN,
                                     DETERGENT_3_VALVE_PIN, DETERGENT_4_VALVE_PIN};
 
 typedef struct{
   uint8_t number;
   uint8_t level_pin;
-  uint8_t flow_pin;
   uint8_t valve_pin;
   uint16_t half_oz_per_ten_lbs = 0;
   char detergent_name[ID_LIMIT];
@@ -33,7 +30,6 @@ void detergent_init(void)
 
     //assign all the pins from const arrays
     detergent[i].level_pin = LEVEL_PIN[i];
-    detergent[i].flow_pin = FLOW_PIN[i];
     detergent[i].valve_pin = VALVE_PIN[i];
     pinMode(VALVE_PIN[i], OUTPUT);
     digitalWrite(VALVE_PIN[i], !VALVE_OPEN);
