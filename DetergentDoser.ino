@@ -2,6 +2,7 @@
 #include "Detergent.h"
 #include "Feedline.h"
 #include "SDcard.h"
+#include "FlowSensor.h"
 
 enum steps{ IDLE_STEP, DOSE_STEP, FLUSH_STEP, RINSE_STEP };
 
@@ -26,6 +27,7 @@ void setup()
   washer_init();
   detergent_init();
   feedline_init();
+  flowsensor_init();
   if(!sdcard_init())
   {
     while(true)
