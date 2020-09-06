@@ -6,44 +6,61 @@
 #define DISPLAY_Y 4
 
 static LiquidCrystalFast lcd(DISPLAY_RS_PIN, DISPLAY_E_PIN, DISPLAY_D4_PIN, DISPLAY_D5_PIN, DISPLAY_D6_PIN, DISPLAY_D7_PIN);
-static char line[DISPLAY_Y][DISPLAY_X];
+static char line[DISPLAY_Y][DISPLAY_X+1];
 
 static uint8_t messageCursor = 0;
+
+void shiftUp(void);
+void copyToLine(int li, char* newMessage);
+
 
 void view_init(void)
 {
   //initialize the screen
   lcd.begin(DISPLAY_X, DISPLAY_Y);
-  view_println("Display Init   - OK");
 }
 
 void updateScreen(void)
 {
-  lcd.println(line[0]);
-  lcd.println(line[1]);
-  lcd.println(line[2]);
-  lcd.println(line[3]);
+  for(int i = 0; i < DISPLAY_Y; i++)
+  {
+    lcd.setCursor(0, i);
+    lcd.print(line[i]);
+  }
+  
 }
 
 void view_println(char* newLine)
 {
-  if(messageCursor >= DISPLAY_Y)
+  if(messageCursor = DISPLAY_Y)
   {
-    for(int i = 0; i < (DISPLAY_Y - 1); i++)
+    shiftUp();
+    copyToLine(3, newLine);
+  }
+  else
+  {
+    copyToLine(messageCursor, newLine);
+    messageCursor++;
+  }
+  updateScreen();
+}
+
+void shiftUp(void)
+{
+  for(int i = 0; i < (DISPLAY_Y - 1); i++)
     {
       for(int j = 0; j < DISPLAY_X; j++)
       {
         line[i][j] = line[i + 1][j];
       }
     }
-  }
-  else
+}
+
+void copyToLine(int li, char* newMessage)
+{
+  for(int i = 0; i < DISPLAY_X; i++)
   {
-    for(int i = 0; i < DISPLAY_X; i++)
-    {
-      line[messageCursor][i] = newLine[i];
-    }
-    messageCursor++;
+    if(i < 20)
+      line[li][i] = newMessage[i];
   }
-  updateScreen();
 }
