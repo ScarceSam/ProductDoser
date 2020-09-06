@@ -3,6 +3,8 @@
 #include "Feedline.h"
 #include "SDcard.h"
 #include "FlowSensor.h"
+#include "Model.h"
+#include "View.h"
 
 enum steps{ IDLE_STEP, DOSE_STEP, FLUSH_STEP, RINSE_STEP };
 
@@ -24,6 +26,16 @@ uint8_t if_idle(void);
 void setup()
 {
   //Initialize sub systems
+  view_init();
+  delay(500);
+  
+  view_println("line one");
+//  view_println("line two");
+//  view_println("line three");
+//  view_println("line four");
+//  view_println("line five");
+//  view_println("line six");
+  
   washer_init();
   detergent_init();
   feedline_init();
