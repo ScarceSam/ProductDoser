@@ -11,7 +11,7 @@ static char line[DISPLAY_Y][DISPLAY_X+1];
 static uint8_t messageCursor = 0;
 
 void shiftUp(void);
-void copyToLine(int li, char* newMessage);
+void copyToLine(char* newMessage, char* oldMessage);
 
 
 void view_init(void)
@@ -44,11 +44,11 @@ void view_println(char* newLine)
   if(messageCursor = DISPLAY_Y)
   {
     shiftUp();
-    copyToLine(3, newLine);
+    copyToLine(newLine, line[3]);
   }
   else
   {
-    copyToLine(messageCursor, newLine);
+    copyToLine(newLine, line[messageCursor]);
     messageCursor++;
   }
   updateScreen();
@@ -65,11 +65,10 @@ void shiftUp(void)
     }
 }
 
-void copyToLine(int li, char* newMessage)
+void copyToLine(char* newMessage, char* oldMessage)
 {
   for(int i = 0; i < DISPLAY_X; i++)
   {
-    if(i < 20)
-      line[li][i] = newMessage[i];
+    oldMessage[i] = newMessage[i];
   }
 }
