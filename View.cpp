@@ -69,6 +69,16 @@ void copyToLine(char* newMessage, char* oldMessage)
 {
   for(int i = 0; i < DISPLAY_X; i++)
   {
+    if (newMessage[i] == '\0')
+    {
+      while(i < DISPLAY_X)
+      {
+        oldMessage[i] = ' ';
+        i++;
+      }
+    }
+    else
+    {
     oldMessage[i] = newMessage[i];
   }
 }
