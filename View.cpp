@@ -36,12 +36,11 @@ void updateScreen(void)
     lcd.setCursor(0, i);
     lcd.print(line[i]);
   }
-  
 }
 
 void view_println(char* newLine)
 {
-  if(messageCursor = DISPLAY_Y)
+  if(messageCursor == DISPLAY_Y)
   {
     shiftUp();
     copyToLine(newLine, line[3]);
