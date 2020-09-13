@@ -79,5 +79,16 @@ void copyToLine(char* newMessage, char* oldMessage)
     else
     {
     oldMessage[i] = newMessage[i];
+    }
   }
+}
+
+void view_clear(void)
+{
+  for (int i = 0; i < DISPLAY_Y; i++)
+  {
+    copyToLine(" ", line[i]);
+  }
+  updateScreen();
+  messageCursor = 0;
 }
