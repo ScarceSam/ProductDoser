@@ -27,40 +27,35 @@ void setup()
 {
   //Initialize sub systems
   view_init();
-  delay(500);
-  
-  view_println("line one");
-//  view_println("line two");
-//  view_println("line three");
-//  view_println("line four");
-//  view_println("line five");
-//  view_println("line six");
-  
   washer_init();
   detergent_init();
   feedline_init();
   flowsensor_init();
-  if(!sdcard_init())
+
+  view_println("SD Card");
+  if (!sdcard_init())
   {
-    while(true)
-    {
-      ;
-    }
+    view_println("-------ERROR--------");
+    while(1);
   }
 
-
+  view_println("Load Setup");
   if(!feedline_load())
   {
     //halt and alarm
   }
+
+  view_println("Load Washers");
   washer_load();
+
+  view_println("Load Products");
   detergent_load();
 
-  //if there is data confirm usage
-
-  //load saved data
+  view_println("System Flush");
   feedline_flush();
 
+  view_clear();
+  view_println("System Ready");
 }
 
 void loop()
