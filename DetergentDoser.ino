@@ -108,8 +108,8 @@ uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)
 {
   //TODO: return dispensing time(millis)
   //find dosing amount for specific washer detergent combo
-  // lbs . oz(tenths) . time(seconds) . time(millis) 
-  //          lb          oz(int) 
+  // lbs . oz(tenths) . time(seconds) . time(millis)
+  //          lb          oz(int)
   uint8_t lbs = washer_size(washer);
   uint8_t half_oz_ten_lb = detergent_half_oz_per_ten_lbs(detergent);
   uint8_t dosage_half_ozs = ((lbs / 10) * half_oz_ten_lb);
@@ -125,7 +125,7 @@ uint32_t advance_step(void)
   {
     case FLUSH_STEP:
       detergent_close_all_valves();//TODO: delete
-      feedline_valve(WATER_VALVE, VALVE_OPEN); 
+      feedline_valve(WATER_VALVE, VALVE_OPEN);
       step_length_millis = feedline_pump_start(feedline_flush_oz() * 2); //TODO: change to flush time
       system_info.current_step = FLUSH_STEP;
       break;
