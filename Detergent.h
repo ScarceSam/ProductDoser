@@ -14,4 +14,6 @@ uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number);
 
 uint8_t detergent_load(void);
 
+uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent);
+
 #endif
