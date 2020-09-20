@@ -66,6 +66,6 @@ void loop()
     system_info.step_start_millis = millis();
   }
 
-  washer_update();
+  washer_pollWashers();
   feedline_update();
 }

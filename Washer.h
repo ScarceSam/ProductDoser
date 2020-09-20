@@ -17,7 +17,7 @@ void washer_close_all_valves(void);
 
 uint8_t washer_size(uint8_t washer_number);
 
-void washer_update(void);
+void washer_pollWashers(void);
 
 uint8_t washer_peek_detergent_in_queue(uint8_t queue_position);
 

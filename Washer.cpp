@@ -103,7 +103,7 @@ uint8_t washer_size(uint8_t washer_number)
   return washer[washer_number - 1].washer_size;
 }
 
-void washer_update(void)
+void washer_pollWashers(void)
 {
   static uint32_t last_check = millis();
   static uint32_t time_temp_queue[24][4]; //[washer_number]
