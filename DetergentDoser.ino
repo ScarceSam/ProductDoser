@@ -44,7 +44,7 @@ void setup()
 
 void loop()
 {
-  if (washer_ready() && if_idle())
+  if (washer_enqueued() && if_idle())
   {
     //dequeue the next washer in queue
     uint8_t next[2] = {0, 0};

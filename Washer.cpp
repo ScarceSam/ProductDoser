@@ -70,7 +70,7 @@ void washer_init(void)
   }
 }
 
-uint8_t washer_ready(void)
+uint8_t washer_enqueued(void)
 {
   return washers_enqueued;
 }

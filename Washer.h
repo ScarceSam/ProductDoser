@@ -7,7 +7,7 @@
 
 void washer_init(void);
 
-uint8_t washer_ready(void);
+uint8_t washer_enqueued(void);
 
 void washer_dequeue_next(uint8_t next_in_queue[]);
 
