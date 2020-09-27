@@ -53,17 +53,13 @@ void loop()
     uint8_t washer = next[0];
     uint8_t detergent = next[1];
 
-    system_info.current_washer = washer;//TODO: move to state file
-    system_info.current_detergent = detergent;//TODO: move to state file
-
     //start dosing
-    system_info.step_length_millis = state_start(washer, detergent);
-    system_info.step_start_millis = millis();
+    state_start(washer, detergent);
+    
   }
-  else if((!feedline_is_pumping()) && ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis))
+  else if(!state_ifIdle() && state_isStepComplete())  
   {
-    system_info.step_length_millis = state_advance();
-    system_info.step_start_millis = millis();
+    state_advance();
   }
 
   washer_pollWashers();

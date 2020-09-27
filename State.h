@@ -10,10 +10,12 @@ typedef struct {
   uint32_t step_start_millis = 0;
 }system_t;
 
-static system_t system_info;//TODO: Move to .cpp
+//TODO: Move to .cpp
 
 uint32_t state_start(uint8_t washer, uint8_t detergent);
 
 uint32_t state_advance(void);
 
 uint8_t state_ifIdle(void);
+
+bool state_isStepComplete(void);

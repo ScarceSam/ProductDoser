@@ -4,8 +4,13 @@
 #include "Washer.h"
 #include "Feedline.h"
 
+static system_t system_info;
+
 uint32_t state_start(uint8_t washer, uint8_t detergent)
 {
+  system_info.current_washer = washer;
+  system_info.current_detergent = detergent;
+
   uint8_t dosage_oz = dosage_oz_calc(washer, detergent);
   uint32_t return_value = 0;
 
@@ -22,7 +27,10 @@ uint32_t state_start(uint8_t washer, uint8_t detergent)
     return_value = feedline_pump_start(dosage_oz);
   }
 
-  return return_value;
+  system_info.step_length_millis = return_value;
+  system_info.step_start_millis = millis();
+
+  return 0;
 }
 
 uint8_t state_ifIdle(void)
@@ -59,5 +67,14 @@ uint32_t state_advance(void)
       system_info.current_step = IDLE_STEP;
       break;
   }
-  return step_length_millis;
+
+  system_info.step_length_millis = step_length_millis;
+  system_info.step_start_millis = millis();
+  
+  return 0;
+}
+
+bool state_isStepComplete(void)
+{
+  return ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis);
 }
