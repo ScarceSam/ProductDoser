@@ -12,8 +12,8 @@ typedef struct {
 
 static system_t system_info;//TODO: Move to .cpp
 
-uint32_t start_dosing(uint8_t washer, uint8_t detergent);
+uint32_t state_start(uint8_t washer, uint8_t detergent);
 
-uint32_t advance_step(void);
+uint32_t state_advance(void);
 
-uint8_t if_idle(void);
+uint8_t state_ifIdle(void);

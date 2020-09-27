@@ -44,7 +44,7 @@ void setup()
 
 void loop()
 {
-  if (washer_enqueued() && if_idle())
+  if (washer_enqueued() && state_ifIdle())
   {
     //dequeue the next washer in queue
     uint8_t next[2] = {0, 0};
@@ -57,12 +57,12 @@ void loop()
     system_info.current_detergent = detergent;//TODO: move to state file
 
     //start dosing
-    system_info.step_length_millis = start_dosing(washer, detergent);
+    system_info.step_length_millis = state_start(washer, detergent);
     system_info.step_start_millis = millis();
   }
   else if((!feedline_is_pumping()) && ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis))
   {
-    system_info.step_length_millis = advance_step();
+    system_info.step_length_millis = state_advance();
     system_info.step_start_millis = millis();
   }
 
