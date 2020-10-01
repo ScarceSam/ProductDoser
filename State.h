@@ -7,12 +7,13 @@ typedef struct {
   uint8_t current_washer = 0;
   uint8_t current_detergent = 0;
   uint32_t step_length_millis = 0;
+  uint32_t step_length_millis_array[4] = {0};
   uint32_t step_start_millis = 0;
 }system_t;
 
 //TODO: Move to .cpp
 
-uint32_t state_start(uint8_t washer, uint8_t detergent);
+bool state_start(uint8_t washer, uint8_t detergent);
 
 uint32_t state_advance(void);
 

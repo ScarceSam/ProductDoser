@@ -8,31 +8,24 @@ static system_t system_info;
 
 uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent);
 
-uint32_t state_start(uint8_t washer, uint8_t detergent)
+bool state_start(uint8_t washer, uint8_t detergent)
 {
-  system_info.current_washer = washer;
-  system_info.current_detergent = detergent;
+  bool return_value = false;
 
   uint8_t dosage_oz = dosage_oz_calc(washer, detergent);
-  uint32_t return_value = 0;
 
-  if(0 == dosage_oz)
+  if(dosage_oz)
   {
-    //TODO: Error handle
-    return_value = 0;
-  }
-  else
-  {
+    system_info.current_washer = washer;
+    system_info.current_detergent = detergent;
     detergent_open_valve(detergent);
     washer_open_valve(washer);
+    system_info.step_length_millis = feedline_pump_start(dosage_oz);
     system_info.current_step = DOSE_STEP;
-    return_value = feedline_pump_start(dosage_oz);
+    system_info.step_start_millis = millis();
+    return_value = true;
   }
-
-  system_info.step_length_millis = return_value;
-  system_info.step_start_millis = millis();
-
-  return 0;
+  return return_value;
 }
 
 uint8_t state_ifIdle(void)
