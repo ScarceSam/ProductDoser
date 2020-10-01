@@ -15,7 +15,7 @@ typedef struct {
 
 bool state_start(uint8_t washer, uint8_t detergent);
 
-uint32_t state_advance(void);
+void state_advance(void);
 
 uint8_t state_ifIdle(void);
 

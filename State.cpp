@@ -33,7 +33,7 @@ uint8_t state_ifIdle(void)
   return !system_info.current_step;
 }
 
-uint32_t state_advance(void)
+void state_advance(void)
 {
   system_info.current_step++;
   uint32_t step_length_millis = 0;
@@ -65,8 +65,6 @@ uint32_t state_advance(void)
 
   system_info.step_length_millis = step_length_millis;
   system_info.step_start_millis = millis();
-  
-  return 0;
 }
 
 bool state_isStepComplete(void)
