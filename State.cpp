@@ -18,11 +18,14 @@ bool state_start(uint8_t washer, uint8_t detergent)
   {
     system_info.current_washer = washer;
     system_info.current_detergent = detergent;
-    detergent_open_valve(detergent);
-    washer_open_valve(washer);
-    system_info.step_length_millis = feedline_pump_start(dosage_oz);
+    system_info.step_length_millis[DOSE_STEP] = feedline_pump_millis(dosage_oz);
+    system_info.step_length_millis[FLUSH_STEP] = feedline_pump_millis(feedline_flush_oz() * 2);
+    system_info.step_length_millis[RINSE_STEP] = feedline_pump_millis(feedline_manifold_oz() * 2);
     system_info.current_step = DOSE_STEP;
     system_info.step_start_millis = millis();
+    feedline_run_pump(true);
+    detergent_open_valve(detergent);
+    washer_open_valve(washer);
     return_value = true;
   }
   return return_value;
@@ -36,14 +39,12 @@ uint8_t state_ifIdle(void)
 void state_advance(void)
 {
   system_info.current_step++;
-  uint32_t step_length_millis = 0;
 
   switch(system_info.current_step)
   {
     case FLUSH_STEP:
       detergent_close_all_valves();
       feedline_valve(WATER_VALVE, VALVE_OPEN);
-      step_length_millis = feedline_pump_start(feedline_flush_oz() * 2);
       system_info.current_step = FLUSH_STEP;
       break;
     case RINSE_STEP:
@@ -51,25 +52,23 @@ void state_advance(void)
       if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
       {
         feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
-        step_length_millis = feedline_pump_start(feedline_manifold_oz() * 2);
         system_info.current_step = RINSE_STEP;
         break;
       }
     default:
+      feedline_run_pump(false);
       detergent_close_all_valves();
       washer_close_all_valves();
       feedline_valve(ALL_VALVES, VALVE_CLOSE);
       system_info.current_step = IDLE_STEP;
       break;
   }
-
-  system_info.step_length_millis = step_length_millis;
   system_info.step_start_millis = millis();
 }
 
 bool state_isStepComplete(void)
 {
-  return ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis);
+  return ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis[system_info.current_step]);
 }
 
 uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)

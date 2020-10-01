@@ -20,7 +20,7 @@ void feedline_init(void);
 void feedline_update(void);
 
 //starting pump with desired volume
-uint32_t feedline_pump_start(uint8_t volume_oz);
+uint32_t feedline_pump_millis(uint8_t volume_oz);
 
 //is the pump active
 bool feedline_is_pumping(void);

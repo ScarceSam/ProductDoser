@@ -47,15 +47,13 @@ void feedline_flush(void)
   feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
-uint32_t feedline_pump_start(uint8_t volume_half_oz)
+uint32_t feedline_pump_millis(uint8_t volume_half_oz)
 {
   //save number of pulses needed for tracking pumping
   feedline_info.pump_time = (((60000 / feedline_info.oz_per_min) * volume_half_oz) / 2);
 
   //caculate estimated time to finish pumping
   //uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
-
-  feedline_run_pump(true);
 
   //remember the start of the above pulse
   feedline_info.pulse_start_millis = millis();

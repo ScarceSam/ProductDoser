@@ -63,5 +63,4 @@ void loop()
   }
 
   washer_pollWashers();
-  feedline_update();
 }

@@ -6,8 +6,7 @@ typedef struct {
   uint8_t current_step = 0;
   uint8_t current_washer = 0;
   uint8_t current_detergent = 0;
-  uint32_t step_length_millis = 0;
-  uint32_t step_length_millis_array[4] = {0};
+  uint32_t step_length_millis[4] = {0};
   uint32_t step_start_millis = 0;
 }system_t;
 
