@@ -6,6 +6,8 @@
 
 static system_t system_info;
 
+uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent);
+
 uint32_t state_start(uint8_t washer, uint8_t detergent)
 {
   system_info.current_washer = washer;
@@ -77,4 +79,15 @@ uint32_t state_advance(void)
 bool state_isStepComplete(void)
 {
   return ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis);
+}
+
+uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)
+{
+  //find dosing amount for specific washer detergent combo
+  // lbs . oz . oz
+  //       lb 
+  uint8_t lbs = washer_size(washer);
+  uint8_t half_oz_ten_lb = detergent_half_oz_per_ten_lbs(detergent);
+  uint8_t dosage_half_ozs = ((lbs / 10) * half_oz_ten_lb);
+  return dosage_half_ozs;
 }

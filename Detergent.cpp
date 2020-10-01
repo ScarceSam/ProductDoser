@@ -75,14 +75,3 @@ uint8_t detergent_load(void)
 
   return detergents_loaded;
 }
-
-uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)
-{
-  //find dosing amount for specific washer detergent combo
-  // lbs . oz . oz
-  //       lb 
-  uint8_t lbs = washer_size(washer);
-  uint8_t half_oz_ten_lb = detergent_half_oz_per_ten_lbs(detergent);
-  uint8_t dosage_half_ozs = ((lbs / 10) * half_oz_ten_lb);
-  return dosage_half_ozs;
-}
