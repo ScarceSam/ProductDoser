@@ -36,3 +36,5 @@ uint8_t feedline_manifold_oz(void);
 bool feedline_load(void);
 
 void feedline_flush(void);
+
+void feedline_run_pump(bool);

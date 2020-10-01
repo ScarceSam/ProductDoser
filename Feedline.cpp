@@ -4,9 +4,6 @@
 #include "SDcard.h"
 #include "FlowSensor.h"
 
-//file scoped functions
-void pulse_pump(int);
-
 typedef struct {
   const uint8_t PUMP_PIN = FEEDLINE_PUMP_PIN;
   bool position_A = 0;
@@ -39,14 +36,14 @@ void feedline_flush(void)
   //purge feedline with water 
   feedline_valve(WATER_VALVE, VALVE_OPEN);
   feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
-  pulse_pump(HIGH);
+  feedline_run_pump(true);
   uint32_t start_time = millis();
   while((uint32_t)(millis() - start_time) < (feedline_info.flush_seconds * 1000))
   {
     if(!flowsensor_is_flowing())
         start_time = millis();
   }
-  pulse_pump(LOW);
+  feedline_run_pump(false);
   feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
@@ -58,7 +55,7 @@ uint32_t feedline_pump_start(uint8_t volume_half_oz)
   //caculate estimated time to finish pumping
   //uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
 
-  pulse_pump(1);
+  feedline_run_pump(true);
 
   //remember the start of the above pulse
   feedline_info.pulse_start_millis = millis();
@@ -87,7 +84,7 @@ void feedline_valve(uint8_t valve, uint8_t state)
   }
 }
 
-void pulse_pump(int power)
+void feedline_run_pump(bool power)
 {
   digitalWrite(feedline_info.PUMP_PIN, power);
 }
@@ -106,7 +103,7 @@ void feedline_update(void)
 {
   if((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.pump_time)
   {
-    pulse_pump(0);
+    feedline_run_pump(false);
   }
 }
 
