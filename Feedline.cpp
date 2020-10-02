@@ -6,12 +6,6 @@
 
 typedef struct {
   const uint8_t PUMP_PIN = FEEDLINE_PUMP_PIN;
-  bool position_A = 0;
-  uint32_t pump_time = 0;
-  uint32_t pulse_start_millis = 0;
-  const uint8_t COIL_MAX_PULSE_PER_SEC = 5;
-  const uint8_t PUMP_MAX_PULSE_PER_SEC = 5;
-  const uint32_t PULSE_TIME_MILLI = 1000/((COIL_MAX_PULSE_PER_SEC <= PUMP_MAX_PULSE_PER_SEC) ? COIL_MAX_PULSE_PER_SEC : PUMP_MAX_PULSE_PER_SEC);
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
@@ -49,17 +43,8 @@ void feedline_flush(void)
 
 uint32_t feedline_pump_millis(uint8_t volume_half_oz)
 {
-  //save number of pulses needed for tracking pumping
-  feedline_info.pump_time = (((60000 / feedline_info.oz_per_min) * volume_half_oz) / 2);
-
-  //caculate estimated time to finish pumping
-  //uint32_t time_to_complete = (feedline_info.remaining_pump_pulses * feedline_info.PULSE_TIME_MILLI);
-
-  //remember the start of the above pulse
-  feedline_info.pulse_start_millis = millis();
-
-  //return the estimated time
-  return feedline_info.pump_time;//time_to_complete;  
+  //return millis to pump given volume
+  return (((60000 / feedline_info.oz_per_min) * volume_half_oz) / 2);  
 }
 
 void feedline_valve(uint8_t valve, uint8_t state)
@@ -95,24 +80,6 @@ uint8_t feedline_flush_oz(void)
 uint8_t feedline_manifold_oz(void)
 {
   return feedline_info.manifold_oz;
-}
-
-void feedline_update(void)
-{
-  if((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.pump_time)
-  {
-    feedline_run_pump(false);
-  }
-}
-
-bool feedline_is_pumping(void)
-{
-  //is the pump running?
-  bool return_value = 0;
-  
-  return_value = !((uint32_t)(millis() - feedline_info.pulse_start_millis) > feedline_info.pump_time);
-
-  return return_value;
 }
 
 bool feedline_load(void)
