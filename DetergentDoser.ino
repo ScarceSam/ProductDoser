@@ -7,6 +7,9 @@
 #include "View.h"
 #include "State.h"
 
+#define LED_PIN 13
+void toggleLED(void);
+
 void setup()
 {
   //Initialize sub systems
@@ -40,6 +43,8 @@ void setup()
 
   view_clear();
   view_println("System Ready");
+
+  pinMode(LED_PIN, OUTPUT);
 }
 
 void loop()
@@ -63,4 +68,12 @@ void loop()
   }
 
   washer_pollWashers();
+  toggleLED();
+}
+
+void toggleLED(void)
+{
+  static bool indicatorLED = false;
+  indicatorLED = !indicatorLED;
+  digitalWrite(LED_PIN, indicatorLED);
 }
