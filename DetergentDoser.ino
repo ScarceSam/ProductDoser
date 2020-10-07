@@ -49,7 +49,7 @@ void setup()
 
 void loop()
 {
-  if (washer_enqueued() && state_ifIdle())
+  if (washer_enqueued() && (state_currentState() == IDLE_STEP))
   {
     //dequeue the next washer in queue
     uint8_t next[2] = {0, 0};
@@ -62,7 +62,7 @@ void loop()
     state_start(washer, detergent);
     
   }
-  else if(!state_ifIdle() && state_isStepComplete())  
+  else if((state_currentState() != IDLE_STEP) && state_isStepComplete())
   {
     state_advance();
   }

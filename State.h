@@ -16,6 +16,6 @@ bool state_start(uint8_t washer, uint8_t detergent);
 
 void state_advance(void);
 
-uint8_t state_ifIdle(void);
+uint8_t state_currentState(void);
 
 bool state_isStepComplete(void);
