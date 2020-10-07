@@ -9,13 +9,18 @@ static LiquidCrystalFast lcd(DISPLAY_RS_PIN, DISPLAY_E_PIN, DISPLAY_D4_PIN, DISP
 static char line[DISPLAY_Y][DISPLAY_X+1];
 
 static uint8_t messageCursor = 0;
+char* stepNames[4];
 
 void shiftUp(void);
 void copyToLine(char* newMessage, char* oldMessage);
 
-
 void view_init(void)
 {
+  stepNames[0] = "Idle";
+  stepNames[1] = "Dosing";
+  stepNames[2] = "Flushing";
+  stepNames[3] = "Rinsing";
+
   //initialize the screen
   lcd.begin(DISPLAY_X, DISPLAY_Y);
 
@@ -91,4 +96,13 @@ void view_clear(void)
   }
   updateScreen();
   messageCursor = 0;
+}
+
+void view_display_state(void)
+{
+  copyToLine("Washer: ", line[0]);
+  copyToLine("Product: ", line[1]);
+  copyToLine("Step: ", line[2]);
+  copyToLine("test", line[3]);
+  updateScreen();
 }
