@@ -103,6 +103,19 @@ void view_clear(void)
 
 void view_display_state(void)
 {
+  static bool idle = 0;
+
+  if (state_currentState() == 0 && idle == 0)
+  {
+    view_clear();
+    copyToLine("     System Idle", line[1]);
+    copyToLine("      And Ready", line[2]);
+    updateScreen();
+    idle = 1;
+    return;
+  }
+  else if(state_currentState() != 0)
+  {
   char scratch[DISPLAY_X + 1];
 
   //display line 1
@@ -118,6 +131,9 @@ void view_display_state(void)
   //display line 4
   copyToLine("Time:", line[3]);
   updateScreen();
+
+  idle == 0;
+  }
 }
 
 void concatinate(char* str1, char* str2, char* str3, uint8_t sizeLimit)

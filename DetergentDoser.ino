@@ -69,7 +69,7 @@ void loop()
   }
   else if(state_currentState() == IDLE_STEP)
   {
-    view_clear();
+    view_display_state();
   }
 
   washer_pollWashers();
