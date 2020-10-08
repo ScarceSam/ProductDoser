@@ -14,7 +14,7 @@ char* stepNames[4];
 
 void shiftUp(void);
 void copyToLine(char* newMessage, char* oldMessage);
-void concatinate(char* str1, char* str2, char* str3, uint8_t sizeLimit);
+void concatenate(char* str1, char* str2, char* str3, uint8_t sizeLimit);
 uint8_t charLen(char* string);
 
 void view_init(void)
@@ -125,7 +125,7 @@ void view_display_state(void)
   copyToLine("Prod: ", line[1]);
 
   //display line 3
-  concatinate("Step: ", stepNames[state_currentState()], scratch, 20);
+  concatenate("Step: ", stepNames[state_currentState()], scratch, (DISPLAY_X + 1));
   copyToLine(scratch, line[2]);
 
   //display line 4
@@ -136,17 +136,17 @@ void view_display_state(void)
   }
 }
 
-void concatinate(char* str1, char* str2, char* str3, uint8_t sizeLimit)
+void concatenate(char* str1, char* str2, char* str3, uint8_t sizeLimit)
 {
-  if (sizeLimit > DISPLAY_X)
+  if (sizeLimit > (DISPLAY_X + 1))
   {
-    sizeLimit = DISPLAY_X;
+    sizeLimit = (DISPLAY_X + 1);
   }
 
   uint8_t endLoop = sizeLimit;
   uint8_t strOneLen = charLen(str1);
 
-  for (int i = 0; i <= endLoop; i++)
+  for (int i = 0; i < endLoop; i++)
   {
     //if iteration is less than end of string one
     if (i < strOneLen)
@@ -162,7 +162,7 @@ void concatinate(char* str1, char* str2, char* str3, uint8_t sizeLimit)
     }
 
     //if last iteration
-    if (i == endLoop)
+    if (i == (endLoop - 1))
     {
       //end line
       str3[i] = '\0';
