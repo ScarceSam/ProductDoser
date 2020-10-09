@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "View.h"
 #include "State.h"
+#include "Controller.h"
 
 #define LED_PIN 13
 void toggleLED(void);
@@ -60,16 +61,16 @@ void loop()
 
     //start dosing
     state_start(washer, detergent);
-    view_display_state();
+    controller_updateScreen();
   }
   else if((state_currentState() != IDLE_STEP) && state_isStepComplete())
   {
     state_advance();
-    view_display_state();
+    controller_updateScreen();
   }
   else if(state_currentState() == IDLE_STEP)
   {
-    view_display_state();
+    controller_updateScreen();
   }
 
   washer_pollWashers();
