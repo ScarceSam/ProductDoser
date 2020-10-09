@@ -61,18 +61,13 @@ void loop()
 
     //start dosing
     state_start(washer, detergent);
-    controller_updateScreen();
   }
   else if((state_currentState() != IDLE_STEP) && state_isStepComplete())
   {
     state_advance();
-    controller_updateScreen();
-  }
-  else if(state_currentState() == IDLE_STEP)
-  {
-    controller_updateScreen();
   }
 
+  controller_updateScreen();
   washer_pollWashers();
   toggleLED();
 }
