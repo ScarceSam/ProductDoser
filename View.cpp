@@ -132,7 +132,7 @@ void view_display_state(void)
   copyToLine("Time:", line[3]);
   updateScreen();
 
-  idle == 0;
+  idle = 0;
   }
 }
 
