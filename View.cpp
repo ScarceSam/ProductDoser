@@ -117,6 +117,8 @@ void view_display_state(void)
   else if(state_currentState() != 0)
   {
   char scratch[DISPLAY_X + 1];
+  system_t currentStateData;
+  state_copyStateData(&currentStateData);
 
   //display line 1
   copyToLine("Wshr: ", line[0]);
@@ -125,7 +127,7 @@ void view_display_state(void)
   copyToLine("Prod: ", line[1]);
 
   //display line 3
-  concatenate("Step: ", stepNames[state_currentState()], scratch, (DISPLAY_X + 1));
+  concatenate("Step: ", stepNames[currentStateData.current_step], scratch, (DISPLAY_X + 1));
   copyToLine(scratch, line[2]);
 
   //display line 4

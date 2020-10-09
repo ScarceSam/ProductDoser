@@ -81,3 +81,8 @@ uint8_t dosage_oz_calc(uint8_t washer, uint8_t detergent)
   uint8_t dosage_half_ozs = ((lbs / 10) * half_oz_ten_lb);
   return dosage_half_ozs;
 }
+
+void state_copyStateData(system_t* copyOfData)
+{
+  *copyOfData = system_info;
+}

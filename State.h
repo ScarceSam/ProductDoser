@@ -19,3 +19,5 @@ void state_advance(void);
 uint8_t state_currentState(void);
 
 bool state_isStepComplete(void);
+
+void state_copyStateData(system_t*);
