@@ -164,6 +164,21 @@ uint8_t washer_load(void)
       washer[i].washer_size = washer_capacity;
       washers_loaded++;
     }
+
+    String washer_label = SDcard_read_string(washer_name, "label");
+
+    for (int j = 0; j < ID_LIMIT; j++)
+    {
+      if ((washer_label[j] == '\0') || (j == (ID_LIMIT - 1)))
+      {
+        washer[i].washer_id[j] = '\0';
+        j = ID_LIMIT;
+      }
+      else
+      {
+        washer[i].washer_id[j] = washer_label[j];
+      }
+    }
   }
 
   return washers_loaded;
