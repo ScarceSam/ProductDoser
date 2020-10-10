@@ -2,6 +2,7 @@
 #include <LiquidCrystalFast.h>
 #include "Pinmap.h"
 #include "State.h"
+#include "Washer.h"
 
 #define DISPLAY_X 20
 #define DISPLAY_Y 4
@@ -121,7 +122,8 @@ void view_display_state(void)
   state_copyStateData(&currentStateData);
 
   //display line 1
-  copyToLine("Wshr: ", line[0]);
+  concatenate("Wshr: ", washer_label(currentStateData.current_washer), scratch, (DISPLAY_X + 1));
+  copyToLine(scratch, line[0]);
 
   //display line 2
   copyToLine("Prod: ", line[1]);
