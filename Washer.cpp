@@ -183,3 +183,8 @@ uint8_t washer_load(void)
 
   return washers_loaded;
 }
+
+char* washer_label(uint8_t washerNumber)
+{
+  return washer[washerNumber - 1].washer_id;
+}
