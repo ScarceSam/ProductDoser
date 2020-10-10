@@ -14,4 +14,6 @@ uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number);
 
 uint8_t detergent_load(void);
 
+char* product_label(uint8_t);
+
 #endif

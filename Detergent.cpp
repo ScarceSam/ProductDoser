@@ -71,7 +71,27 @@ uint8_t detergent_load(void)
       detergent[i].half_oz_per_ten_lbs = detergent_dosage;
       detergents_loaded++;
     }
+
+    String product_label = SDcard_read_string(detergent_name, "label");
+
+    for (int j = 0; j < ID_LIMIT; j++)
+    {
+      if ((product_label[j] == '\0') || (j == (ID_LIMIT - 1)))
+      {
+        detergent[i].detergent_name[j] = '\0';
+        j = ID_LIMIT;
+      }
+      else
+      {
+        detergent[i].detergent_name[j] = product_label[j];
+      }
+    }
   }
 
   return detergents_loaded;
+}
+
+char* product_label(uint8_t washerNumber)
+{
+  return detergent[washerNumber - 1].detergent_name;
 }
