@@ -3,6 +3,7 @@
 #include "Pinmap.h"
 #include "State.h"
 #include "Washer.h"
+#include "Detergent.h"
 
 #define DISPLAY_X 20
 #define DISPLAY_Y 4
@@ -126,7 +127,8 @@ void view_display_state(void)
   copyToLine(scratch, line[0]);
 
   //display line 2
-  copyToLine("Prod: ", line[1]);
+  concatenate("Prod: ", product_label(currentStateData.current_detergent), scratch, (DISPLAY_X + 1));
+  copyToLine(scratch, line[1]);
 
   //display line 3
   concatenate("Step: ", stepNames[currentStateData.current_step], scratch, (DISPLAY_X + 1));
