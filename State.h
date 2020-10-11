@@ -21,3 +21,5 @@ uint8_t state_currentState(void);
 bool state_isStepComplete(void);
 
 void state_copyStateData(system_t*);
+
+uint16_t state_remainingMillis(void);

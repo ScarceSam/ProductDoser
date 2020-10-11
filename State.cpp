@@ -86,3 +86,17 @@ void state_copyStateData(system_t* copyOfData)
 {
   *copyOfData = system_info;
 }
+
+uint16_t state_remainingMillis(void)
+{
+  uint32_t return_value;
+  for (int i = system_info.current_step; i < 4; i++)
+  {
+    return_value += system_info.step_length_millis[i];
+    if (system_info.current_step == i)
+    {
+      return_value -= (uint32_t)(millis() - system_info.step_start_millis);
+    }
+  }
+  return (uint16_t)(return_value);
+}
