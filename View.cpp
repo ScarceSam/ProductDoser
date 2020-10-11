@@ -135,7 +135,12 @@ void view_display_state(void)
   copyToLine(scratch, line[2]);
 
   //display line 4
-  copyToLine("Time:", line[3]);
+  char buf[4];
+  sprintf(buf, "%0.3d", (state_remainingMillis()/1000)); //leading zeros & more codespace
+  //itoa((state_remainingMillis()/1000), buf, 10); //less codespace & no leading zeros
+  concatenate("Time: ", buf, scratch, (DISPLAY_X + 1));
+  concatenate(scratch, " Seconds", scratch, (DISPLAY_X + 1));
+  copyToLine(scratch, line[3]);
   updateScreen();
 
   idle = 0;
