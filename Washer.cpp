@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "pinmap.h"
 #include "Washer.h"
 #include <Wire.h>
 #include "Adafruit_MCP23017.h"
@@ -38,6 +39,8 @@ void washer_init(void)
   for(int i = 0; i < 8; i++)
   {
     mcp[i].begin(i);
+    mcp[i].setupInterrupts(true, true, HIGH);
+    pinMode(MCP23017_INT_PIN, INPUT_PULLUP);
   }
 
   for(int i = 0; i < NUMBER_OF_WASHERS; i++)
@@ -57,6 +60,7 @@ void washer_init(void)
         washer[i].com_pin[j] = (((i % USED_PINS_PER_EXPANSION) * NUMBER_OF_PINS) + j) % USED_PINS_PER_EXPANSION;
         mcp[washer[i].i2cAddress].pinMode(washer[i].com_pin[j], INPUT);
         mcp[washer[i].i2cAddress].pullUp(washer[i].com_pin[j], HIGH);
+        mcp[washer[i].i2cAddress].setupInterruptPin(washer[i].com_pin[j], FALLING);
       }
       
       //The last pin is an output to the Washer valve
@@ -105,6 +109,9 @@ uint8_t washer_size(uint8_t washer_number)
 
 void washer_pollWashers(void)
 {
+  if(digitalRead(MCP23017_INT_PIN) == HIGH)
+    return;
+
   static uint32_t last_check = millis();
   static uint32_t time_temp_queue[24][4]; //[washer_number]
   static uint8_t temp_queued[24][4];
