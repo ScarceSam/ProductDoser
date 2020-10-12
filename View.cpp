@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "View.h"
 #include <LiquidCrystalFast.h>
 #include "Pinmap.h"

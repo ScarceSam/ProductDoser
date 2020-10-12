@@ -1,7 +1,4 @@
-#ifndef Washer_h
-#define Washer_h
-
-#include <Arduino.h>
+#pragma once
 
 #define ID_LIMIT 16 
 
@@ -24,5 +21,3 @@ uint8_t washer_peek_detergent_in_queue(uint8_t queue_position);
 uint8_t washer_load(void);
 
 char* washer_label(uint8_t);
-
-#endif

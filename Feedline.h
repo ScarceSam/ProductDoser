@@ -1,9 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-#include "Washer.h"
-#include "Detergent.h"
-
 //values to use with valve function
 #define PUMP_ON HIGH
 #define PUMP_OFF !PUMP_ON

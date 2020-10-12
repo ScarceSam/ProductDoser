@@ -1,6 +1,4 @@
-#ifndef Detergent_h
-#define Detergent_h
-#include <Arduino.h>
+#pragma once
 
 #define ID_LIMIT 16
 
@@ -15,5 +13,3 @@ uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number);
 uint8_t detergent_load(void);
 
 char* product_label(uint8_t);
-
-#endif
