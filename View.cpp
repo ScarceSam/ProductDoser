@@ -141,6 +141,8 @@ void view_display_state(void)
   //itoa((state_remainingMillis()/1000), buf, 10); //less codespace & no leading zeros
   concatenate("Time: ", buf, scratch, (DISPLAY_X + 1));
   concatenate(scratch, " Seconds", scratch, (DISPLAY_X + 1));
+  if(currentStateData.step_length_millis[RINSE_STEP] == 0)
+    concatenate(scratch, " sr", scratch, (DISPLAY_X + 1));
   copyToLine(scratch, line[3]);
   updateScreen();
 

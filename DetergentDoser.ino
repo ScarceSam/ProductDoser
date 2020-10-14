@@ -62,10 +62,16 @@ void loop()
     //start dosing
     state_start(washer, detergent);
   }
-  else if((state_currentState() != IDLE_STEP) && state_isStepComplete())
+  else if(state_currentState() != IDLE_STEP)
   {
-    state_advance();
+    state_checkSkipRinse(washer_peek_detergent_in_queue(0));
+
+    if(state_isStepComplete())
+    {
+      state_advance();
+    }
   }
+
 
   controller_updateScreen();
   washer_pollWashers();

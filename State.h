@@ -23,3 +23,5 @@ bool state_isStepComplete(void);
 void state_copyStateData(system_t*);
 
 uint16_t state_remainingMillis(void);
+
+void state_checkSkipRinse(uint8_t);

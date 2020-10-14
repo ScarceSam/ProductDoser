@@ -49,7 +49,7 @@ void state_advance(void)
       break;
     case RINSE_STEP:
       washer_close_all_valves();
-      if(washer_peek_detergent_in_queue(0) != system_info.current_detergent)
+      if(system_info.step_length_millis[RINSE_STEP] > 0)
       {
         feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
         system_info.current_step = RINSE_STEP;
@@ -99,4 +99,16 @@ uint16_t state_remainingMillis(void)
     }
   }
   return (uint16_t)(return_value);
+}
+
+void state_checkSkipRinse(uint8_t)
+{
+  if(washer_peek_detergent_in_queue(0) == system_info.current_detergent)
+  {
+    system_info.step_length_millis[RINSE_STEP] = 0;
+  }
+  else
+  {
+    system_info.step_length_millis[RINSE_STEP] = feedline_pump_millis(feedline_manifold_oz() * 2);
+  }
 }
