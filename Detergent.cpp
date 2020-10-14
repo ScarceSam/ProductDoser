@@ -4,13 +4,13 @@
 #include "Pinmap.h"
 #include "SDcard.h"
 
-#define NUMBER_OF_DETERGENTS 4
+#define NUMBER_OF_PRODUCTS 4
 #define VALVE_OPEN HIGH
 
-static const uint8_t LEVEL_PIN[] = {DETERGENT_1_LEVEL_PIN, DETERGENT_2_LEVEL_PIN,
-                                    DETERGENT_3_LEVEL_PIN, DETERGENT_4_LEVEL_PIN};
-static const uint8_t VALVE_PIN[] = {DETERGENT_1_VALVE_PIN, DETERGENT_2_VALVE_PIN,
-                                    DETERGENT_3_VALVE_PIN, DETERGENT_4_VALVE_PIN};
+static const uint8_t LEVEL_PIN[] = {PRODUCT_1_LEVEL_PIN, PRODUCT_2_LEVEL_PIN,
+                                    PRODUCT_3_LEVEL_PIN, PRODUCT_4_LEVEL_PIN};
+static const uint8_t VALVE_PIN[] = {PRODUCT_1_VALVE_PIN, PRODUCT_2_VALVE_PIN,
+                                    PRODUCT_3_VALVE_PIN, PRODUCT_4_VALVE_PIN};
 
 typedef struct{
   uint8_t number;
@@ -20,11 +20,11 @@ typedef struct{
   char detergent_name[ID_LIMIT];
 } detergent_t;
 
-static detergent_t detergent[NUMBER_OF_DETERGENTS];
+static detergent_t detergent[NUMBER_OF_PRODUCTS];
 
 void detergent_init(void)
 {
-  for(int i = 0; i < NUMBER_OF_DETERGENTS; i++)
+  for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
     //chronologically label the detergents
     detergent[i].number = i+1;
@@ -44,7 +44,7 @@ void detergent_open_valve(uint8_t detergent_number)
 
 void detergent_close_all_valves(void)
 {
-  for(int i = 0; i < NUMBER_OF_DETERGENTS; i++)
+  for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
     digitalWrite(detergent[i].valve_pin, !VALVE_OPEN);
   }
@@ -59,7 +59,7 @@ uint8_t detergent_load(void)
 {
   uint8_t detergents_loaded = 0;
 
-  for (uint8_t i = 0; i < NUMBER_OF_DETERGENTS; i++)
+  for (uint8_t i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
     String detergent_name = "product";
     int detergent_number = i + 1;
