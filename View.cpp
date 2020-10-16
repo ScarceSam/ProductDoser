@@ -128,7 +128,7 @@ void view_display_state(void)
   copyToLine(scratch, line[0]);
 
   //display line 2
-  concatenate("Prod: ", product_label(currentStateData.current_detergent), scratch, (DISPLAY_X + 1));
+  concatenate("Prod: ", product_label(currentStateData.current_product), scratch, (DISPLAY_X + 1));
   copyToLine(scratch, line[1]);
 
   //display line 3

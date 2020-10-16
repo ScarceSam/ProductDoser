@@ -16,7 +16,7 @@ void setup()
   //Initialize sub systems
   view_init();
   washer_init();
-  detergent_init();
+  product_init();
   feedline_init();
   flowsensor_init();
 
@@ -37,7 +37,7 @@ void setup()
   washer_load();
 
   view_println("Load Products");
-  detergent_load();
+  product_load();
 
   view_println("System Flush");
   feedline_flush();
@@ -57,14 +57,14 @@ void loop()
     washer_dequeue_next(next);
 
     uint8_t washer = next[0];
-    uint8_t detergent = next[1];
+    uint8_t product = next[1];
 
     //start dosing
-    state_start(washer, detergent);
+    state_start(washer, product);
   }
   else if(state_currentState() != IDLE_STEP)
   {
-    state_checkSkipRinse(washer_peek_detergent_in_queue(0));
+    state_checkSkipRinse(washer_peek_product_in_queue(0));
 
     if(state_isStepComplete())
     {

@@ -2,14 +2,14 @@
 
 #define ID_LIMIT 16
 
-void detergent_init(void);
+void product_init(void);
 
-void detergent_open_valve(uint8_t detergent_number);
+void product_open_valve(uint8_t product_number);
 
-void detergent_close_all_valves(void);
+void product_close_all_valves(void);
 
-uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number);
+uint8_t product_half_oz_per_ten_lbs(uint8_t product_number);
 
-uint8_t detergent_load(void);
+uint8_t product_load(void);
 
 char* product_label(uint8_t);

@@ -17,81 +17,81 @@ typedef struct{
   uint8_t level_pin;
   uint8_t valve_pin;
   uint16_t half_oz_per_ten_lbs = 0;
-  char detergent_name[ID_LIMIT];
-} detergent_t;
+  char product_name[ID_LIMIT];
+} product_t;
 
-static detergent_t detergent[NUMBER_OF_PRODUCTS];
+static product_t product[NUMBER_OF_PRODUCTS];
 
-void detergent_init(void)
+void product_init(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
-    //chronologically label the detergents
-    detergent[i].number = i+1;
+    //chronologically label the products
+    product[i].number = i+1;
 
     //assign all the pins from const arrays
-    detergent[i].level_pin = LEVEL_PIN[i];
-    detergent[i].valve_pin = VALVE_PIN[i];
+    product[i].level_pin = LEVEL_PIN[i];
+    product[i].valve_pin = VALVE_PIN[i];
     pinMode(VALVE_PIN[i], OUTPUT);
     digitalWrite(VALVE_PIN[i], !VALVE_OPEN);
   }
 }
 
-void detergent_open_valve(uint8_t detergent_number)
+void product_open_valve(uint8_t product_number)
 {
-  digitalWrite(detergent[detergent_number - 1].valve_pin, VALVE_OPEN);
+  digitalWrite(product[product_number - 1].valve_pin, VALVE_OPEN);
 }
 
-void detergent_close_all_valves(void)
+void product_close_all_valves(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
-    digitalWrite(detergent[i].valve_pin, !VALVE_OPEN);
+    digitalWrite(product[i].valve_pin, !VALVE_OPEN);
   }
 }
 
-uint8_t detergent_half_oz_per_ten_lbs(uint8_t detergent_number)
+uint8_t product_half_oz_per_ten_lbs(uint8_t product_number)
 {
-  return detergent[detergent_number -1].half_oz_per_ten_lbs;
+  return product[product_number -1].half_oz_per_ten_lbs;
 }
 
-uint8_t detergent_load(void)
+uint8_t product_load(void)
 {
-  uint8_t detergents_loaded = 0;
+  uint8_t products_loaded = 0;
 
   for (uint8_t i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
-    String detergent_name = "product";
-    int detergent_number = i + 1;
-    detergent_name += detergent_number;
+    String product_name = "product";
+    int product_number = i + 1;
+    product_name += product_number;
 
-    int32_t detergent_dosage = SDcard_read_int(detergent_name, "dosage");
-    if(detergent_dosage > 0)
+    int32_t product_dosage = SDcard_read_int(product_name, "dosage");
+    if(product_dosage > 0)
     {
-      detergent[i].half_oz_per_ten_lbs = detergent_dosage;
-      detergents_loaded++;
+      product[i].half_oz_per_ten_lbs = product_dosage;
+      products_loaded++;
     }
 
-    String product_label = SDcard_read_string(detergent_name, "label");
+    String product_label = SDcard_read_string(product_name, "label");
 
     for (int j = 0; j < ID_LIMIT; j++)
     {
       if ((product_label[j] == '\0') || (j == (ID_LIMIT - 1)))
       {
-        detergent[i].detergent_name[j] = '\0';
+        product[i].product_name[j] = '\0';
         j = ID_LIMIT;
       }
       else
       {
-        detergent[i].detergent_name[j] = product_label[j];
+        product[i].product_name[j] = product_label[j];
       }
     }
   }
 
-  return detergents_loaded;
+  return products_loaded;
 }
 
 char* product_label(uint8_t washerNumber)
 {
-  return detergent[washerNumber - 1].detergent_name;
+  return product[washerNumber - 1].product_name;
 }

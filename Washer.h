@@ -16,7 +16,7 @@ uint8_t washer_size(uint8_t washer_number);
 
 void washer_pollWashers(void);
 
-uint8_t washer_peek_detergent_in_queue(uint8_t queue_position);
+uint8_t washer_peek_product_in_queue(uint8_t queue_position);
 
 uint8_t washer_load(void);
 
