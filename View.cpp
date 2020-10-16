@@ -106,15 +106,25 @@ void view_clear(void)
 
 void view_display_state(void)
 {
-  static bool idle = 0;
-
-  if (state_currentState() == 0 && idle == 0)
+  if (state_currentState() == 0)
   {
-    view_clear();
-    copyToLine("     System Idle", line[1]);
-    copyToLine("      And Ready", line[2]);
+    static bool indicator = true;
+    if(indicator)
+    {
+      copyToLine("||||||||||||||||||||", line[0]);
+      copyToLine("||   System Idle  ||", line[1]);
+      copyToLine("||    And Ready   ||", line[2]);
+      copyToLine("||||||||||||||||||||", line[3]);
+    }
+    else
+    {
+      copyToLine("--------------------", line[0]);
+      copyToLine("--   System Idle  --", line[1]);
+      copyToLine("--    And Ready   --", line[2]);
+      copyToLine("--------------------", line[3]);
+    }
     updateScreen();
-    idle = 1;
+    indicator = !indicator;
     return;
   }
   else if(state_currentState() != 0)
@@ -145,8 +155,6 @@ void view_display_state(void)
     concatenate(scratch, " sr", scratch, (DISPLAY_X + 1));
   copyToLine(scratch, line[3]);
   updateScreen();
-
-  idle = 0;
   }
 }
 
