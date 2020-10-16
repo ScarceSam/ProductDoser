@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "State.h"
-#include "Detergent.h"
+#include "Product.h"
 #include "Washer.h"
 #include "Feedline.h"
 

@@ -4,7 +4,7 @@
 #include "Pinmap.h"
 #include "State.h"
 #include "Washer.h"
-#include "Detergent.h"
+#include "Product.h"
 
 #define DISPLAY_X 20
 #define DISPLAY_Y 4

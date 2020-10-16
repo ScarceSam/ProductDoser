@@ -1,5 +1,5 @@
 #include "Washer.h"
-#include "Detergent.h"
+#include "Product.h"
 #include "Feedline.h"
 #include "SDcard.h"
 #include "FlowSensor.h"

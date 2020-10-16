@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Detergent.h"
+#include "Product.h"
 #include "Washer.h"
 #include "Pinmap.h"
 #include "SDcard.h"
