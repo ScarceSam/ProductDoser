@@ -8,7 +8,6 @@ typedef struct {
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
-  uint8_t oz_per_min = 40;
   uint32_t flush_millis = 500;
 }feedline_t;
 
