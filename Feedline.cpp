@@ -28,14 +28,12 @@ void feedline_flush(void)
   //purge feedline with water 
   feedline_valve(WATER_VALVE, VALVE_OPEN);
   feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
-  feedline_run_pump(true);
   uint32_t start_time = millis();
   while((uint32_t)(millis() - start_time) < (feedline_info.flush_millis))
   {
     if(!flowsensor_is_flowing())
         start_time = millis();
   }
-  feedline_run_pump(false);
   feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
