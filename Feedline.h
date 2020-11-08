@@ -1,8 +1,6 @@
 #pragma once
 
 //values to use with valve function
-#define PUMP_ON HIGH
-#define PUMP_OFF !PUMP_ON
 #define VALVE_OPEN HIGH
 #define VALVE_CLOSE !VALVE_OPEN
 
@@ -24,5 +22,3 @@ uint32_t feedline_flush_millis(void);
 bool feedline_load(void);
 
 void feedline_flush(void);
-
-void feedline_run_pump(bool);

@@ -5,7 +5,6 @@
 #include "FlowSensor.h"
 
 typedef struct {
-  const uint8_t PUMP_PIN = FEEDLINE_PUMP_PIN;
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
@@ -17,7 +16,6 @@ static feedline_t feedline_info;
 
 void feedline_init(void)
 {
-  pinMode(feedline_info.PUMP_PIN, OUTPUT);
   pinMode(feedline_info.LINE_DRAIN_VALVE_PIN, OUTPUT);
   pinMode(feedline_info.WATER_VAVLE_PIN, OUTPUT);
   pinMode(feedline_info.MANIFOLD_DRAIN_VALVE_PIN, OUTPUT);
@@ -61,11 +59,6 @@ void feedline_valve(uint8_t valve, uint8_t state)
       digitalWrite(feedline_info.LINE_DRAIN_VALVE_PIN, state);
       digitalWrite(feedline_info.MANIFOLD_DRAIN_VALVE_PIN, state);
   }
-}
-
-void feedline_run_pump(bool power)
-{
-  digitalWrite(feedline_info.PUMP_PIN, power);
 }
 
 uint32_t feedline_flush_millis(void)

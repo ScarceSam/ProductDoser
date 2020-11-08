@@ -58,7 +58,6 @@ Pin|Use
 18|- All GPIO Expanders SDA
 19|- All GPIO Expanders SLC
 20|- All GPIO Expanders interrupt
-25|- Feedline Pump
 26|- Feedline Line-End Drain Valve
 27|- Feedline Water Valve
 28|- Feedline Manifold Drain Valve
