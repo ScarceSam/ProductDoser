@@ -37,12 +37,12 @@ void product_init(void)
   }
 }
 
-void product_open_valve(uint8_t product_number)
+void product_pumpOn(uint8_t product_number)
 {
   digitalWrite(product[product_number - 1].valve_pin, VALVE_OPEN);
 }
 
-void product_close_all_valves(void)
+void product_allPumpsOff(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {

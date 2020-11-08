@@ -25,7 +25,7 @@ bool state_start(uint8_t washer, uint8_t product)
     system_info.current_step = DOSE_STEP;
     system_info.step_start_millis = millis();
     feedline_run_pump(true);
-    product_open_valve(product);
+    product_pumpOn(product);
     washer_open_valve(washer);
     return_value = true;
   }
@@ -44,7 +44,7 @@ void state_advance(void)
   switch(system_info.current_step)
   {
     case FLUSH_STEP:
-      product_close_all_valves();
+      product_allPumpsOff();
       feedline_valve(WATER_VALVE, VALVE_OPEN);
       system_info.current_step = FLUSH_STEP;
       break;
@@ -58,7 +58,7 @@ void state_advance(void)
       }
     default:
       feedline_run_pump(false);
-      product_close_all_valves();
+      product_allPumpsOff();
       washer_close_all_valves();
       feedline_valve(ALL_VALVES, VALVE_CLOSE);
       system_info.current_step = IDLE_STEP;
