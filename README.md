@@ -69,13 +69,13 @@ Pin|Use
 3|- Display D5
 4|- Display D6
 5|- Display D7
-6|- Display R cathode
+6|- Display R cathode(Not Used)
 7|- Display G cathode
 8|- Display B cathode
 18|- All GPIO Expanders SDA
 19|- All GPIO Expanders SLC
-24|- Feedline Pump coil A
-25|- Feedline Pump coil B
+20|- All GPIO Expanders interrupt
+25|- Feedline Pump
 26|- Feedline Line-End Drain Valve
 27|- Feedline Water Valve
 28|- Feedline Manifold Drain Valve
@@ -83,10 +83,6 @@ Pin|Use
 30|- Detergent 2 Valve
 31|- Detergent 3 Valve
 32|- Detergent 4 Valve
-33|- Detergent 1 Flow sensor
-34|- Detergent 2 Flow sensor
-35|- Detergent 3 Flow sensor
-36|- Detergent 4 Flow sensor
 37|- Feedline Flow sensor
 38|- Detergent 1 Level sensor
 39|- Detergent 2 Level sensor
