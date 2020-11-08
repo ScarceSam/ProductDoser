@@ -38,12 +38,12 @@ void product_init(void)
   }
 }
 
-void product_pumpOn(uint8_t product_number)
+void product_pump_on(uint8_t product_number)
 {
   digitalWrite(product[product_number - 1].pump_pin, PUMP_ON);
 }
 
-void product_allPumpsOff(void)
+void product_all_pumps_off(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
@@ -92,9 +92,9 @@ uint8_t product_load(void)
   return products_loaded;
 }
 
-char* product_label(uint8_t washerNumber)
+char* product_label(uint8_t product_number)
 {
-  return product[washerNumber - 1].product_name;
+  return product[product_number - 1].product_name;
 }
 
 uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz)
