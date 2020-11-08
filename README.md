@@ -1,22 +1,5 @@
 [comment]: # (# List of development priorities)
 
-# Code organization
-
-## -DetergentDoser.ino
-
-### -Detergent.h
-
-* Detergent.cpp
-
-### -Washer.h
-
-* Washer.cpp
-
-### -System.h
-
-* System.cpp
-
-
 # Development environment setup
 
   * Install Arduino IDE (v1.8.12 used for development)
