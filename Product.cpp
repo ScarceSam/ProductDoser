@@ -5,7 +5,7 @@
 #include "SDcard.h"
 
 #define NUMBER_OF_PRODUCTS 4
-#define VALVE_OPEN HIGH
+#define PUMP_ON HIGH
 
 static const uint8_t LEVEL_PIN[] = {PRODUCT_1_LEVEL_PIN, PRODUCT_2_LEVEL_PIN,
                                     PRODUCT_3_LEVEL_PIN, PRODUCT_4_LEVEL_PIN};
@@ -33,20 +33,20 @@ void product_init(void)
     product[i].level_pin = LEVEL_PIN[i];
     product[i].pump_pin = PUMP_PIN[i];
     pinMode(PUMP_PIN[i], OUTPUT);
-    digitalWrite(PUMP_PIN[i], !VALVE_OPEN);
+    digitalWrite(PUMP_PIN[i], !PUMP_ON);
   }
 }
 
 void product_pumpOn(uint8_t product_number)
 {
-  digitalWrite(product[product_number - 1].pump_pin, VALVE_OPEN);
+  digitalWrite(product[product_number - 1].pump_pin, PUMP_ON);
 }
 
 void product_allPumpsOff(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
-    digitalWrite(product[i].pump_pin, !VALVE_OPEN);
+    digitalWrite(product[i].pump_pin, !PUMP_ON);
   }
 }
 
