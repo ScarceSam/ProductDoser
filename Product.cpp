@@ -9,13 +9,13 @@
 
 static const uint8_t LEVEL_PIN[] = {PRODUCT_1_LEVEL_PIN, PRODUCT_2_LEVEL_PIN,
                                     PRODUCT_3_LEVEL_PIN, PRODUCT_4_LEVEL_PIN};
-static const uint8_t VALVE_PIN[] = {PRODUCT_1_PUMP_PIN, PRODUCT_2_PUMP_PIN,
+static const uint8_t PUMP_PIN[] = {PRODUCT_1_PUMP_PIN, PRODUCT_2_PUMP_PIN,
                                     PRODUCT_3_PUMP_PIN, PRODUCT_4_PUMP_PIN};
 
 typedef struct{
   uint8_t number;
   uint8_t level_pin;
-  uint8_t valve_pin;
+  uint8_t pump_pin;
   uint16_t half_oz_per_ten_lbs = 0;
   char product_name[ID_LIMIT];
 } product_t;
@@ -31,22 +31,22 @@ void product_init(void)
 
     //assign all the pins from const arrays
     product[i].level_pin = LEVEL_PIN[i];
-    product[i].valve_pin = VALVE_PIN[i];
-    pinMode(VALVE_PIN[i], OUTPUT);
-    digitalWrite(VALVE_PIN[i], !VALVE_OPEN);
+    product[i].pump_pin = PUMP_PIN[i];
+    pinMode(PUMP_PIN[i], OUTPUT);
+    digitalWrite(PUMP_PIN[i], !VALVE_OPEN);
   }
 }
 
 void product_pumpOn(uint8_t product_number)
 {
-  digitalWrite(product[product_number - 1].valve_pin, VALVE_OPEN);
+  digitalWrite(product[product_number - 1].pump_pin, VALVE_OPEN);
 }
 
 void product_allPumpsOff(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
-    digitalWrite(product[i].valve_pin, !VALVE_OPEN);
+    digitalWrite(product[i].pump_pin, !VALVE_OPEN);
   }
 }
 
