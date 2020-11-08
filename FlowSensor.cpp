@@ -2,29 +2,29 @@
 #include "Pinmap.h"
 
 static bool ignore_flowsensor = false;
-static volatile uint32_t pulseTime[256] = {0};
-static volatile uint8_t timeCursor = 0;
-static uint16_t maxPulseDelta = 750;
+static volatile uint32_t pulse_time[256] = {0};
+static volatile uint8_t time_cursor = 0;
+static uint16_t max_pulse_delta = 750;
 
-void incrementCount()
+static void increment_count()
 {
-    ++timeCursor;
-    pulseTime[timeCursor] = millis();
+    ++time_cursor;
+    pulse_time[time_cursor] = millis();
 }
 
 void flowsensor_init(void)
 {
-  attachInterrupt(digitalPinToInterrupt(FLOWSENSOR_PIN), incrementCount, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FLOWSENSOR_PIN), increment_count, CHANGE);
 }
 
 bool flowsensor_is_flowing(void)
 {
-  bool return_value = false;
+  bool b_return_value = false;
 
-  return_value = (uint32_t)(millis() - pulseTime[timeCursor - 1] < maxPulseDelta);
+  b_return_value = (uint32_t)(millis() - pulse_time[time_cursor - 1] < max_pulse_delta);
 
   if(ignore_flowsensor)
-      return_value = true;
+      b_return_value = true;
 
-  return return_value;
+  return b_return_value;
 }
