@@ -61,15 +61,15 @@ uint32_t feedline_flush_millis(void)
 
 bool feedline_load(void)
 {
-  bool return_value = false;
+  bool b_return_value = false;
 
   int32_t duration = SDcard_read_int("system", "flushtimeseconds");
 
   if(duration > 0)
   {
     feedline_info.flush_millis = (uint32_t)(duration * 1000);
-    return_value = true;
+    b_return_value = true;
   }
 
-  return return_value;
+  return b_return_value;
 }
