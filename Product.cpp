@@ -16,6 +16,7 @@ typedef struct{
   uint8_t number;
   uint8_t level_pin;
   uint8_t pump_pin;
+  uint16_t cal_oz_per_min = 40;
   uint16_t half_oz_per_ten_lbs = 0;
   char product_name[ID_LIMIT];
 } product_t;
@@ -94,4 +95,13 @@ uint8_t product_load(void)
 char* product_label(uint8_t washerNumber)
 {
   return product[washerNumber - 1].product_name;
+}
+
+uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz)
+{
+  uint16_t oz_per_min = product[product_number - 1].cal_oz_per_min;
+
+  uint32_t millis_per_oz = ( 60000 / oz_per_min );
+
+  return ((millis_per_oz * volume_oz)/2);
 }

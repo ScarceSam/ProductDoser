@@ -35,12 +35,6 @@ void feedline_flush(void)
   feedline_valve(ALL_VALVES, VALVE_CLOSE);
 }
 
-uint32_t feedline_pump_millis(uint8_t volume_half_oz)
-{
-  //return millis to pump given volume
-  return (((60000 / feedline_info.oz_per_min) * volume_half_oz) / 2);  
-}
-
 void feedline_valve(uint8_t valve, uint8_t state)
 {
   switch(valve)

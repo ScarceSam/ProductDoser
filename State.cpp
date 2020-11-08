@@ -19,7 +19,7 @@ bool state_start(uint8_t washer, uint8_t product)
     system_info.current_washer = washer;
     system_info.current_product = product;
     system_info.step_length_millis[IDLE_STEP] = 1;
-    system_info.step_length_millis[DOSE_STEP] = feedline_pump_millis(dosage_oz);
+    system_info.step_length_millis[DOSE_STEP] = product_pump_millis(product, dosage_oz);
     system_info.step_length_millis[FLUSH_STEP] = feedline_flush_millis();
     system_info.step_length_millis[RINSE_STEP] = feedline_flush_millis();;
     system_info.current_step = DOSE_STEP;

@@ -13,3 +13,5 @@ uint8_t product_half_oz_per_ten_lbs(uint8_t product_number);
 uint8_t product_load(void);
 
 char* product_label(uint8_t);
+
+uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz);

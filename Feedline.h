@@ -10,9 +10,6 @@ enum valves{ LINE_DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
 //initializing function
 void feedline_init(void);
 
-//starting pump with desired volume
-uint32_t feedline_pump_millis(uint8_t volume_oz);
-
 //operate valves
 void feedline_valve(uint8_t valve, uint8_t state);
 
