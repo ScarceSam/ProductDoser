@@ -9,8 +9,8 @@
 
 static const uint8_t LEVEL_PIN[] = {PRODUCT_1_LEVEL_PIN, PRODUCT_2_LEVEL_PIN,
                                     PRODUCT_3_LEVEL_PIN, PRODUCT_4_LEVEL_PIN};
-static const uint8_t VALVE_PIN[] = {PRODUCT_1_VALVE_PIN, PRODUCT_2_VALVE_PIN,
-                                    PRODUCT_3_VALVE_PIN, PRODUCT_4_VALVE_PIN};
+static const uint8_t VALVE_PIN[] = {PRODUCT_1_PUMP_PIN, PRODUCT_2_PUMP_PIN,
+                                    PRODUCT_3_PUMP_PIN, PRODUCT_4_PUMP_PIN};
 
 typedef struct{
   uint8_t number;

@@ -62,10 +62,10 @@ Pin|Use
 26|- Feedline Line-End Drain Valve
 27|- Feedline Water Valve
 28|- Feedline Manifold Drain Valve
-29|- Detergent 1 Valve
-30|- Detergent 2 Valve
-31|- Detergent 3 Valve
-32|- Detergent 4 Valve
+29|- Detergent 1 pump
+30|- Detergent 2 pump
+31|- Detergent 3 pump
+32|- Detergent 4 pump
 37|- Feedline Flow sensor
 38|- Detergent 1 Level sensor
 39|- Detergent 2 Level sensor
