@@ -9,7 +9,7 @@
 #include "Controller.h"
 
 #define LED_PIN 13
-void toggleLED(void);
+void toggle_led(void);
 
 void setup()
 {
@@ -53,11 +53,11 @@ void loop()
   if (washer_enqueued() && (state_currentState() == IDLE_STEP))
   {
     //dequeue the next washer in queue
-    uint8_t next[2] = {0, 0};
-    washer_dequeue_next(next);
+    uint8_t next_job[2] = {0, 0};
+    washer_dequeue_next(next_job);
 
-    uint8_t washer = next[0];
-    uint8_t product = next[1];
+    uint8_t washer = next_job[0];
+    uint8_t product = next_job[1];
 
     //start dosing
     state_start(washer, product);
@@ -75,12 +75,12 @@ void loop()
 
   controller_updateScreen();
   washer_pollWashers();
-  toggleLED();
+  toggle_led();
 }
 
-void toggleLED(void)
+void toggle_led(void)
 {
-  static bool indicatorLED = false;
-  indicatorLED = !indicatorLED;
-  digitalWrite(LED_PIN, indicatorLED);
+  static bool b_led_on = false;
+  b_led_on = !b_led_on;
+  digitalWrite(LED_PIN, b_led_on);
 }
