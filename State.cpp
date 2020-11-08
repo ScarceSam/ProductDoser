@@ -18,9 +18,10 @@ bool state_start(uint8_t washer, uint8_t product)
   {
     system_info.current_washer = washer;
     system_info.current_product = product;
+    system_info.step_length_millis[IDLE_STEP] = 1;
     system_info.step_length_millis[DOSE_STEP] = feedline_pump_millis(dosage_oz);
-    system_info.step_length_millis[FLUSH_STEP] = feedline_pump_millis(feedline_flush_oz() * 2);
-    system_info.step_length_millis[RINSE_STEP] = feedline_pump_millis(feedline_manifold_oz() * 2);
+    system_info.step_length_millis[FLUSH_STEP] = feedline_flush_millis();
+    system_info.step_length_millis[RINSE_STEP] = feedline_flush_millis();;
     system_info.current_step = DOSE_STEP;
     system_info.step_start_millis = millis();
     feedline_run_pump(true);
@@ -87,18 +88,19 @@ void state_copyStateData(system_t* copyOfData)
   *copyOfData = system_info;
 }
 
-uint16_t state_remainingMillis(void)
+uint32_t state_remainingMillis(void)
 {
-  uint32_t return_value;
+  uint32_t return_value = 0;
   for (int i = system_info.current_step; i < 4; i++)
   {
     return_value += system_info.step_length_millis[i];
     if (system_info.current_step == i)
     {
-      return_value -= (uint32_t)(millis() - system_info.step_start_millis);
+      return_value -= (millis() - system_info.step_start_millis);
     }
   }
-  return (uint16_t)(return_value);
+
+  return return_value;
 }
 
 void state_checkSkipRinse(uint8_t)
@@ -109,6 +111,6 @@ void state_checkSkipRinse(uint8_t)
   }
   else
   {
-    system_info.step_length_millis[RINSE_STEP] = feedline_pump_millis(feedline_manifold_oz() * 2);
+    system_info.step_length_millis[RINSE_STEP] = feedline_flush_millis();;
   }
 }

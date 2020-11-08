@@ -9,10 +9,8 @@ typedef struct {
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
-  uint8_t flush_oz = 0;
-  uint8_t manifold_oz = 0;
   uint8_t oz_per_min = 40;
-  uint8_t flush_seconds = 10;
+  uint32_t flush_millis = 500;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -32,7 +30,7 @@ void feedline_flush(void)
   feedline_valve(LINE_DRAIN_VALVE, VALVE_OPEN);
   feedline_run_pump(true);
   uint32_t start_time = millis();
-  while((uint32_t)(millis() - start_time) < (feedline_info.flush_seconds * 1000))
+  while((uint32_t)(millis() - start_time) < (feedline_info.flush_millis))
   {
     if(!flowsensor_is_flowing())
         start_time = millis();
@@ -72,35 +70,21 @@ void feedline_run_pump(bool power)
   digitalWrite(feedline_info.PUMP_PIN, power);
 }
 
-uint8_t feedline_flush_oz(void)
+uint32_t feedline_flush_millis(void)
 {
-  return feedline_info.flush_oz;
-}
-
-uint8_t feedline_manifold_oz(void)
-{
-  return feedline_info.manifold_oz;
+  return feedline_info.flush_millis;
 }
 
 bool feedline_load(void)
 {
-  bool return_value = 1;
+  bool return_value = false;
 
-  uint32_t volume = SDcard_read_int("system", "flushvolumeoz");
-  feedline_info.flush_oz = (uint8_t)volume;
+  int32_t duration = SDcard_read_int("system", "flushtimeseconds");
 
-  if(volume == 0)
+  if(duration > 0)
   {
-    return_value = 0;
-  }
-
-  volume = 0;
-  volume = SDcard_read_int("system", "manifoldvolumeoz");
-  feedline_info.manifold_oz = (uint8_t)volume;
-
-  if(volume == 0)
-  {
-    return_value = 0;
+    feedline_info.flush_millis = (uint32_t)(duration * 1000);
+    return_value = true;
   }
 
   return return_value;

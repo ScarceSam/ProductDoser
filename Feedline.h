@@ -19,9 +19,7 @@ uint32_t feedline_pump_millis(uint8_t volume_oz);
 void feedline_valve(uint8_t valve, uint8_t state);
 
 //return the flush volume
-uint8_t feedline_flush_oz(void);
-
-uint8_t feedline_manifold_oz(void);
+uint32_t feedline_flush_millis(void);
 
 bool feedline_load(void);
 
