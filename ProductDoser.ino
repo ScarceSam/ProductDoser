@@ -72,8 +72,7 @@ void loop()
     }
   }
 
-
-  controller_updateScreen();
+  controller_update_screen();
   washer_pollWashers();
   toggle_led();
 }

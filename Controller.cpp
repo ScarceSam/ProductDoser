@@ -2,26 +2,27 @@
 #include "View.h"
 #include "State.h"
 
-void controller_updateScreen(void)
+void controller_update_screen(void)
 {
-  uint8_t currentState = state_currentState();
-  static uint8_t previousState = 0;
-  uint16_t currentMillis = 0;
-  static uint16_t previousMillis = currentMillis;
+  static uint8_t previous_state = 0;
+  static uint16_t previous_millis = 0;
 
-  if(currentState == IDLE_STEP)
+  uint8_t current_state = state_currentState();
+  uint16_t current_millis = 0;
+
+  if(current_state == IDLE_STEP)
   {
-    currentMillis = (millis() / 1000);
+    current_millis = (millis() / 1000);
   }
   else
   {
-    currentMillis = (state_remainingMillis() / 1000);
+    current_millis = (state_remainingMillis() / 1000);
   }
 
-  if ((currentState != previousState) || (currentMillis != previousMillis))
+  if ((current_state != previous_state) || (current_millis != previous_millis))
   {
     view_display_state();
-    previousState = currentState;
-    previousMillis = currentMillis;
+    previous_state = current_state;
+    previous_millis = current_millis;
   }
 }

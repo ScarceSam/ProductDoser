@@ -1,3 +1,3 @@
 #pragma once
 
-void controller_updateScreen(void);
+void controller_update_screen(void);
