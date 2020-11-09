@@ -7,7 +7,7 @@ void controller_update_screen(void)
   static uint8_t previous_state = 0;
   static uint16_t previous_millis = 0;
 
-  uint8_t current_state = state_currentState();
+  uint8_t current_state = state_current_state();
   uint16_t current_millis = 0;
 
   if(current_state == IDLE_STEP)
@@ -16,7 +16,7 @@ void controller_update_screen(void)
   }
   else
   {
-    current_millis = (state_remainingMillis() / 1000);
+    current_millis = (state_remaining_millis() / 1000);
   }
 
   if ((current_state != previous_state) || (current_millis != previous_millis))

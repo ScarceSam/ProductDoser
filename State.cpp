@@ -6,7 +6,7 @@
 
 static system_t system_info;
 
-uint8_t dosage_oz_calc(uint8_t washer, uint8_t product);
+static uint8_t dosage_oz_calc(uint8_t washer, uint8_t product);
 
 bool state_start(uint8_t washer, uint8_t product)
 {
@@ -31,7 +31,7 @@ bool state_start(uint8_t washer, uint8_t product)
   return return_value;
 }
 
-uint8_t state_currentState(void)
+uint8_t state_current_state(void)
 {
   return system_info.current_step;
 }
@@ -65,7 +65,7 @@ void state_advance(void)
   system_info.step_start_millis = millis();
 }
 
-bool state_isStepComplete(void)
+bool state_is_step_complete(void)
 {
   return ((uint32_t)(millis() - system_info.step_start_millis) > system_info.step_length_millis[system_info.current_step]);
 }
@@ -81,12 +81,12 @@ uint8_t dosage_oz_calc(uint8_t washer, uint8_t product)
   return dosage_half_ozs;
 }
 
-void state_copyStateData(system_t* copyOfData)
+void state_copy_state_data(system_t* copyOfData)
 {
   *copyOfData = system_info;
 }
 
-uint32_t state_remainingMillis(void)
+uint32_t state_remaining_millis(void)
 {
   uint32_t return_value = 0;
   for (int i = system_info.current_step; i < 4; i++)
@@ -101,7 +101,7 @@ uint32_t state_remainingMillis(void)
   return return_value;
 }
 
-void state_checkSkipRinse(uint8_t)
+void state_check_skip_rinse(uint8_t)
 {
   if(washer_peek_product_in_queue(0) == system_info.current_product)
   {

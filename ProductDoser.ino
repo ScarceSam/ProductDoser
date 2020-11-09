@@ -50,7 +50,7 @@ void setup()
 
 void loop()
 {
-  if (washer_enqueued() && (state_currentState() == IDLE_STEP))
+  if (washer_enqueued() && (state_current_state() == IDLE_STEP))
   {
     //dequeue the next washer in queue
     uint8_t next_job[2] = {0, 0};
@@ -62,11 +62,11 @@ void loop()
     //start dosing
     state_start(washer, product);
   }
-  else if(state_currentState() != IDLE_STEP)
+  else if(state_current_state() != IDLE_STEP)
   {
-    state_checkSkipRinse(washer_peek_product_in_queue(0));
+    state_check_skip_rinse(washer_peek_product_in_queue(0));
 
-    if(state_isStepComplete())
+    if(state_is_step_complete())
     {
       state_advance();
     }

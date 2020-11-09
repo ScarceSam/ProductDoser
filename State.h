@@ -16,12 +16,12 @@ bool state_start(uint8_t washer, uint8_t product);
 
 void state_advance(void);
 
-uint8_t state_currentState(void);
+uint8_t state_current_state(void);
 
-bool state_isStepComplete(void);
+bool state_is_step_complete(void);
 
-void state_copyStateData(system_t*);
+void state_copy_state_data(system_t*);
 
-uint32_t state_remainingMillis(void);
+uint32_t state_remaining_millis(void);
 
-void state_checkSkipRinse(uint8_t);
+void state_check_skip_rinse(uint8_t);

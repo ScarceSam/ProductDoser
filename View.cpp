@@ -106,7 +106,7 @@ void view_clear(void)
 
 void view_display_state(void)
 {
-  if (state_currentState() == 0)
+  if (state_current_state() == 0)
   {
     static bool indicator = true;
     if(indicator)
@@ -127,11 +127,11 @@ void view_display_state(void)
     indicator = !indicator;
     return;
   }
-  else if(state_currentState() != 0)
+  else if(state_current_state() != 0)
   {
   char scratch[DISPLAY_X + 1];
   system_t currentStateData;
-  state_copyStateData(&currentStateData);
+  state_copy_state_data(&currentStateData);
 
   //display line 1
   concatenate("Wshr: ", washer_label(currentStateData.current_washer), scratch, (DISPLAY_X + 1));
@@ -147,7 +147,7 @@ void view_display_state(void)
 
   //display line 4
   char buf[5];
-  sprintf(buf, "%0.3d", ((state_remainingMillis()/1000)+1)); // the "+1" displays a 1 during the last second instead of a 0 //leading zeros & more codespace
+  sprintf(buf, "%0.3d", ((state_remaining_millis()/1000)+1)); // the "+1" displays a 1 during the last second instead of a 0 //leading zeros & more codespace
   //itoa((state_remainingMillis()/1000), buf, 10); //less codespace & no leading zeros
   concatenate("Time: ", buf, scratch, (DISPLAY_X + 1));
   concatenate(scratch, " Seconds", scratch, (DISPLAY_X + 1));
