@@ -8,7 +8,7 @@ typedef struct {
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
   const uint8_t WATER_VAVLE_PIN = FEEDLINE_WATER_VALVE_PIN;
   const uint8_t MANIFOLD_DRAIN_VALVE_PIN = FEEDLINE_MANIFOLD_DRAIN_VALVE_PIN;
-  uint32_t flush_millis = 500;
+  uint32_t flush_millis = 10000;
 }feedline_t;
 
 static feedline_t feedline_info;
@@ -63,9 +63,9 @@ bool feedline_load(void)
 {
   bool b_return_value = false;
 
-  int32_t duration = SDcard_read_int("system", "flushtimeseconds");
+  int8_t duration = 0;
 
-  if(duration > 0)
+  if(!SDcard_read_int("system", "flushtimeseconds", &duration))
   {
     feedline_info.flush_millis = (uint32_t)(duration * 1000);
     b_return_value = true;

@@ -246,3 +246,21 @@ void remove_characters(char phrase[])
     }
   }
 }
+
+uint8_t SDcard_read_string(const char* device, const char* setting, char* result)
+{
+  uint8_t return_value = -1;
+
+  
+
+  return return_value;
+}
+
+uint8_t SDcard_read_int(const char* device, const char* setting, uint8_t* result)
+{
+  uint8_t return_value = -1;
+
+  
+
+  return return_value;
+}
