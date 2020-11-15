@@ -2,6 +2,7 @@
 #include "SDcard.h"
 #include <SD.h>
 #include <SPI.h>
+#include "Chars.h"
 
 #define MAX_LEN 60
 
@@ -13,8 +14,6 @@ String fetch_setting(uint32_t start);
 String clean_setting(String value);
 void remove_characters(char phrase[]);
 
-void clear_char_array(char* string, uint8_t max_len);
-void copy_char_array(char* copy_array, char* master_array);
 uint8_t fetch_setting(uint32_t start, char* string);
 void clean_setting(char* string);
 
@@ -351,31 +350,12 @@ uint8_t fetch_setting(uint32_t start, char* string)
 
   saveFile.close();
 
-  copy_char_array(string, working_array);
+  copy_char_array(string, working_array, MAX_LEN);
 }
 
-void copy_char_array(char* copy_array, char* master_array)
-{
-  for(int i = 0; i < MAX_LEN; i++)
-  {
-    copy_array[i] = master_array[i];
-    if(copy_array[i] == '\0')
-      break;
-  }
-}
-
-void clear_char_array(char* string, uint8_t max_len)
-{
-  for(int i = 0; i < max_len; i++)
-  {
-    string[i] = '\0';
-  }
-  string[max_len - 1] = '\0';
-}
 
 void clean_setting(char* string)
 {
-
   char* working_array = string;
   bool copying = 1;
   int in_cursor, out_cursor = 0;
@@ -400,5 +380,5 @@ void clean_setting(char* string)
     }
   }
 
-  copy_char_array(string, working_array);
+  copy_char_array(string, working_array, MAX_LEN);
 }
