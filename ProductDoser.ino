@@ -30,7 +30,8 @@ void setup()
   view_println("Load Setup");
   if(!feedline_load())
   {
-    //halt and alarm
+    view_println("--Feedline Defaults--");
+    delay(2000);
   }
 
   view_println("Load Washers");
