@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include "Adafruit_MCP23017.h"
 #include "SDcard.h"
+#include "Chars.h"
 
 #define NUMBER_OF_WASHERS 24
 #define NUMBER_OF_COM_PINS 4
@@ -161,11 +162,32 @@ uint8_t washer_load(void)
 
   for (uint8_t i = 0; i <= NUMBER_OF_WASHERS; i++)
   {
-    String washer_name = "washer";
-    int washer_number = i + 1;
-    washer_name += washer_number;
+    char washer_name[9];
+    clear_char_array(washer_name, 9);
+    for (int copy_index = 0; copy_index < 8; copy_index++)
+    {
+      const char* washer_word = "washer";
+      if (copy_index < 6)
+      {
+        washer_name[copy_index] = washer_word[copy_index];
+      }
+      else if((i + 1) >= 10 && copy_index == 6)
+      {
+        char char_number = '0';
+        char_number += ((i + 1) / 10);
+        washer_name[copy_index] = char_number;
+      }
+      else
+      {
+        char char_number = '0';
+        char_number += ((i + 1) % 10);
+        washer_name[copy_index] = char_number;
+        break;
+      }
+    }
 
-    int32_t washer_capacity = SDcard_read_int(washer_name, "capacitylbs");
+    uint8_t washer_capacity = 0;
+    SDcard_read_int(washer_name, "capacitylbs", &washer_capacity);
     if(washer_capacity > 0)
     {
       washer[i].washer_size = washer_capacity;
