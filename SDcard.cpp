@@ -253,7 +253,7 @@ void remove_characters(char phrase[])
   }
 }
 
-uint8_t SDcard_read_string(const char* device, const char* setting, char* result)
+uint8_t SDcard_read_string(const char* device, const char* setting, char* result, uint8_t max_len)
 {
   /*  search settings file for section = device
    *  search found section for line = setting
@@ -261,6 +261,7 @@ uint8_t SDcard_read_string(const char* device, const char* setting, char* result
    *  errors; 1 = could not find device, 2 = could not parse setting
    */
 
+  char working_array[MAX_LEN];
   uint8_t return_value = -1;
   uint32_t location_in_file = 0;
 
@@ -280,8 +281,8 @@ uint8_t SDcard_read_string(const char* device, const char* setting, char* result
 
   if(location_in_file > 0)
   {
-    fetch_setting(location_in_file, result);
-    clean_setting(result);
+    fetch_setting(location_in_file, working_array);
+    clean_setting(working_array);
     return_value = 0;
   }
   else
@@ -291,6 +292,7 @@ uint8_t SDcard_read_string(const char* device, const char* setting, char* result
     return_value = 2;
   }
 
+  copy_char_array(result, working_array, max_len);
   return return_value;
 }
 
@@ -303,7 +305,7 @@ uint8_t SDcard_read_int(const char* device, const char* setting, uint8_t* result
   char char_result[MAX_LEN];
   clear_char_array(char_result, MAX_LEN);
 
-  SDcard_read_string(device, setting, char_result);
+  SDcard_read_string(device, setting, char_result, MAX_LEN);
 
   if('\0' != char_result[0])
   {
