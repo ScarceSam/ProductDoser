@@ -3,6 +3,8 @@
 #include <SD.h>
 #include <SPI.h>
 
+#define MAX_LEN 60
+
 static File saveFile;
 
 uint32_t find_device_info(String device);
@@ -10,6 +12,11 @@ uint32_t find_setting_info(uint32_t start, String setting);
 String fetch_setting(uint32_t start);
 String clean_setting(String value);
 void remove_characters(char phrase[]);
+
+void clear_char_array(char* string, uint8_t max_len);
+void copy_char_array(char* copy_array, char* master_array);
+uint8_t fetch_setting(uint32_t start, char* string);
+void clean_setting(char* string);
 
 uint8_t sdcard_init(void)
 {
@@ -249,18 +256,149 @@ void remove_characters(char phrase[])
 
 uint8_t SDcard_read_string(const char* device, const char* setting, char* result)
 {
+  /*  search settings file for section = device
+   *  search found section for line = setting
+   *  find the string after '=' and remove white space
+   *  errors; 1 = could not find device, 2 = could not parse setting
+   */
+
   uint8_t return_value = -1;
+  uint32_t location_in_file = 0;
+
+  //find device name location in settings file
+  location_in_file = find_device_info(device);
 
   
+  if(location_in_file > 0)
+  {
+    //find the devices setting name in settings file
+    location_in_file = find_setting_info(location_in_file, setting);
+  }
+  else
+  {
+    return_value = 1; //could not find device in settings file
+  }
+
+  if(location_in_file > 0)
+  {
+    fetch_setting(location_in_file, result);
+    clean_setting(result);
+    return_value = 0;
+  }
+  else
+  {
+    //a value could not be found after the setting name in the file
+    result[0] =  '\0';
+    return_value = 2;
+  }
 
   return return_value;
 }
 
 uint8_t SDcard_read_int(const char* device, const char* setting, uint8_t* result)
 {
+  /*  conver char* type setting to int
+   *  errors; 1 = could not parse setting, 2 = setting value overflow
+   */
   uint8_t return_value = -1;
+  char char_result[MAX_LEN];
+  clear_char_array(char_result, MAX_LEN);
 
-  
+  SDcard_read_string(device, setting, char_result);
+
+  if('\0' != char_result[0])
+  {
+    char** pointer_to_end = NULL;
+    long int convertion_result = strtol(char_result, pointer_to_end, 0);
+    if(0xFFFF >= convertion_result)
+    {
+      *result = (int8_t)convertion_result;
+      return_value = 0;
+    }
+    else
+    {
+      return_value = 2;
+    }
+  }
+  else
+  {
+    return_value = 1;
+  }
 
   return return_value;
+}
+
+uint8_t fetch_setting(uint32_t start, char* string)
+{
+  char working_array[MAX_LEN];
+  clear_char_array(working_array, MAX_LEN);
+
+  saveFile = SD.open("settings.txt", FILE_READ);
+  saveFile.seek(start);
+
+  for(int i = 0; i < MAX_LEN; i++)
+  {
+    if(saveFile.available())
+    {
+      working_array[i] = saveFile.read();
+
+      if (working_array[i] == '\n')
+      {
+        i = MAX_LEN;
+      }
+    }
+  }
+
+  saveFile.close();
+
+  copy_char_array(string, working_array);
+}
+
+void copy_char_array(char* copy_array, char* master_array)
+{
+  for(int i = 0; i < MAX_LEN; i++)
+  {
+    copy_array[i] = master_array[i];
+    if(copy_array[i] == '\0')
+      break;
+  }
+}
+
+void clear_char_array(char* string, uint8_t max_len)
+{
+  for(int i = 0; i < max_len; i++)
+  {
+    string[i] = '\0';
+  }
+  string[max_len - 1] = '\0';
+}
+
+void clean_setting(char* string)
+{
+
+  char* working_array = string;
+  bool copying = 1;
+  int in_cursor, out_cursor = 0;
+
+  while(copying)
+  {
+    working_array[out_cursor] = working_array[in_cursor];
+
+    if(out_cursor == 0 && working_array[in_cursor] == ' ')
+    {
+      in_cursor++;
+    }
+    else if(working_array[in_cursor] == '\n')
+    {
+      copying = 0;
+      working_array[out_cursor] = '\0';
+    }
+    else
+    {
+      in_cursor++;
+      out_cursor++;
+    }
+  }
+
+  copy_char_array(string, working_array);
 }
