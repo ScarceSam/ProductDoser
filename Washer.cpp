@@ -159,32 +159,16 @@ uint8_t washer_peek_product_in_queue(uint8_t queue_position)
 uint8_t washer_load(void)
 {
   uint8_t washers_loaded = 0;
+  char washer_name[9];
+  clear_char_array(washer_name, 9);
+  const char* washer_word = "washer";
+  copy_char_array(washer_name, washer_word, 7);
 
   for (uint8_t i = 0; i <= NUMBER_OF_WASHERS; i++)
   {
-    char washer_name[9];
-    clear_char_array(washer_name, 9);
-    for (int copy_index = 0; copy_index < 8; copy_index++)
-    {
-      const char* washer_word = "washer";
-      if (copy_index < 6)
-      {
-        washer_name[copy_index] = washer_word[copy_index];
-      }
-      else if((i + 1) >= 10 && copy_index == 6)
-      {
-        char char_number = '0';
-        char_number += ((i + 1) / 10);
-        washer_name[copy_index] = char_number;
-      }
-      else
-      {
-        char char_number = '0';
-        char_number += ((i + 1) % 10);
-        washer_name[copy_index] = char_number;
-        break;
-      }
-    }
+    washer_name[6] = '\0';
+    char_append_digits(washer_name, (i + 1), 9);
+    Serial.println(washer_name);
 
     uint8_t washer_capacity = 0;
     SDcard_read_int(washer_name, "capacitylbs", &washer_capacity);
