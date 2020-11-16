@@ -8,10 +8,9 @@
 
 static File saveFile;
 
-uint32_t find_device_info(String device);
-uint32_t find_setting_info(uint32_t start, String setting);
+uint32_t find_device_info(char* device);
+uint32_t find_setting_info(uint32_t start, char* setting);
 void remove_characters(char phrase[]);
-
 uint8_t fetch_setting(uint32_t start, char* string);
 void clean_setting(char* string);
 
@@ -26,26 +25,27 @@ uint8_t sdcard_init(void)
   return return_value;
 }
 
-uint32_t find_device_info(String device)
+uint32_t find_device_info(char* device)
 {
   //open file
   saveFile = SD.open("settings.txt", FILE_READ);
-  char line[60];
+  char line[MAX_LEN];
 
   //find device line
   bool device_found = 0;
   bool end_of_file = 0;
   while(device_found == 0 && saveFile.available())
   {
-    for( int i = 0; i < 60; i++)
+    for( int i = 0; i < MAX_LEN; i++)
     {
       
       if(saveFile.available())
       {
         line[i] = saveFile.read();
-        String temp = line[i];
-        temp.toLowerCase();
-        line[i] = temp[0];
+        if(line[i] >= 'A' && line[i] <= 'Z')
+        {
+          line[i] += ('a' - 'A');
+        }
       }else{
         line[i] = '\n';
         end_of_file = 1;
@@ -53,7 +53,7 @@ uint32_t find_device_info(String device)
       
       if( line[i] == '\n')
       {
-        i = 60;
+        i = MAX_LEN;
       }
     }
 
@@ -85,24 +85,25 @@ uint32_t find_device_info(String device)
   return return_value;
 }
 
-uint32_t find_setting_info(uint32_t start, String setting)
+uint32_t find_setting_info(uint32_t start, char* setting)
 {
   saveFile = SD.open("settings.txt", FILE_READ);
-  char line[60];
+  char line[MAX_LEN];
   saveFile.seek(start);
 
   bool device_found = 0;
   bool end_of_file = 0;
   while(!device_found && saveFile.available())
   {
-    for(int i = 0; i < 60; i++)
+    for(int i = 0; i < MAX_LEN; i++)
     {
       if(saveFile.available())
       {
         line[i] = saveFile.read();
-        String temp = line[i];
-        temp.toLowerCase();
-        line[i] = temp[0];
+        if(line[i] >= 'A' && line[i] <= 'Z')
+        {
+          line[i] += ('a' - 'A');
+        }
       }
       else
       {
@@ -112,7 +113,7 @@ uint32_t find_setting_info(uint32_t start, String setting)
       
       if( line[i] == '\n' || line[i] == '=')
       {
-        i = 60;
+        i = MAX_LEN;
       }
     }
 
@@ -147,7 +148,7 @@ uint32_t find_setting_info(uint32_t start, String setting)
 void remove_characters(char phrase[])
 {
   int out_cursor = 0;
-  for(int i = 0; i < 60; i++)
+  for(int i = 0; i < MAX_LEN; i++)
   {
     if((phrase[i] >= 'a' && phrase[i] <= 'z') || (phrase[i] >= '0' && phrase[i] <= '9') || phrase[i] == '\n' || phrase[i] == '=')
     {
