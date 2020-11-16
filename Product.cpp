@@ -87,36 +87,6 @@ uint8_t product_load(void)
       copy_char_array(product[i].product_name, saved_name, ID_LIMIT);
     }
   }
-/*
-  for (uint8_t i = 0; i < NUMBER_OF_PRODUCTS; i++)
-  {
-    String product_name = "product";
-    int product_number = i + 1;
-    product_name += product_number;
-
-    int32_t product_dosage = SDcard_read_int(product_name, "dosage");
-    if(product_dosage > 0)
-    {
-      product[i].half_oz_per_ten_lbs = product_dosage;
-      products_loaded++;
-    }
-
-    String product_label = SDcard_read_string(product_name, "label");
-
-    for (int j = 0; j < ID_LIMIT; j++)
-    {
-      if ((product_label[j] == '\0') || (j == (ID_LIMIT - 1)))
-      {
-        product[i].product_name[j] = '\0';
-        j = ID_LIMIT;
-      }
-      else
-      {
-        product[i].product_name[j] = product_label[j];
-      }
-    }
-  }
-*/
   return products_loaded;
 }
 
