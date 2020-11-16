@@ -3,6 +3,7 @@
 #include "Washer.h"
 #include "Pinmap.h"
 #include "SDcard.h"
+#include "Chars.h"
 
 #define NUMBER_OF_PRODUCTS 4
 #define PUMP_ON HIGH
@@ -59,7 +60,34 @@ uint8_t product_half_oz_per_ten_lbs(uint8_t product_number)
 uint8_t product_load(void)
 {
   uint8_t products_loaded = 0;
+  char product_name[10];
+  clear_char_array(product_name, 10);
+  const char* product_word = "product";
+  copy_char_array(product_name, product_word, 8);
 
+  for (int i = 0; i < NUMBER_OF_PRODUCTS; i++)
+  {
+    product_name[7] = '\0';
+    char_append_digits(product_name, (i + 1), 10);
+
+    uint8_t product_dosage = 0;
+    SDcard_read_int(product_name, "dosage", &product_dosage);
+    if(product_dosage > 0)
+    {
+      product[i].half_oz_per_ten_lbs = product_dosage;
+      products_loaded++;
+    }
+
+    char saved_name[ID_LIMIT];
+    clear_char_array(saved_name, 10);
+    SDcard_read_string(product_name,  "label", saved_name, ID_LIMIT);
+
+    if(saved_name[0] != '\0')
+    {
+      copy_char_array(product[i].product_name, saved_name, ID_LIMIT);
+    }
+  }
+/*
   for (uint8_t i = 0; i < NUMBER_OF_PRODUCTS; i++)
   {
     String product_name = "product";
@@ -88,7 +116,7 @@ uint8_t product_load(void)
       }
     }
   }
-
+*/
   return products_loaded;
 }
 

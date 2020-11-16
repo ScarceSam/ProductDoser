@@ -164,11 +164,10 @@ uint8_t washer_load(void)
   const char* washer_word = "washer";
   copy_char_array(washer_name, washer_word, 7);
 
-  for (uint8_t i = 0; i <= NUMBER_OF_WASHERS; i++)
+  for (uint8_t i = 0; i < NUMBER_OF_WASHERS; i++)
   {
     washer_name[6] = '\0';
     char_append_digits(washer_name, (i + 1), 9);
-    Serial.println(washer_name);
 
     uint8_t washer_capacity = 0;
     SDcard_read_int(washer_name, "capacitylbs", &washer_capacity);
@@ -178,19 +177,13 @@ uint8_t washer_load(void)
       washers_loaded++;
     }
 
-    String washer_label = SDcard_read_string(washer_name, "label");
+    char saved_name[ID_LIMIT];
+    clear_char_array(saved_name, 10);
+    SDcard_read_string(washer_name,  "label", saved_name, ID_LIMIT);
 
-    for (int j = 0; j < ID_LIMIT; j++)
+    if(saved_name[0] != '\0')
     {
-      if ((washer_label[j] == '\0') || (j == (ID_LIMIT - 1)))
-      {
-        washer[i].washer_id[j] = '\0';
-        j = ID_LIMIT;
-      }
-      else
-      {
-        washer[i].washer_id[j] = washer_label[j];
-      }
+      copy_char_array(washer[i].washer_id, saved_name, ID_LIMIT);
     }
   }
 
