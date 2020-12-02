@@ -1,9 +1,7 @@
 #include <Arduino.h>
 #include "Pinmap.h"
-#include "View.h"
 
 static bool ignore_flowsensor = true;
-static bool ignore_notice = false;
 static volatile uint32_t pulse_time[256] = {0};
 static volatile uint8_t time_cursor = 0;
 static uint16_t max_pulse_delta = 750;
@@ -14,10 +12,19 @@ static void add_pulse()
   save_pulse = true;
 }
 
-void flowsensor_init(void)
+bool flowsensor_init(void)
 {
+  bool b_return_value = false;
+  
   pinMode(FLOWSENSOR_PIN, INPUT);
-  attachInterrupt(digitalPinToInterrupt(FLOWSENSOR_PIN), add_pulse, CHANGE);
+  
+  if(!ignore_flowsensor)
+  {
+    attachInterrupt(digitalPinToInterrupt(FLOWSENSOR_PIN), add_pulse, CHANGE);
+    b_return_value = true;
+  }
+
+  return b_return_value;
 }
 
 bool flowsensor_is_flowing(void)
@@ -38,11 +45,6 @@ bool flowsensor_is_flowing(void)
   if(ignore_flowsensor)
   {
       b_return_value = true;
-      if(!ignore_notice)
-      {
-        view_println("Flow Sensor - OFF");
-        ignore_notice = true;
-      }
   }
 
   return b_return_value;

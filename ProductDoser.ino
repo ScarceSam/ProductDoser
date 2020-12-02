@@ -18,7 +18,6 @@ void setup()
   washer_init();
   product_init();
   feedline_init();
-  flowsensor_init();
 
   view_println("SD Card");
   if (!sdcard_init())
@@ -39,6 +38,11 @@ void setup()
 
   view_println("Load Products");
   product_load();
+
+  if(!flowsensor_init())
+  {
+    view_println("Flow Sensor - OFF");
+  }
 
   view_println("System Flush");
   feedline_flush();
