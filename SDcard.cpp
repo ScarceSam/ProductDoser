@@ -193,7 +193,7 @@ uint8_t SDcard_read_string(const char* device, const char* setting, char* result
   else
   {
     //a value could not be found after the setting name in the file
-    result[0] =  '\0';
+    working_array[0] =  '\0';
     return_value = 2;
   }
 
