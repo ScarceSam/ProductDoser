@@ -16,7 +16,6 @@ void setup()
   //Initialize sub systems
   view_init();
   washer_init();
-  product_init();
   feedline_init();
 
   view_println("SD Card");
@@ -36,8 +35,13 @@ void setup()
   view_println("Load Washers");
   washer_load();
 
+  product_init();
   view_println("Load Products");
-  product_load();
+  if(!product_load())
+  {
+    view_println("-------ERROR--------");
+    while(1);
+  }
 
   if(!flowsensor_init())
   {
