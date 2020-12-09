@@ -17,7 +17,7 @@ typedef struct{
   uint8_t number;
   uint8_t level_pin;
   uint8_t pump_pin;
-  uint16_t cal_oz_per_min = 40;
+  uint8_t cal_oz_per_min = 40;
   uint16_t half_oz_per_ten_lbs = 0;
   char product_name[ID_LIMIT];
 } product_t;
@@ -59,7 +59,8 @@ uint8_t product_half_oz_per_ten_lbs(uint8_t product_number)
 
 uint8_t product_load(void)
 {
-  uint8_t products_loaded = 0;
+  uint8_t return_products_loaded = 0;
+
   char product_name[10];
   clear_char_array(product_name, 10);
   const char* product_word = "product";
@@ -75,7 +76,14 @@ uint8_t product_load(void)
     if(product_dosage > 0)
     {
       product[i].half_oz_per_ten_lbs = product_dosage;
-      products_loaded++;
+      return_products_loaded++;
+    }
+
+    uint8_t product_calibration = 0;
+    SDcard_read_int(product_name, "calibration", &product_calibration);
+    if(product_calibration > 0)
+    {
+      product[i].cal_oz_per_min = product_calibration;
     }
 
     char saved_name[ID_LIMIT];
@@ -87,7 +95,7 @@ uint8_t product_load(void)
       copy_char_array(product[i].product_name, saved_name, ID_LIMIT);
     }
   }
-  return products_loaded;
+  return return_products_loaded;
 }
 
 char* product_label(uint8_t product_number)
