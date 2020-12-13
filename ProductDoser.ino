@@ -19,9 +19,18 @@ void setup()
   feedline_init();
 
   view_println("SD Card");
-  if (!sdcard_init())
+  uint8_t temp_result = sdcard_init();
+  if (temp_result == 0)
   {
     view_println("-------ERROR--------");
+    while(1);
+  }
+  else if (temp_result == 2)
+  {
+    view_println("   Settings file   ");
+    view_println(" added to SD card. ");
+    view_println("   Populate file   ");
+    view_println("-------HALT--------");
     while(1);
   }
 

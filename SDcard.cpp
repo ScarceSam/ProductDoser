@@ -6,6 +6,7 @@
 
 #define MAX_LEN 60
 
+static bool overwrite_settings = false;
 static File saveFile;
 
 uint32_t find_device_info(char* device);
@@ -13,13 +14,28 @@ uint32_t find_setting_info(uint32_t start, char* setting);
 void remove_characters(char phrase[]);
 uint8_t fetch_setting(uint32_t start, char* string);
 void clean_setting(char* string);
+void create_settings_file(void);
 
 uint8_t sdcard_init(void)
 {
   uint8_t return_value = 0;
 
   if (SD.begin(BUILTIN_SDCARD)) {
-    return_value += 1;
+    return_value = 1;
+  }
+
+  if (return_value == 1)
+  {
+    if(overwrite_settings)
+    {
+      SD.remove("settings.txt");
+    }
+
+    if(!SD.exists("settings.txt"))
+    {
+      create_settings_file();
+      return_value = 2;
+    }
   }
 
   return return_value;
@@ -293,4 +309,136 @@ void clean_setting(char* string)
   }
 
   copy_char_array(string, working_array, MAX_LEN);
+}
+
+void create_settings_file(void)
+{
+  saveFile = SD.open("settings.txt", FILE_WRITE);
+
+  saveFile.write("System:\n");
+  saveFile.write("Flush time(seconds) = 15\n");
+
+  saveFile.write("\n");
+
+  saveFile.write("Product1:\n");
+  saveFile.write("Dosage =\n");
+  saveFile.write("Label = Product A\n");
+  saveFile.write("Calibration =\n");
+
+  saveFile.write("Product2:\n");
+  saveFile.write("Dosage =\n");
+  saveFile.write("Label = Product B\n");
+  saveFile.write("Calibration =\n");
+
+  saveFile.write("Product3:\n");
+  saveFile.write("Dosage =\n");
+  saveFile.write("Label = Product C\n");
+  saveFile.write("Calibration =\n");
+
+  saveFile.write("Product4:\n");
+  saveFile.write("Dosage =\n");
+  saveFile.write("Label = Product D\n");
+  saveFile.write("Calibration =\n");
+
+  saveFile.write("\n");
+
+  saveFile.write("Washer1:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 1\n");
+
+  saveFile.write("Washer2:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 2\n");
+
+  saveFile.write("Washer3:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 3\n");
+
+  saveFile.write("Washer4:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 4\n");
+
+  saveFile.write("Washer5:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 5\n");
+
+  saveFile.write("Washer6:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 6\n");
+
+  saveFile.write("Washer7:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 7\n");
+
+  saveFile.write("Washer8:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 8\n");
+
+  saveFile.write("Washer9:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 9\n");
+
+  saveFile.write("Washer10:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 10\n");
+
+  saveFile.write("Washer11:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 11\n");
+
+  saveFile.write("Washer12:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 12\n");
+
+  saveFile.write("Washer13:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 13\n");
+
+  saveFile.write("Washer14:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 14\n");
+
+  saveFile.write("Washer15:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 15\n");
+
+  saveFile.write("Washer16:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 16\n");
+
+  saveFile.write("Washer17:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 17\n");
+
+  saveFile.write("Washer18:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 18\n");
+
+  saveFile.write("Washer19:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 19\n");
+
+  saveFile.write("Washer20:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 20\n");
+
+  saveFile.write("Washer21:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 21\n");
+
+  saveFile.write("Washer22:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 22\n");
+
+  saveFile.write("Washer23:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 23\n");
+
+  saveFile.write("Washer24:\n");
+  saveFile.write("Capacity(lbs) =\n");
+  saveFile.write("Label = Washer 24\n");
+
+  saveFile.write("end\n");
+
+  saveFile.close();
 }
