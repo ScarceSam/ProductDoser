@@ -91,7 +91,7 @@ uint32_t find_setting_info(uint32_t start, char* setting)
   char line[MAX_LEN];
   saveFile.seek(start);
 
-  bool device_found = 0;
+  int device_found = 0;
   bool end_of_file = 0;
   while(!device_found && saveFile.available())
   {
@@ -113,7 +113,12 @@ uint32_t find_setting_info(uint32_t start, char* setting)
       
       if( line[i] == '\n' || line[i] == '=')
       {
-        i = MAX_LEN;
+        break;
+      }
+      else if(line[i] == ':' || line[i] == ';')
+      {
+        device_found = -1;
+        break;
       }
     }
 
@@ -139,7 +144,7 @@ uint32_t find_setting_info(uint32_t start, char* setting)
   
   saveFile.close();
 
-  if(end_of_file)
+  if(end_of_file || (device_found <= 0))
     return_value = 0;
 
   return return_value;
