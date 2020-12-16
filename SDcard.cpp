@@ -10,7 +10,7 @@ static bool overwrite_settings = false;
 static File saveFile;
 
 uint32_t find_device_info(const char* device);
-uint32_t find_setting_info(uint32_t start, char* setting);
+uint32_t find_setting_info(uint32_t start, const char* setting);
 void remove_characters(char phrase[]);
 uint8_t fetch_setting(uint32_t start, char* string);
 void clean_setting(char* string);
@@ -101,7 +101,7 @@ uint32_t find_device_info(const char* device)
   return return_value;
 }
 
-uint32_t find_setting_info(uint32_t start, char* setting)
+uint32_t find_setting_info(uint32_t start, const char* setting)
 {
   saveFile = SD.open("settings.txt", FILE_READ);
   char line[MAX_LEN];
