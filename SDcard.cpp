@@ -12,7 +12,7 @@ static File saveFile;
 uint32_t find_device_info(const char* device);
 uint32_t find_setting_info(uint32_t start, const char* setting);
 void remove_characters(char phrase[]);
-uint8_t fetch_setting(uint32_t start, char* string);
+void fetch_setting(uint32_t start, char* string);
 void clean_setting(char* string);
 void create_settings_file(void);
 
@@ -255,7 +255,7 @@ uint8_t SDcard_read_int(const char* device, const char* setting, uint8_t* result
   return return_value;
 }
 
-uint8_t fetch_setting(uint32_t start, char* string)
+void fetch_setting(uint32_t start, char* string)
 {
   char working_array[MAX_LEN];
   clear_char_array(working_array, MAX_LEN);
