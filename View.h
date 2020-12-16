@@ -4,7 +4,7 @@
 
 void view_init(void);
 
-void view_println(char*);
+void view_println(const char*);
 
 void view_clear(void);
 
