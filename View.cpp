@@ -49,7 +49,7 @@ void updateScreen(void)
   }
 }
 
-void view_println(char* newLine)
+void view_println(const char* newLine)
 {
   if(messageCursor == DISPLAY_Y)
   {
