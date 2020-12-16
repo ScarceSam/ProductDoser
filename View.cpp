@@ -16,7 +16,7 @@ static uint8_t messageCursor = 0;
 const char* stepNames[4] = {"Idle", "Dosing", "Flushing", "Rinsing"};
 
 void shiftUp(void);
-void copyToLine(char* newMessage, char* oldMessage);
+void copyToLine(const char* newMessage, char* oldMessage);
 void concatenate(char* str1, char* str2, char* str3, uint8_t sizeLimit);
 uint8_t charLen(char* string);
 
@@ -70,7 +70,7 @@ void shiftUp(void)
     }
 }
 
-void copyToLine(char* newMessage, char* oldMessage)
+void copyToLine(const char* newMessage, char* oldMessage)
 {
   for(int i = 0; i < DISPLAY_X; i++)
   {
