@@ -196,11 +196,14 @@ void concatenate(const char* str1, const char* str2, char* str3, uint8_t sizeLim
 
 uint8_t charLen(const char* string)
 {
+  uint8_t return_value = 0;
   for (int i = 0; i < (DISPLAY_X + 1);i++)
   {
     if( string[i] == '\0')
     {
-      return i;
+      return_value = i;
+      break;
     }
   }
+  return return_value;
 }
