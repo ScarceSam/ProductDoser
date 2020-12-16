@@ -142,7 +142,7 @@ void view_display_state(void)
 
   //display line 4
   char buf[5];
-  sprintf(buf, "%0.3d", ((state_remaining_millis()/1000)+1)); // the "+1" displays a 1 during the last second instead of a 0 //leading zeros & more codespace
+  sprintf(buf, "%.3d", (int)((state_remaining_millis()/1000)+1)); // the "+1" displays a 1 during the last second instead of a 0 //leading zeros & more codespace
   //itoa((state_remainingMillis()/1000), buf, 10); //less codespace & no leading zeros
   concatenate("Time: ", buf, scratch, (DISPLAY_X + 1));
   concatenate(scratch, " Seconds", scratch, (DISPLAY_X + 1));
