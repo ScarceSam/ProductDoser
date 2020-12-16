@@ -63,7 +63,7 @@ bool feedline_load(void)
 {
   bool b_return_value = false;
 
-  int8_t duration = 0;
+  uint8_t duration = 0;
 
   if(!SDcard_read_int("system", "flushtimeseconds", &duration))
   {
