@@ -17,7 +17,7 @@ const char* stepNames[4] = {"Idle", "Dosing", "Flushing", "Rinsing"};
 
 void shiftUp(void);
 void copyToLine(const char* newMessage, char* oldMessage);
-void concatenate(char* str1, char* str2, char* str3, uint8_t sizeLimit);
+void concatenate(const char* str1, const char* str2, char* str3, uint8_t sizeLimit);
 uint8_t charLen(char* string);
 
 void view_init(void)
@@ -153,7 +153,7 @@ void view_display_state(void)
   }
 }
 
-void concatenate(char* str1, char* str2, char* str3, uint8_t sizeLimit)
+void concatenate(const char* str1, const char* str2, char* str3, uint8_t sizeLimit)
 {
   if (sizeLimit > (DISPLAY_X + 1))
   {
