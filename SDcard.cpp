@@ -286,7 +286,8 @@ void clean_setting(char* string)
 {
   char* working_array = string;
   bool copying = 1;
-  int in_cursor, out_cursor = 0;
+  int in_cursor = 0;
+  int out_cursor = 0;
 
   while(copying)
   {
