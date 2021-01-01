@@ -6,10 +6,10 @@
 
 SX1509 expander;
 
-const int BUTTONS[] = {0, 1, 2, 3, 4};
-const int BUTTON_COUNT = (sizeof(BUTTONS)/sizeof(BUTTONS[0]));
-const int DEBOUNCE = 64;
-const int INTERRUPT_PIN = SX1509_INT_PIN;
+static const int BUTTONS[] = {0, 1, 2, 3, 4};
+static const int BUTTON_COUNT = (sizeof(BUTTONS)/sizeof(BUTTONS[0]));
+static const int DEBOUNCE = 64;
+static const int INTERRUPT_PIN = SX1509_INT_PIN;
 
 void buttons_init(void)
 {
