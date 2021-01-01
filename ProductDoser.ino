@@ -7,6 +7,7 @@
 #include "View.h"
 #include "State.h"
 #include "Controller.h"
+#include "Buttons.h"
 
 #define LED_PIN 13
 void toggle_led(void);
@@ -17,6 +18,7 @@ void setup()
   view_init();
   washer_init();
   feedline_init();
+  buttons_init();
 
   view_println("SD Card");
   uint8_t temp_result = sdcard_init();
