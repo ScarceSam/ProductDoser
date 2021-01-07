@@ -57,7 +57,8 @@ Pin|Use
 8|- Display B cathode
 18|- All GPIO Expanders SDA
 19|- All GPIO Expanders SLC
-20|- All GPIO Expanders interrupt
+20|- MCP23017 GPIO Expanders interrupt
+21|- SX1509 GPIO Expander interrupt
 26|- Feedline Line-End Drain Valve
 27|- Feedline Water Valve
 28|- Feedline Manifold Drain Valve
