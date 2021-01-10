@@ -2,12 +2,13 @@
 #include "View.h"
 #include "State.h"
 #include "Buttons.h"
+#include "Menutree.h"
 
 void display_state(void);
 
 void controller_update_screen(void)
 {
-  static bool in_menu = false;
+  static menu_node_t* menu_location = nullptr;
   static long interaction_at = 0;
   static long menu_timeout = 5000;
 
@@ -17,19 +18,26 @@ void controller_update_screen(void)
     interaction_at = millis();
   }
 
-  if(in_menu)
+  if(!menu_location && (nav_buttons & (1<<3)))
+  {
+    menu_location = first_node();
+    view_clear();
+    view_println(menu_location->node_name);
+    view_println(menu_location->child->node_name);
+    view_println(menu_location->child->next_sibling->node_name);
+    view_println(menu_location->child->next_sibling->next_sibling->node_name);
+  }
+  else if((menu_location) && (nav_buttons & (1<<1)))
+  {
+    menu_location = menu_location->parent;
+  }
+
+  if(menu_location)
   {
     if((millis() - interaction_at) > menu_timeout)
     {
-      in_menu = false;
+      menu_location = nullptr;
     }
-  }
-  else if(nav_buttons & (1<<3))
-  {
-    view_clear();
-    view_println("        MENU        ");
-    view_println("//under construction");
-    in_menu = true;
   }
   else
   {
