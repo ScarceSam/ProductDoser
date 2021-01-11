@@ -65,15 +65,19 @@ bool display_menu(int buttons_pressed)
   if(!menu_location && (buttons_pressed & (1<<3)))
   {
     menu_location = first_node();
+  }
+  else if((menu_location) && (buttons_pressed & (1<<1)))
+  {
+    menu_location = menu_location->parent;
+  }
+
+  if(menu_location && buttons_pressed)
+  {
     view_clear();
     view_println(menu_location->node_name);
     view_println(menu_location->child->node_name);
     view_println(menu_location->child->next_sibling->node_name);
     view_println(menu_location->child->next_sibling->next_sibling->node_name);
-  }
-  else if((menu_location) && (buttons_pressed & (1<<1)))
-  {
-    menu_location = menu_location->parent;
   }
 
   return menu_location;
