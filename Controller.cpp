@@ -5,41 +5,19 @@
 #include "Menutree.h"
 
 void display_state(void);
+bool display_menu(int buttons_pressed);
 
 void controller_update_screen(void)
 {
-  static menu_node_t* menu_location = nullptr;
-  static long interaction_at = 0;
-  static long menu_timeout = 5000;
-
+  static bool in_menu = false;
   int nav_buttons = buttons_pushed();
-  if(nav_buttons)
+
+  if(nav_buttons || in_menu)
   {
-    interaction_at = millis();
+    in_menu = display_menu(nav_buttons);
   }
 
-  if(!menu_location && (nav_buttons & (1<<3)))
-  {
-    menu_location = first_node();
-    view_clear();
-    view_println(menu_location->node_name);
-    view_println(menu_location->child->node_name);
-    view_println(menu_location->child->next_sibling->node_name);
-    view_println(menu_location->child->next_sibling->next_sibling->node_name);
-  }
-  else if((menu_location) && (nav_buttons & (1<<1)))
-  {
-    menu_location = menu_location->parent;
-  }
-
-  if(menu_location)
-  {
-    if((millis() - interaction_at) > menu_timeout)
-    {
-      menu_location = nullptr;
-    }
-  }
-  else
+  if(!in_menu)
   {
     display_state();
   }
@@ -67,4 +45,40 @@ void display_state(void){
     previous_state = current_state;
     previous_sec = current_sec;
   }
+}
+
+bool display_menu(int buttons_pressed)
+{
+  static menu_node_t* menu_location = nullptr;
+  static long interaction_at = 0;
+  static long menu_timeout = 5000;
+
+  if(buttons_pressed)
+  {
+    interaction_at = millis();
+  }
+
+  if(!menu_location && (buttons_pressed & (1<<3)))
+  {
+    menu_location = first_node();
+    view_clear();
+    view_println(menu_location->node_name);
+    view_println(menu_location->child->node_name);
+    view_println(menu_location->child->next_sibling->node_name);
+    view_println(menu_location->child->next_sibling->next_sibling->node_name);
+  }
+  else if((menu_location) && (buttons_pressed & (1<<1)))
+  {
+    menu_location = menu_location->parent;
+  }
+
+  if(menu_location)
+  {
+    if((millis() - interaction_at) > menu_timeout)
+    {
+      menu_location = nullptr;
+    }
+  }
+
+  return menu_location;
 }
