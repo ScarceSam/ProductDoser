@@ -72,12 +72,9 @@ bool display_menu(int buttons_pressed)
     menu_location = menu_location->parent;
   }
 
-  if(menu_location)
+  if((millis() - interaction_at) > menu_timeout)
   {
-    if((millis() - interaction_at) > menu_timeout)
-    {
-      menu_location = nullptr;
-    }
+    menu_location = nullptr;
   }
 
   return menu_location;
