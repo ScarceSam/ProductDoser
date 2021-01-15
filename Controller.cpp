@@ -49,7 +49,8 @@ void display_state(void){
 
 bool display_menu(int buttons_pressed)
 {
-  static menu_node_t* menu_location = nullptr;
+  bool return_value = false;
+  static int menu_location = -1;
   static long interaction_at = 0;
   static long menu_timeout = 5000;
 
@@ -59,26 +60,24 @@ bool display_menu(int buttons_pressed)
   }
   else if((millis() - interaction_at) > menu_timeout)
   {
-    menu_location = nullptr;
+    menu_location = -1;
   }
 
-  if(!menu_location && (buttons_pressed & (1<<3)))
+  if((menu_location < 0) && (buttons_pressed & (1<<3)))
   {
-    menu_location = first_node();
+    menu_location = 0;
   }
-  else if((menu_location) && (buttons_pressed & (1<<1)))
+  else if((menu_location >= 0) && (buttons_pressed & (1<<1)))
   {
-    menu_location = menu_location->parent;
+    menu_location = menu_get_parent(menu_location);
   }
 
-  if(menu_location && buttons_pressed)
+  if((menu_location >= 0) && buttons_pressed)
   {
     view_clear();
-    view_println(menu_location->node_name);
-    view_println(menu_location->child->node_name);
-    view_println(menu_location->child->next_sibling->node_name);
-    view_println(menu_location->child->next_sibling->next_sibling->node_name);
+    view_println(menu_get_name(menu_location));
   }
 
-  return menu_location;
+  (menu_location >= 0) ? (return_value = true) : (return_value = false);
+  return return_value;
 }

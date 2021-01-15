@@ -20,7 +20,6 @@ void setup()
   washer_init();
   feedline_init();
   buttons_init();
-  menu_init();
 
   view_println("SD Card");
   uint8_t temp_result = sdcard_init();
