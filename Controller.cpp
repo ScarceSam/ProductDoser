@@ -51,6 +51,7 @@ bool display_menu(int buttons_pressed)
 {
   bool return_value = false;
   static int menu_location = -1;
+  static int menu_selection = 0;
   static long interaction_at = 0;
   static long menu_timeout = 5000;
 
@@ -66,6 +67,7 @@ bool display_menu(int buttons_pressed)
   if((menu_location < 0) && (buttons_pressed & (1<<3)))
   {
     menu_location = 0;
+    menu_selection = menu_get_child(menu_location);
   }
   else if((menu_location >= 0) && (buttons_pressed & (1<<1)))
   {
@@ -76,6 +78,7 @@ bool display_menu(int buttons_pressed)
   {
     view_clear();
     view_println(menu_get_name(menu_location));
+    view_println(menu_get_name(menu_selection));
   }
 
   (menu_location >= 0) ? (return_value = true) : (return_value = false);

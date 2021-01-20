@@ -55,3 +55,8 @@ char* menu_get_name(int node)
 {
   return MenuNodes[node].node_name;
 }
+
+int menu_get_child(int node)
+{
+  return MenuNodes[node].child;
+}
