@@ -31,7 +31,7 @@ const menu_node_t MenuNodes[] = {
 //
 // node_name,            is_function,    (*function)(void),    parent,                child,                next_sibling,          Prev_sibling
 //
-  {"Menu",               false,          nullptr,              NULL,                  SYSTEM,               NULL,                  NULL},
+  {"Menu",               false,          nullptr,              -1,                  SYSTEM,               NULL,                  NULL},
     {"System",             false,          nullptr,              MAIN_MENU,             S_MANUAL_FUNCTIONS,   WASHERS,               LOGGING},
       {"Manual Functions",   false,          nullptr,              SYSTEM,                NULL,                 NULL,                  NULL},
     {"Washers",            false,          nullptr,              MAIN_MENU,             W_CHANGE_NAME,        PRODUCTS,              SYSTEM},
@@ -64,4 +64,9 @@ int menu_get_child(int node)
 int menu_get_next_sibling(int node)
 {
   return MenuNodes[node].next_sibling;
+}
+
+int menu_get_prev_sibling(int node)
+{
+  return MenuNodes[node].prev_sibling;
 }

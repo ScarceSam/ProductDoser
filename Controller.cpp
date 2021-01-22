@@ -64,33 +64,37 @@ bool display_menu(int buttons_pressed)
     menu_location = -1;
   }
 
-  if((menu_location < 0) && (buttons_pressed & (1<<3)))
+  if((menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
   {
-    menu_location = 0;
+    menu_location = MENU_ROOT;
     menu_selection = menu_get_child(menu_location);
   }
-  else if((menu_location >= 0) && (buttons_pressed & (1<<3)))
+  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
   {
     menu_location = menu_selection;
     menu_selection = menu_get_child(menu_location);
   }
-  else if((menu_location >= 0) && (buttons_pressed & (1<<1)))
+  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_LEFT))
   {
     menu_location = menu_get_parent(menu_location);
     menu_selection = menu_get_child(menu_location);
   }
-  else if((menu_location >= 0) && (buttons_pressed & (1<<4)))
+  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_DOWN))
   {
     menu_selection = menu_get_next_sibling(menu_selection);
   }
+  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_UP))
+  {
+    menu_selection = menu_get_prev_sibling(menu_selection);
+  }
 
-  if((menu_location >= 0) && buttons_pressed)
+  if((menu_location >= MENU_ROOT) && buttons_pressed)
   {
     view_clear();
     view_println(menu_get_name(menu_location));
     view_println(menu_get_name(menu_selection));
   }
 
-  (menu_location >= 0) ? (return_value = true) : (return_value = false);
+  (menu_location >= MENU_ROOT) ? (return_value = true) : (return_value = false);
   return return_value;
 }
