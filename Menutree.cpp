@@ -60,3 +60,8 @@ int menu_get_child(int node)
 {
   return MenuNodes[node].child;
 }
+
+int menu_get_next_sibling(int node)
+{
+  return MenuNodes[node].next_sibling;
+}

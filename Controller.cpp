@@ -79,6 +79,10 @@ bool display_menu(int buttons_pressed)
     menu_location = menu_get_parent(menu_location);
     menu_selection = menu_get_child(menu_location);
   }
+  else if((menu_location >= 0) && (buttons_pressed & (1<<4)))
+  {
+    menu_selection = menu_get_next_sibling(menu_selection);
+  }
 
   if((menu_location >= 0) && buttons_pressed)
   {
