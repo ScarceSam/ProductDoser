@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Buttons.h"
 #include "Menutree.h"
+#include "chars.h"
 
 void display_state(void);
 bool display_menu(int buttons_pressed);
@@ -69,16 +70,25 @@ bool display_menu(int buttons_pressed)
 
   if((menu_location >= MENU_ROOT) && buttons_pressed)
   {
+    char displaied_text[4][21];
+    for(int i = 0; i < 4; i++)
+    {
+      clear_char_array(displaied_text[i], 21);
+    }
+
     if(menu_is_function(menu_location))
     {
-      view_clear();
-      view_println(menu_get_name(menu_location));
+      copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
     }
     else
     {
-      view_clear();
-      view_println(menu_get_name(menu_location));
-      view_println(menu_get_name(menu_selection));
+      copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
+      copy_char_array(displaied_text[1], menu_get_name(menu_selection), 21);
+    }
+    view_clear();
+    for(int i = 0; i < 4; i++)
+    {
+      view_println(displaied_text[i]);
     }
   }
 
