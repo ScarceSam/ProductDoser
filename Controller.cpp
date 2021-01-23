@@ -87,7 +87,10 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
   }
   else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
   {
-    *menu_location = *menu_selection;
+    int temp = *menu_selection;
+    if(temp > MENU_ROOT)
+      *menu_location = temp;
+
     *menu_selection = menu_get_child(*menu_location);
   }
   else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_LEFT))
@@ -97,10 +100,14 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
   }
   else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_DOWN))
   {
-    *menu_selection = menu_get_next_sibling(*menu_selection);
+    int temp = menu_get_next_sibling(*menu_selection);
+    if(temp > MENU_ROOT)
+      *menu_selection = temp;
   }
   else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_UP))
   {
-    *menu_selection = menu_get_prev_sibling(*menu_selection);
+    int temp = menu_get_prev_sibling(*menu_selection);
+    if(temp > MENU_ROOT)
+      *menu_selection = temp;
   }
 }
