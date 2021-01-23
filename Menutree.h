@@ -11,3 +11,5 @@ int menu_get_child(int node);
 int menu_get_next_sibling(int node);
 
 int menu_get_prev_sibling(int node);
+
+bool menu_is_function(int node);

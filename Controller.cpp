@@ -69,9 +69,17 @@ bool display_menu(int buttons_pressed)
 
   if((menu_location >= MENU_ROOT) && buttons_pressed)
   {
-    view_clear();
-    view_println(menu_get_name(menu_location));
-    view_println(menu_get_name(menu_selection));
+    if(menu_is_function(menu_location))
+    {
+      view_clear();
+      view_println(menu_get_name(menu_location));
+    }
+    else
+    {
+      view_clear();
+      view_println(menu_get_name(menu_location));
+      view_println(menu_get_name(menu_selection));
+    }
   }
 
   (menu_location >= MENU_ROOT) ? (return_value = true) : (return_value = false);
