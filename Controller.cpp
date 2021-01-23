@@ -8,6 +8,7 @@
 void display_state(void);
 bool display_menu(int buttons_pressed);
 void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
+void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed);
 
 void controller_update_screen(void)
 {
@@ -82,9 +83,9 @@ bool display_menu(int buttons_pressed)
     }
     else
     {
-      copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
-      copy_char_array(displaied_text[1], menu_get_name(menu_selection), 21);
+      assemble_menu_text(displaied_text, menu_location, menu_selection, buttons_pressed);
     }
+
     view_clear();
     for(int i = 0; i < 4; i++)
     {
@@ -128,4 +129,10 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
     if(temp > MENU_ROOT)
       *menu_selection = temp;
   }
+}
+
+void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed)
+{
+  copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
+  copy_char_array(displaied_text[1], menu_get_name(menu_selection), 21);
 }
