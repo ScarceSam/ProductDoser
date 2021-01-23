@@ -6,6 +6,7 @@
 
 void display_state(void);
 bool display_menu(int buttons_pressed);
+void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
 
 void controller_update_screen(void)
 {
@@ -64,29 +65,7 @@ bool display_menu(int buttons_pressed)
     menu_location = -1;
   }
 
-  if((menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
-  {
-    menu_location = MENU_ROOT;
-    menu_selection = menu_get_child(menu_location);
-  }
-  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
-  {
-    menu_location = menu_selection;
-    menu_selection = menu_get_child(menu_location);
-  }
-  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_LEFT))
-  {
-    menu_location = menu_get_parent(menu_location);
-    menu_selection = menu_get_child(menu_location);
-  }
-  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_DOWN))
-  {
-    menu_selection = menu_get_next_sibling(menu_selection);
-  }
-  else if((menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_UP))
-  {
-    menu_selection = menu_get_prev_sibling(menu_selection);
-  }
+  change_menu_position(&menu_location, &menu_selection, buttons_pressed);
 
   if((menu_location >= MENU_ROOT) && buttons_pressed)
   {
@@ -97,4 +76,31 @@ bool display_menu(int buttons_pressed)
 
   (menu_location >= MENU_ROOT) ? (return_value = true) : (return_value = false);
   return return_value;
+}
+
+void change_menu_position(int* menu_location, int* menu_selection, int buttons_pressed)
+{
+  if((*menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
+  {
+    *menu_location = MENU_ROOT;
+    *menu_selection = menu_get_child(*menu_location);
+  }
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
+  {
+    *menu_location = *menu_selection;
+    *menu_selection = menu_get_child(*menu_location);
+  }
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_LEFT))
+  {
+    *menu_selection = *menu_location;
+    *menu_location = menu_get_parent(*menu_location);
+  }
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_DOWN))
+  {
+    *menu_selection = menu_get_next_sibling(*menu_selection);
+  }
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_UP))
+  {
+    *menu_selection = menu_get_prev_sibling(*menu_selection);
+  }
 }
