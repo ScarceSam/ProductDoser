@@ -133,6 +133,36 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
 
 void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed)
 {
+  static int cursor_position = 1;
+
+  if((buttons_pressed & BUTTON_LEFT) || (buttons_pressed & BUTTON_RIGHT))
+    cursor_position = 1;
+
+  if((cursor_position < 3) && (buttons_pressed & BUTTON_DOWN))
+    cursor_position++;
+
+  if((cursor_position > 1) && (buttons_pressed & BUTTON_UP))
+    cursor_position--;
+
   copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
-  copy_char_array(displaied_text[1], menu_get_name(menu_selection), 21);
+
+  for(int i = 1; i < 4; i++)
+  {
+    int node_to_display = menu_selection;
+    int position_error = i - cursor_position;
+    while(position_error)
+    {
+      if(position_error < 0)
+      {
+        node_to_display = menu_get_prev_sibling(node_to_display);
+        position_error++;
+      }
+      else
+      {
+        node_to_display = menu_get_next_sibling(node_to_display);
+        position_error--;
+      }
+    }
+    copy_char_array(displaied_text[i], menu_get_name(node_to_display), 21);
+  }
 }
