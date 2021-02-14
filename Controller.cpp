@@ -79,7 +79,8 @@ bool display_menu(int buttons_pressed)
 
     if(menu_is_function(menu_location))
     {
-      copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
+      char_concatenate(displaied_text[0], "<", menu_get_name(menu_location), 21);
+      char_concatenate(displaied_text[0], displaied_text[0], ">", 21);
     }
     else
     {
@@ -144,7 +145,8 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
   if((cursor_position > 1) && (buttons_pressed & BUTTON_UP))
     cursor_position--;
 
-  copy_char_array(displaied_text[0], menu_get_name(menu_location), 21);
+  char_concatenate(displaied_text[0], "<", menu_get_name(menu_location), 21);
+  char_concatenate(displaied_text[0], displaied_text[0], ">", 21);
 
   for(int i = 1; i < 4; i++)
   {
@@ -163,6 +165,14 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
         position_error--;
       }
     }
-    copy_char_array(displaied_text[i], menu_get_name(node_to_display), 21);
+
+    if(i == cursor_position)
+    {
+      char_concatenate(displaied_text[i], ">", menu_get_name(node_to_display), 21);
+    }
+    else
+    {
+      char_concatenate(displaied_text[i], " ", menu_get_name(node_to_display), 21);
+    }
   }
 }
