@@ -170,7 +170,7 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
     {
       char_concatenate(displaied_text[i], ">", menu_get_name(node_to_display), 21);
     }
-    else
+    else if(node_to_display)
     {
       char_concatenate(displaied_text[i], " ", menu_get_name(node_to_display), 21);
     }
