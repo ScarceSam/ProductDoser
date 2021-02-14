@@ -134,45 +134,42 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
 
 void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed)
 {
-  static int cursor_position = 1;
+  int displayed_menu = menu_get_child(menu_location);
+  bool selection_in_range = false;
 
-  if((buttons_pressed & BUTTON_LEFT) || (buttons_pressed & BUTTON_RIGHT))
-    cursor_position = 1;
+  //where to start display to make selection visible
+  while(selection_in_range == false)
+  {
+    int test_point = displayed_menu;
+    for(int i = 1; i < 4; i++)
+    {
+      if(0 == (menu_selection - test_point))
+      {
+        selection_in_range = true;
+      }
+      test_point = menu_get_next_sibling(test_point);
+    }
 
-  if((cursor_position < 3) && (buttons_pressed & BUTTON_DOWN))
-    cursor_position++;
-
-  if((cursor_position > 1) && (buttons_pressed & BUTTON_UP))
-    cursor_position--;
+    if(!selection_in_range)
+    {
+      displayed_menu = menu_get_next_sibling(displayed_menu);
+    }
+  }
 
   char_concatenate(displaied_text[0], "<", menu_get_name(menu_location), 21);
   char_concatenate(displaied_text[0], displaied_text[0], ">", 21);
 
   for(int i = 1; i < 4; i++)
   {
-    int node_to_display = menu_selection;
-    int position_error = i - cursor_position;
-    while(position_error)
+    if(displayed_menu == menu_selection)
     {
-      if(position_error < 0)
-      {
-        node_to_display = menu_get_prev_sibling(node_to_display);
-        position_error++;
-      }
-      else
-      {
-        node_to_display = menu_get_next_sibling(node_to_display);
-        position_error--;
-      }
+      char_concatenate(displaied_text[i], ">", menu_get_name(displayed_menu), 21);
+    }
+    else if(displayed_menu)
+    {
+      char_concatenate(displaied_text[i], " ", menu_get_name(displayed_menu), 21);
     }
 
-    if(i == cursor_position)
-    {
-      char_concatenate(displaied_text[i], ">", menu_get_name(node_to_display), 21);
-    }
-    else if(node_to_display)
-    {
-      char_concatenate(displaied_text[i], " ", menu_get_name(node_to_display), 21);
-    }
+    displayed_menu = menu_get_next_sibling(displayed_menu);
   }
 }
