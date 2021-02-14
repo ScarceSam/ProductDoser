@@ -136,6 +136,7 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
 {
   int displayed_menu = menu_get_child(menu_location);
   bool selection_in_range = false;
+  bool at_end = false;
 
   //where to start display to make selection visible
   while(selection_in_range == false)
@@ -146,6 +147,8 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
       if(0 == (menu_selection - test_point))
       {
         selection_in_range = true;
+        if(i == (4 - 1))
+          at_end = true;
       }
       test_point = menu_get_next_sibling(test_point);
     }
@@ -154,6 +157,11 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
     {
       displayed_menu = menu_get_next_sibling(displayed_menu);
     }
+  }
+
+  if(at_end && (menu_get_child(menu_location) != menu_get_next_sibling(menu_selection)))
+  {
+    displayed_menu = menu_get_next_sibling(displayed_menu);
   }
 
   char_concatenate(displaied_text[0], "<", menu_get_name(menu_location), 21);
