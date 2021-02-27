@@ -3,6 +3,7 @@
 #include "Pinmap.h"
 #include "SDcard.h"
 #include "FlowSensor.h"
+#include "Chars.h"
 
 typedef struct {
   const uint8_t LINE_DRAIN_VALVE_PIN = FEEDLINE_END_DRAIN_VALVE_PIN;
@@ -72,4 +73,10 @@ bool feedline_load(void)
   }
 
   return b_return_value;
+}
+
+int feedline_menu_manual(char displaied_text[4][21], int buttons_pressed)
+{
+  char_concatenate(displaied_text[2], "   in", " a function", 21);
+  buttons_pressed = 0;
 }
