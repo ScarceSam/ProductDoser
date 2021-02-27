@@ -20,7 +20,7 @@ enum menu_index{
 typedef struct node{
   const char* node_name;
   bool is_function;
-  void (*function)(void);
+  int (*function)(char[4][21], int);
   int parent;
   int child;
   int next_sibling;
@@ -29,7 +29,7 @@ typedef struct node{
 
 const menu_node_t MenuNodes[] = {
 //
-// node_name,            is_function,    (*function)(void),    parent,                child,                next_sibling,          Prev_sibling
+// node_name,            is_function,    int(*function)(char, int),    parent,                child,                next_sibling,          Prev_sibling
 //
   {"Menu",               false,          nullptr,              -1,                  SYSTEM,               NULL,                  NULL},
     {"System",             false,          nullptr,              MAIN_MENU,             S_MANUAL_FUNCTIONS,   WASHERS,               LOGGING},
@@ -73,5 +73,14 @@ int menu_get_prev_sibling(int node)
 
 bool menu_is_function(int node)
 {
+  //return (MenuNodes[node].function != nullptr);
   return MenuNodes[node].is_function;
+}
+
+void menu_function(int menu_location,char displaied_text[4][21], int* buttons_pressed)
+{
+  if(MenuNodes[menu_location].function != nullptr)
+  {
+    MenuNodes[menu_location].function(displaied_text, buttons_pressed);
+  }
 }
