@@ -73,7 +73,7 @@ Pin|Use
 41|- Detergent 4 Level sensor
 
 
-## I/O Expanders
+## I/O Expanders for washers
 (W= Washer, R= Relay, VA- Valve)
 
 Pin|Address 0x20|Address 0x21|Address 0x22|Address 0x23|Address 0x24|Address 0x25|Address 0x26|Address 0x27
@@ -94,6 +94,17 @@ PB4|W3 R3|W6 R3|W9 R3|W12 R3|W15 R3|W18 R3|W21 R3|W24 R3
 PB5|W3 R4|W6 R4|W9 R4|W12 R4|W15 R4|W18 R4|W21 R4|W24 R4
 PB6|W3 VA|W6 VA|W9 VA|W12 VA|W15 VA|W18 VA|W21 VA|W24 VA
 PB7|
+
+## I/O Expander for buttons
+
+Pin|Button
+---------|----------
+GND|Common
+2|Up
+4|Left
+5|Select
+6|Right
+8|Down
 
 [comment]: # (# Glossary of project terms)
 
