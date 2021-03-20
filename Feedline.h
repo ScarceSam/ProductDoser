@@ -5,7 +5,7 @@
 #define VALVE_CLOSE !VALVE_OPEN
 
 //valve names for use with valve function
-enum valves{ LINE_DRAIN_VALVE, WATER_VALVE, MANIFOLD_DRAIN_VALVE, ALL_VALVES };
+enum valves{ WATER_VALVE, MANIFOLD_DRAIN_VALVE, LINE_DRAIN_VALVE, ALL_VALVES };
 
 //initializing function
 void feedline_init(void);
