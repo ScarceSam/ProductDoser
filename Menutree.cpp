@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Menutree.h"
 #include "Feedline.h"
+#include "Controller.h"
 
 enum menu_index{
   MAIN_MENU,
@@ -34,7 +35,7 @@ const menu_node_t MenuNodes[] = {
 //
   {"Menu",               false,          nullptr,                 -1,                    SYSTEM,               NULL,                  NULL},
     {"System",             false,          nullptr,                 MAIN_MENU,             S_MANUAL_FUNCTIONS,   WASHERS,               LOGGING},
-      {"Manual Functions",   true,           feedline_menu_manual,    SYSTEM,                NULL,                 NULL,                  NULL},
+      {"Manual Functions",   true,           controller_manual_func,  SYSTEM,                NULL,                 NULL,                  NULL},
     {"Washers",            false,          nullptr,                 MAIN_MENU,             W_CHANGE_NAME,        PRODUCTS,              SYSTEM},
       {"Change Name",        true,          nullptr,                  WASHERS,               NULL,                 W_CHANGE_WEIGHT,       W_MANUAL_FUNCTIONS},
       {"Change Weight",      true,          nullptr,                  WASHERS,               NULL,                 W_MANUAL_FUNCTIONS,    W_CHANGE_NAME},

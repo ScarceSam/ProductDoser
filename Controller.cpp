@@ -230,3 +230,9 @@ int assemble_func_text(char text[4][21], int menu_location, int menu_selection, 
 
       return return_value;
 }
+
+int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
+{
+  char_concatenate(displaied_text[2], "   in", " a function", 21);
+  buttons_pressed = 0;
+}

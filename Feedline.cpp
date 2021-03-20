@@ -74,9 +74,3 @@ bool feedline_load(void)
 
   return b_return_value;
 }
-
-int feedline_menu_manual(char displaied_text[4][21], int buttons_pressed)
-{
-  char_concatenate(displaied_text[2], "   in", " a function", 21);
-  buttons_pressed = 0;
-}

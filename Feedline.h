@@ -19,5 +19,3 @@ uint32_t feedline_flush_millis(void);
 bool feedline_load(void);
 
 void feedline_flush(void);
-
-int feedline_menu_manual(char displaied_text[4][21], int buttons_pressed);
