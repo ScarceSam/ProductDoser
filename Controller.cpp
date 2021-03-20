@@ -230,9 +230,113 @@ int assemble_func_text(char text[4][21], int menu_location, int menu_selection, 
 
       return return_value;
 }
+enum manual_functions{
+  CONT_WATER_VALVE, CONT_MANIFOLD_DRAIN,  CONT_LINE_DRAIN,
+  CONT_PUMP1, CONT_PUMP2, CONT_PUMP3, CONT_PUMP4,
+  CONT_WASHER1, CONT_WASHER2, CONT_WASHER3, CONT_WASHER4,
+  CONT_WASHER5, CONT_WASHER6, CONT_WASHER7, CONT_WASHER8,
+  CONT_WASHER9, CONT_WASHER10, CONT_WASHER11, CONT_WASHER12,
+  CONT_WASHER13, CONT_WASHER14, CONT_WASHER15, CONT_WASHER16,
+  CONT_WASHER17, CONT_WASHER18, CONT_WASHER19, CONT_WASHER20,
+  CONT_WASHER21, CONT_WASHER22, CONT_WASHER23, CONT_WASHER24,
+  CONT_LAST_ITEM
+};
+
+static char manual_functions[CONT_LAST_ITEM][15]{
+  "Water valve   ", "Manifold drain", "Line end drain", 
+  "Product 1 pump", "Product 2 pump", "Product 3 pump", "Product 4 pump",
+  "Washer  1 valv", "Washer  2 valv", "Washer  3 valv", "Washer  4 valv",
+  "Washer  5 valv", "Washer  6 valv", "Washer  7 valv", "Washer  8 valv",
+  "Washer  9 valv", "Washer 10 valv", "Washer 11 valv", "Washer 12 valv",
+  "Washer 13 valv", "Washer 14 valv", "Washer 15 valv", "Washer 16 valv",
+  "Washer 17 valv", "Washer 18 valv", "Washer 19 valv", "Washer 20 valv",
+  "Washer 21 valv", "Washer 22 valv", "Washer 23 valv", "Washer 24 valv"
+};
 
 int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
 {
-  char_concatenate(displaied_text[2], "   in", " a function", 21);
-  buttons_pressed = 0;
+  static bool b_inited = false;
+  static bool b_running = false;
+  static int cursor_position = 0;
+  static bool b_position[CONT_LAST_ITEM];
+
+  if(!b_inited)
+  {
+    for(int i = 0; i < CONT_LAST_ITEM; i++)
+    {
+      b_position[i] = false;
+    }
+    b_inited = true;
+  }
+
+  if(b_running = false)
+    *buttons_pressed = 0;
+
+  switch(*buttons_pressed)
+  {
+    case BUTTON_DOWN:
+      cursor_position < (CONT_LAST_ITEM - 1) ? cursor_position++ : cursor_position = (CONT_LAST_ITEM - 1);
+      break;
+    case BUTTON_UP:
+      cursor_position > 0 ? cursor_position-- : cursor_position = 0;
+      break;
+    case BUTTON_ENTER:
+      b_position[cursor_position] = !b_position[cursor_position];
+      //feedline_valve(cursor_position-1, b_valve_position[cursor_position-1]);
+      break;
+    case BUTTON_LEFT:
+      for(int i = 1; i < 4; i++)
+      {
+        b_position[i-1] = false;
+        //feedline_valve(i-1, b_valve_position[i-1]);
+      }
+      break;
+  }
+
+  if(0 == cursor_position)
+  {
+    char_concatenate(displaied_text[1], "", ">", 21);
+    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position], 21);
+    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[2], "", " ", 21);
+    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position+1], 21);
+    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position+1] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[3], "", " ", 21);
+    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position+2], 21);
+    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position+2] ? " OPEN" : " SHUT"), 21);
+  }
+  else if(0 < cursor_position && (CONT_LAST_ITEM - 1) > cursor_position)
+  {
+    char_concatenate(displaied_text[1], "", " ", 21);
+    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position-1], 21);
+    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position-1] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[2], "", ">", 21);
+    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position], 21);
+    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[3], "", " ", 21);
+    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position+1], 21);
+    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position+1] ? " OPEN" : " SHUT"), 21);
+  }
+  else if((CONT_LAST_ITEM - 1) == cursor_position)
+  {
+    char_concatenate(displaied_text[1], "", " ", 21);
+    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position-2], 21);
+    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position-2] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[2], "", " ", 21);
+    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position-1], 21);
+    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position-1] ? " OPEN" : " SHUT"), 21);
+    char_concatenate(displaied_text[3], "", ">", 21);
+    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position], 21);
+    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
+  }
+
+  if(*buttons_pressed == BUTTON_LEFT)
+  {
+    b_running = false;
+    cursor_position = 0;
+  }
+  else
+  {
+    b_running = true;
+  }
 }
