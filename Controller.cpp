@@ -258,6 +258,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
   static bool b_inited = false;
   static bool b_running = false;
   static int cursor_position = 0;
+  static int screen_position = 1;
   static bool b_position[CONT_LAST_ITEM];
 
   if(!b_inited)
@@ -276,9 +277,11 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
   {
     case BUTTON_DOWN:
       cursor_position < (CONT_LAST_ITEM - 1) ? cursor_position++ : cursor_position = (CONT_LAST_ITEM - 1);
+      cursor_position == (CONT_LAST_ITEM - 1) ? screen_position = 3 : screen_position = 2;
       break;
     case BUTTON_UP:
       cursor_position > 0 ? cursor_position-- : cursor_position = 0;
+      cursor_position == 0 ? screen_position = 1 : screen_position = 2;
       break;
     case BUTTON_ENTER:
       b_position[cursor_position] = !b_position[cursor_position];
@@ -293,47 +296,26 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
       break;
   }
 
-  if(0 == cursor_position)
+  for( int i = 1; i <= 4; i++)
   {
-    char_concatenate(displaied_text[1], "", ">", 21);
-    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position], 21);
-    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[2], "", " ", 21);
-    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position+1], 21);
-    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position+1] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[3], "", " ", 21);
-    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position+2], 21);
-    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position+2] ? " OPEN" : " SHUT"), 21);
+    if(screen_position == i)
+      char_concatenate(displaied_text[i], "", ">", 21);
+    else
+      char_concatenate(displaied_text[i], "", " ", 21);
   }
-  else if(0 < cursor_position && (CONT_LAST_ITEM - 1) > cursor_position)
-  {
-    char_concatenate(displaied_text[1], "", " ", 21);
-    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position-1], 21);
-    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position-1] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[2], "", ">", 21);
-    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position], 21);
-    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[3], "", " ", 21);
-    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position+1], 21);
-    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position+1] ? " OPEN" : " SHUT"), 21);
-  }
-  else if((CONT_LAST_ITEM - 1) == cursor_position)
-  {
-    char_concatenate(displaied_text[1], "", " ", 21);
-    char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position-2], 21);
-    char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position-2] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[2], "", " ", 21);
-    char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position-1], 21);
-    char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position-1] ? " OPEN" : " SHUT"), 21);
-    char_concatenate(displaied_text[3], "", ">", 21);
-    char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position], 21);
-    char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position] ? " OPEN" : " SHUT"), 21);
-  }
+
+  char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position + 1 - screen_position], 21);
+  char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position + 1 - screen_position] ? " ON  " : " OFF "), 21);
+  char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position + 2 - screen_position], 21);
+  char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position + 2 - screen_position] ? " ON  " : " OFF "), 21);
+  char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position + 3 - screen_position], 21);
+  char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position + 3 - screen_position] ? " ON  " : " OFF "), 21);
 
   if(*buttons_pressed == BUTTON_LEFT)
   {
     b_running = false;
     cursor_position = 0;
+    screen_position = 1;
   }
   else
   {
