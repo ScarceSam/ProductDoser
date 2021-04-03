@@ -10,6 +10,7 @@ bool display_menu(int buttons_pressed);
 void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
 void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed);
 int assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed);
+bool toggle_check(int device, bool d_state);
 
 void controller_update_screen(void)
 {
@@ -284,32 +285,26 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
       cursor_position == 0 ? screen_position = 1 : screen_position = 2;
       break;
     case BUTTON_ENTER:
-      b_position[cursor_position] = !b_position[cursor_position];
-      //feedline_valve(cursor_position-1, b_valve_position[cursor_position-1]);
+      b_position[cursor_position] = toggle_check(cursor_position, !b_position[cursor_position]);
       break;
     case BUTTON_LEFT:
-      for(int i = 1; i < 4; i++)
+      for(int i = 1; i < CONT_LAST_ITEM; i++)
       {
-        b_position[i-1] = false;
-        //feedline_valve(i-1, b_valve_position[i-1]);
+        b_position[i-1] = toggle_check(i-1, false);
       }
       break;
   }
 
-  for( int i = 1; i <= 4; i++)
+  for( int i = 1; i < 4; i++)
   {
     if(screen_position == i)
       char_concatenate(displaied_text[i], "", ">", 21);
     else
       char_concatenate(displaied_text[i], "", " ", 21);
-  }
 
-  char_concatenate(displaied_text[1], displaied_text[1], manual_functions[cursor_position + 1 - screen_position], 21);
-  char_concatenate(displaied_text[1], displaied_text[1], (b_position[cursor_position + 1 - screen_position] ? " ON  " : " OFF "), 21);
-  char_concatenate(displaied_text[2], displaied_text[2], manual_functions[cursor_position + 2 - screen_position], 21);
-  char_concatenate(displaied_text[2], displaied_text[2], (b_position[cursor_position + 2 - screen_position] ? " ON  " : " OFF "), 21);
-  char_concatenate(displaied_text[3], displaied_text[3], manual_functions[cursor_position + 3 - screen_position], 21);
-  char_concatenate(displaied_text[3], displaied_text[3], (b_position[cursor_position + 3 - screen_position] ? " ON  " : " OFF "), 21);
+    char_concatenate(displaied_text[i], displaied_text[i], manual_functions[cursor_position + i - screen_position], 21);
+    char_concatenate(displaied_text[i], displaied_text[i], (b_position[cursor_position + i - screen_position] ? " ON  " : " OFF "), 21);
+  }
 
   if(*buttons_pressed == BUTTON_LEFT)
   {
@@ -321,4 +316,63 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
   {
     b_running = true;
   }
+}
+
+bool toggle_check(int device, bool d_state)
+{
+  static bool input = false;
+  static int input_device = 0;
+  static bool output = false;
+  static int output_device = 0;
+  bool return_value = false;
+
+  bool device_is_input[CONT_LAST_ITEM]{
+    true, false, false,
+    true, true, true, true,
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false,
+    false, false, false, false
+  };
+
+  if(!device_is_input[device])
+  {
+    if(!output && d_state && !output_device)
+    {
+      output = d_state;
+      output_device = device;
+    }
+    else if(!d_state && !input)
+    {
+      output = d_state;
+      output_device = 0;
+    }
+
+    if(device == output_device)
+    {
+      return_value = output;
+    }
+  }
+  else if(output)
+  {
+    if(!input && d_state)
+    {
+      input = d_state;
+      input_device = device;
+    }
+    else if(!d_state)
+    {
+      input = d_state;
+      input_device = 0;
+    }
+
+    if(device == input_device)
+    {
+      return_value = input;
+    }
+  }
+
+  return return_value;
 }
