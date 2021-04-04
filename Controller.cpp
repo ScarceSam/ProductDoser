@@ -4,13 +4,17 @@
 #include "Buttons.h"
 #include "Menutree.h"
 #include "chars.h"
+#include "Feedline.h"
+#include "Product.h"
+#include "Washer.h"
 
 void display_state(void);
 bool display_menu(int buttons_pressed);
 void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
 void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed);
 int assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed);
-bool toggle_check(int device, bool d_state);
+bool toggle_check(int device, bool b_state);
+void toggle_device(int device, bool b_state);
 
 void controller_update_screen(void)
 {
@@ -286,11 +290,13 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
       break;
     case BUTTON_ENTER:
       b_position[cursor_position] = toggle_check(cursor_position, !b_position[cursor_position]);
+      toggle_device(cursor_position, b_position[cursor_position]);
       break;
     case BUTTON_LEFT:
       for(int i = 1; i < CONT_LAST_ITEM; i++)
       {
         b_position[i-1] = toggle_check(i-1, false);
+        toggle_device(i-1, false);
       }
       break;
   }
@@ -318,7 +324,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
   }
 }
 
-bool toggle_check(int device, bool d_state)
+bool toggle_check(int device, bool b_state)
 {
   static bool input = false;
   static int input_device = 0;
@@ -339,14 +345,14 @@ bool toggle_check(int device, bool d_state)
 
   if(!device_is_input[device])
   {
-    if(!output && d_state && !output_device)
+    if(!output && b_state && !output_device)
     {
-      output = d_state;
+      output = b_state;
       output_device = device;
     }
-    else if(!d_state && !input)
+    else if(!b_state && !input)
     {
-      output = d_state;
+      output = b_state;
       output_device = 0;
     }
 
@@ -357,14 +363,14 @@ bool toggle_check(int device, bool d_state)
   }
   else if(output)
   {
-    if(!input && d_state)
+    if(!input && b_state)
     {
-      input = d_state;
+      input = b_state;
       input_device = device;
     }
-    else if(!d_state)
+    else if(!b_state)
     {
-      input = d_state;
+      input = b_state;
       input_device = 0;
     }
 
@@ -375,4 +381,42 @@ bool toggle_check(int device, bool d_state)
   }
 
   return return_value;
+}
+
+void toggle_device(int device, bool b_state)
+{
+  if(device == CONT_WATER_VALVE)
+  {
+    feedline_valve(WATER_VALVE, b_state);
+  }
+  if(device == CONT_MANIFOLD_DRAIN)
+  {
+    feedline_valve(MANIFOLD_DRAIN_VALVE, b_state);
+  }
+  if(device == CONT_LINE_DRAIN)
+  {
+    feedline_valve(LINE_DRAIN_VALVE, b_state);
+  }
+  if((device >= CONT_PUMP1) && (device <= CONT_PUMP4))
+  {
+    if(b_state == true)
+    {
+      product_pump_on(device - CONT_PUMP1 + 1);
+    }
+    else
+    {
+      product_all_pumps_off();
+    }
+  }
+  if((device >= CONT_WASHER1) && (device <= CONT_WASHER24))
+  {
+    if(b_state == true)
+    {
+      washer_open_valve(device - CONT_WASHER1 + 1);
+    }
+    else
+    {
+      washer_close_all_valves();
+    }
+  }
 }
