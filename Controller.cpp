@@ -39,7 +39,7 @@ void display_state(void){
   uint8_t current_state = state_current_state();
   uint16_t current_sec = 0;
 
-  if(current_state == IDLE_STEP)
+  if(current_state <= IDLE_STEP)
   {
     current_sec = (millis() / 1000);
   }

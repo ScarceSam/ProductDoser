@@ -13,7 +13,7 @@ static LiquidCrystalFast lcd(DISPLAY_RS_PIN, DISPLAY_E_PIN, DISPLAY_D4_PIN, DISP
 static char line[DISPLAY_Y][DISPLAY_X+1];
 
 static uint8_t messageCursor = 0;
-const char* stepNames[4] = {"Idle", "Dosing", "Flushing", "Rinsing"};
+const char* stepNames[5] = {"Pause", "Idle", "Dosing", "Flushing", "Rinsing"};
 
 void shiftUp(void);
 void copyToLine(const char* newMessage, char* oldMessage);
@@ -101,7 +101,15 @@ void view_clear(void)
 
 void view_display_state(void)
 {
-  if (state_current_state() == 0)
+  if (state_current_state() == PAUSE_STEP)
+  {
+    copyToLine("********************", line[0]);
+    copyToLine("**     System     **", line[1]);
+    copyToLine("**     Paused     **", line[2]);
+    copyToLine("********************", line[3]);
+    updateScreen();
+  }
+  else if (state_current_state() == IDLE_STEP)
   {
     static bool indicator = true;
     if(indicator)

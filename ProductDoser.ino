@@ -64,14 +64,18 @@ void setup()
   feedline_flush();
 
   view_clear();
-  view_println("System Ready");
+  view_println("System loaded");
 
   pinMode(LED_PIN, OUTPUT);
 }
 
 void loop()
 {
-  if (washer_enqueued() && (state_current_state() == IDLE_STEP))
+  if(state_current_state() == PAUSE_STEP)
+  {
+    state_advance();
+  }
+  else if(washer_enqueued() && (state_current_state() == IDLE_STEP))
   {
     //dequeue the next washer in queue
     uint8_t next_job[2] = {0, 0};
