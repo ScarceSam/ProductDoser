@@ -73,7 +73,7 @@ void loop()
 {
   if(state_current_state() == PAUSE_STEP)
   {
-    state_advance();
+    //state_advance();
   }
   else if(washer_enqueued() && (state_current_state() == IDLE_STEP))
   {

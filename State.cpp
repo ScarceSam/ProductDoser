@@ -112,3 +112,33 @@ void state_check_skip_rinse(uint8_t)
     system_info.step_length_millis[RINSE_STEP] = feedline_flush_millis();;
   }
 }
+
+bool state_paused(void)
+{
+  bool return_value = false;
+
+  if(state_current_state() <= IDLE_STEP)
+  {
+    system_info.current_step = PAUSE_STEP;
+    return_value = true;
+  }
+
+  return return_value;
+}
+
+bool state_unpaused(void)
+{
+  bool return_value = false;
+
+  if(state_current_state() <= IDLE_STEP)
+  {
+    state_advance();
+  }
+
+  if(state_current_state() != PAUSE_STEP)
+  {
+    return_value = true;
+  }
+
+  return return_value;
+}
