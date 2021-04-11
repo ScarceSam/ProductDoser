@@ -5,6 +5,7 @@
 #define BUTTON_ENTER (1<<2)
 #define BUTTON_RIGHT (1<<3)
 #define BUTTON_DOWN (1<<4)
+#define BUTTON_RETURN (1<<5)
 
 void buttons_init(void);
 

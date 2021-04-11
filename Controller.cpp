@@ -106,7 +106,7 @@ bool display_menu(int buttons_pressed)
       callback_set = millis();
       in_function = true;
 
-      if(buttons_pressed & BUTTON_LEFT)
+      if(buttons_pressed & BUTTON_RETURN)
       {
         change_menu_position(&menu_location, &menu_selection, buttons_pressed);
         in_function = false;
@@ -143,12 +143,12 @@ bool display_menu(int buttons_pressed)
 
 void change_menu_position(int* menu_location, int* menu_selection, int buttons_pressed)
 {
-  if((*menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_RIGHT))
+  if((*menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_ENTER))
   {
     *menu_location = MENU_ROOT;
     *menu_selection = menu_get_child(*menu_location);
   }
-  else if((*menu_location >= MENU_ROOT) && ((buttons_pressed & BUTTON_RIGHT) || (buttons_pressed & BUTTON_ENTER)))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_ENTER))
   {
     int temp = *menu_selection;
     if(temp > MENU_ROOT && (!menu_is_function(temp) || state_paused()))
@@ -157,7 +157,7 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
       *menu_selection = menu_get_child(*menu_location);
     }
   }
-  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_LEFT))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RETURN))
   {
     *menu_selection = *menu_location;
     *menu_location = menu_get_parent(*menu_location);
@@ -297,7 +297,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
       b_position[cursor_position] = toggle_check(cursor_position, !b_position[cursor_position]);
       toggle_device(cursor_position, b_position[cursor_position]);
       break;
-    case BUTTON_LEFT:
+    case BUTTON_RETURN:
       for(int i = 1; i < CONT_LAST_ITEM; i++)
       {
         b_position[i-1] = toggle_check(i-1, false);
@@ -317,7 +317,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
     char_concatenate(displaied_text[i], displaied_text[i], (b_position[cursor_position + i - screen_position] ? " ON  " : " OFF "), 21);
   }
 
-  if(*buttons_pressed == BUTTON_LEFT)
+  if(*buttons_pressed == BUTTON_RETURN)
   {
     b_running = false;
     cursor_position = 0;
