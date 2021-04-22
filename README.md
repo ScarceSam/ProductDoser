@@ -100,6 +100,7 @@ PB7|
 Pin|Button
 ---------|----------
 GND|Common
+1|Return
 2|Up
 4|Left
 5|Select
