@@ -425,3 +425,141 @@ void toggle_device(int device, bool b_state)
     }
   }
 }
+long controller_calibrate_product(char displaied_text[4][21], int* buttons_pressed)
+{
+  /*
+   * Calibration steps;
+   * 1. Select pump to calibrate
+   * 2. start calibration?
+   * 3. pump 30 oz with option to stop.
+   * 4. if stopped, continue pumping or enter amount?
+   * 5. Display amount calculated. user can adjust and/or confirm calibration.
+   * 6. return to 2.
+   */
+  static bool b_running = false; //used to indicate if this function is in use.
+  enum cal_states{ CAL_SELECT, CAL_BEGIN, CAL_PRIME, CAL_RUN, CAL_CHECK };
+  static char cal_state_names[CAL_CHECK+1][20] {"Select Pump     ", "Confirm", "Prime System", "Pumping", "Check"};
+  static int cal_state = CAL_SELECT;
+  static int cal_pump = 1;
+  int return_value = 0;
+
+  //clear the button push that entered this function
+  if(b_running == false)
+    *buttons_pressed = 0;
+
+  if(cal_state == CAL_SELECT)
+  {
+    char_concatenate(displaied_text[1], "", cal_state_names[0], 21);
+    clear_char_array(displaied_text[2], 21);
+
+    if(*buttons_pressed == BUTTON_RIGHT && cal_pump < 4)
+      cal_pump++;
+    if(*buttons_pressed == BUTTON_LEFT && cal_pump > 1)
+      cal_pump--;
+
+    if(cal_pump == 1)
+      char_concatenate(displaied_text[3], "", " >1<   2    3    4  ", 21);
+    if(cal_pump == 2)
+      char_concatenate(displaied_text[3], "", "  1   >2<   3    4  ", 21);
+    if(cal_pump == 3)
+      char_concatenate(displaied_text[3], "", "  1    2   >3<   4  ", 21);
+    if(cal_pump == 4)
+      char_concatenate(displaied_text[3], "", "  1    2    3   >4< ", 21);
+
+    if(*buttons_pressed == BUTTON_ENTER)
+    {
+      cal_state++;
+    }
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+  }
+
+
+  if(cal_state == CAL_BEGIN)
+  {
+    static bool b_confirm = false;
+
+    if(*buttons_pressed == BUTTON_RIGHT && b_confirm == true)
+      b_confirm = false;
+    else if(*buttons_pressed == BUTTON_LEFT && b_confirm == false)
+      b_confirm = true;
+    if(*buttons_pressed == BUTTON_ENTER  && b_confirm == true)
+    {
+      cal_state++;
+      b_confirm = false;
+    }
+    else if(*buttons_pressed == BUTTON_ENTER  && b_confirm == false)
+    {
+      cal_state--;
+      return_value = 1;
+    }
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+    else
+      b_confirm = false;
+
+    char_concatenate(displaied_text[1], cal_state_names[1], ", Pump ", 21);
+    char_append_digits(displaied_text[1], cal_pump, 21);
+    char_concatenate(displaied_text[1], displaied_text[1], "?", 21);
+
+    clear_char_array(displaied_text[2], 21);
+
+    if(b_confirm == true)
+      char_concatenate(displaied_text[3], "", "   >Yes<    Back    ", 21);
+    if(b_confirm == false)
+      char_concatenate(displaied_text[3], "", "    Yes    >Back<   ", 21);
+  }
+
+
+  if(cal_state == CAL_PRIME)
+  {
+    char_concatenate(displaied_text[1], "", cal_state_names[2], 21);
+    clear_char_array(displaied_text[2], 21);
+    clear_char_array(displaied_text[3], 21);
+    if(*buttons_pressed == BUTTON_ENTER)
+      cal_state++;
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+  }
+
+
+  if(cal_state == CAL_RUN)
+  {
+    char_concatenate(displaied_text[1], "", cal_state_names[3], 21);
+    clear_char_array(displaied_text[2], 21);
+    clear_char_array(displaied_text[3], 21);
+    if(*buttons_pressed == BUTTON_ENTER)
+      cal_state++;
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+  }
+
+
+  if(cal_state == CAL_CHECK)
+  {
+    char_concatenate(displaied_text[1], "", cal_state_names[4], 21);
+    clear_char_array(displaied_text[2], 21);
+    clear_char_array(displaied_text[3], 21);
+    if(*buttons_pressed == BUTTON_ENTER)
+    {
+      cal_state = CAL_SELECT;
+      return_value = 1;
+    }
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+  }
+
+  //clean up if leaving the function else set the 'running' flag.
+  if(*buttons_pressed == BUTTON_RETURN)
+  {
+    b_running = false;
+    cal_pump = 1;
+    cal_state = CAL_SELECT;
+  }
+  else
+  {
+    b_running = true;
+  }
+
+  return return_value;
+}
