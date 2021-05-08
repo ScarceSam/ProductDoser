@@ -14,4 +14,4 @@ int menu_get_prev_sibling(int node);
 
 bool menu_is_function(int node);
 
-void menu_function(int menu_location,char displaied_text[4][21], int* buttons_pressed);
+long menu_function(int menu_location,char displaied_text[4][21], int* buttons_pressed);
