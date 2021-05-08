@@ -12,7 +12,7 @@ void display_state(void);
 bool display_menu(int buttons_pressed);
 void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
 void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_selection, int buttons_pressed);
-int assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed);
+long assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed);
 bool toggle_check(int device, bool b_state);
 void toggle_device(int device, bool b_state);
 
@@ -230,13 +230,13 @@ void assemble_menu_text(char displaied_text[4][21], int menu_location, int menu_
   }
 }
 
-int assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed)
+long assemble_func_text(char text[4][21], int menu_location, int menu_selection, int* buttons_pressed)
 {
       static int return_value = 0;
       char_concatenate(text[0], "<", menu_get_name(menu_location), 21);
       char_concatenate(text[0], text[0], ">", 21);
       copy_char_array(text[2], "function = nullptr", 21);
-      menu_function(menu_location, text, buttons_pressed);
+      return_value = menu_function(menu_location, text, buttons_pressed);
 
       return return_value;
 }
@@ -265,8 +265,8 @@ static char manual_functions[CONT_LAST_ITEM][15]{
 
 int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
 {
-  static bool b_inited = false;
-  static bool b_running = false;
+  static bool b_inited = false;  //used to initialize on first run.
+  static bool b_running = false; //used to ignore button input used to enter function.
   static int cursor_position = 0;
   static int screen_position = 1;
   static bool b_position[CONT_LAST_ITEM];
@@ -280,7 +280,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
     b_inited = true;
   }
 
-  if(b_running = false)
+  if(b_running == false)
     *buttons_pressed = 0;
 
   switch(*buttons_pressed)
