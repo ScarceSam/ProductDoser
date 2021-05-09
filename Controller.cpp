@@ -513,13 +513,31 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
 
   if(cal_state == CAL_PRIME)
   {
+    static bool b_priming = false;
+
+    if(!b_priming)
+    {
+      product_pump_on(cal_pump);
+      feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+      b_priming = true;
+    }
+
     char_concatenate(displaied_text[1], "", cal_state_names[2], 21);
-    clear_char_array(displaied_text[2], 21);
-    clear_char_array(displaied_text[3], 21);
-    if(*buttons_pressed == BUTTON_ENTER)
-      cal_state++;
-    if(*buttons_pressed != BUTTON_RETURN)
-      *buttons_pressed = 0;
+    char_concatenate(displaied_text[2], "", "    Press SELECT    ", 21);
+    char_concatenate(displaied_text[3], "", "    when Primed     ", 21);
+
+    switch(*buttons_pressed)
+    {
+      case BUTTON_ENTER:
+        cal_state++;
+      case BUTTON_RETURN:
+        product_all_pumps_off();
+        feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_CLOSE);
+        b_priming = false;
+        break;
+      default:
+        *buttons_pressed = 0;
+    }
   }
 
 
