@@ -8,6 +8,8 @@
 #include "Product.h"
 #include "Washer.h"
 
+#define CAL_VOLUME 32;
+
 void display_state(void);
 bool display_menu(int buttons_pressed);
 void change_menu_position(int* menu_location, int* menu_selection, int button_pressed);
@@ -438,7 +440,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
    */
   static bool b_running = false; //used to indicate if this function is in use.
   enum cal_states{ CAL_SELECT, CAL_BEGIN, CAL_PRIME, CAL_RUN, CAL_CHECK };
-  static char cal_state_names[CAL_CHECK+1][20] {"Select Pump     ", "Confirm", "Priming:", "Pumping", "Check"};
+  static char cal_state_names[CAL_CHECK+1][20] {"Select Pump     ", "Confirm", "Priming:", "Pumping:", "Check"};
   static int cal_state = CAL_SELECT;
   static int cal_pump = 1;
   int return_value = 0;
@@ -539,7 +541,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     {
       char_concatenate(displaied_text[1], displaied_text[1], " Running", 21);
       if(b_prime_selection)
-        char_concatenate(displaied_text[3], "", "  >STOP<     NEXT   ", 21);
+        char_concatenate(displaied_text[3], "", "  >STOP <    NEXT   ", 21);
       else
         char_concatenate(displaied_text[3], "", "   STOP     >NEXT<  ", 21);
     }else if(!b_priming)
@@ -574,13 +576,62 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
 
   if(cal_state == CAL_RUN)
   {
-    char_concatenate(displaied_text[1], "", cal_state_names[3], 21);
-    clear_char_array(displaied_text[2], 21);
-    clear_char_array(displaied_text[3], 21);
-    if(*buttons_pressed == BUTTON_ENTER)
-      cal_state++;
+    static bool b_calibrating = false;
+    static bool b_cal_selection = true;
+    static bool b_cal_next = false;
+    static int Cal_volume = 0;
+
+    if(*buttons_pressed == BUTTON_LEFT && !b_cal_selection)
+      b_cal_selection = true;
+    else if(*buttons_pressed == BUTTON_RIGHT && b_cal_selection)
+      b_cal_selection = false;
+    else if(*buttons_pressed == BUTTON_ENTER && b_cal_selection && b_calibrating)
+      b_calibrating = false;
+    else if(*buttons_pressed == BUTTON_ENTER && b_cal_selection && !b_calibrating)
+      b_calibrating = true;
+    else if(*buttons_pressed == BUTTON_ENTER && !b_cal_selection)
+      b_cal_next = true;
+
     if(*buttons_pressed != BUTTON_RETURN)
       *buttons_pressed = 0;
+
+    char_concatenate(displaied_text[1], "", cal_state_names[3], 21);
+    char_concatenate(displaied_text[2], "Volume remaining: ", "", 21);
+
+    if(b_calibrating)
+    {
+      char_concatenate(displaied_text[1], displaied_text[1], " Running", 21);
+      if(b_cal_selection)
+        char_concatenate(displaied_text[3], "", "  >STOP <    NEXT   ", 21);
+      else
+        char_concatenate(displaied_text[3], "", "   STOP     >NEXT<  ", 21);
+    }else if(!b_calibrating)
+    {
+      char_concatenate(displaied_text[1], displaied_text[1], " Paused", 21);
+      if(b_cal_selection)
+        char_concatenate(displaied_text[3], "", "  >START<    NEXT   ", 21);
+      else
+        char_concatenate(displaied_text[3], "", "   START    >NEXT<  ", 21);
+    }
+
+    if(b_cal_next == true || *buttons_pressed == BUTTON_RETURN)
+    {
+      cal_state++;
+      b_calibrating = false;
+      b_cal_selection = true;
+      b_cal_next = false;
+    }
+
+    if(b_calibrating)
+    {
+      product_pump_on(cal_pump);
+      feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+    }
+    else
+    {
+      product_all_pumps_off();
+      feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_CLOSE);
+    }
   }
 
 
