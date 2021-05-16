@@ -443,6 +443,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
   static char cal_state_names[CAL_CHECK+1][20] {"Select Pump     ", "Confirm", "Priming:", "Pumping:", "Check"};
   static int cal_state = CAL_SELECT;
   static int cal_pump = 1;
+  static int millis_pumped = 0;
   int return_value = 0;
 
   //clear the button push that entered this function
@@ -576,10 +577,25 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
 
   if(cal_state == CAL_RUN)
   {
+    static bool b_started = false;
     static bool b_calibrating = false;
     static bool b_cal_selection = true;
     static bool b_cal_next = false;
-    static int Cal_volume = 0;
+    static int cal_volume = CAL_VOLUME;
+    static int32_t cal_time = 0;
+    static int mills_per_oz = 0;
+    static bool b_cal_pumping = false;
+    static uint32_t pump_start = 0;
+    static uint32_t old_pump_start = 0;
+
+    if(!b_started)
+    {
+      cal_volume = CAL_VOLUME;
+      cal_time = product_pump_millis(cal_pump, cal_volume);
+      mills_per_oz = (cal_time / cal_volume);
+      b_started = true;
+      millis_pumped = 0;
+    }
 
     if(*buttons_pressed == BUTTON_LEFT && !b_cal_selection)
       b_cal_selection = true;
@@ -595,8 +611,42 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     if(*buttons_pressed != BUTTON_RETURN)
       *buttons_pressed = 0;
 
+    if(b_cal_pumping && b_calibrating)
+    {
+      b_cal_selection = true;
+      uint32_t time_passed = (millis() - pump_start);
+      cal_time -= time_passed;
+      millis_pumped += time_passed;
+      pump_start = millis();
+      return_value = (cal_time < mills_per_oz ? cal_time : mills_per_oz);
+      cal_volume = 1 + (cal_time / mills_per_oz);
+    }
+    else if(!b_cal_pumping && b_calibrating)
+    {
+      b_cal_selection = true;
+      pump_start = millis();
+      return_value = (cal_time < mills_per_oz ? cal_time : mills_per_oz);
+    }
+    else if(b_cal_pumping && !b_calibrating)
+    {
+      uint32_t time_passed = (millis() - pump_start);
+      cal_time -= time_passed;
+      millis_pumped += time_passed;
+    }
+    else if(!b_cal_pumping && !b_calibrating)
+    {
+    }
+
+    if(cal_time <= 0)
+    {
+      b_calibrating = false;
+      b_cal_selection = false;
+      cal_volume = 0;
+    }
+
     char_concatenate(displaied_text[1], "", cal_state_names[3], 21);
     char_concatenate(displaied_text[2], "Volume remaining: ", "", 21);
+    char_append_digits(displaied_text[2], cal_volume, 21);
 
     if(b_calibrating)
     {
@@ -620,17 +670,20 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
       b_calibrating = false;
       b_cal_selection = true;
       b_cal_next = false;
+      b_started = false;
     }
 
     if(b_calibrating)
     {
       product_pump_on(cal_pump);
       feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_OPEN);
+      b_cal_pumping = true;
     }
     else
     {
       product_all_pumps_off();
       feedline_valve(MANIFOLD_DRAIN_VALVE, VALVE_CLOSE);
+      b_cal_pumping = false;
     }
   }
 
@@ -638,8 +691,13 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
   if(cal_state == CAL_CHECK)
   {
     char_concatenate(displaied_text[1], "", cal_state_names[4], 21);
+    char_concatenate(displaied_text[1], displaied_text[1], " : ", 21);
+    int ozs = (millis_pumped / product_pump_millis(cal_pump, 1));
+    char_append_digits(displaied_text[1], ozs, 21);
+
     clear_char_array(displaied_text[2], 21);
     clear_char_array(displaied_text[3], 21);
+
     if(*buttons_pressed == BUTTON_ENTER)
     {
       cal_state = CAL_SELECT;
