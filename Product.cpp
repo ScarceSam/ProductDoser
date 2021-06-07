@@ -109,5 +109,5 @@ uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz)
 
   uint32_t millis_per_oz = ( 60000 / oz_per_min );
 
-  return ((millis_per_oz * volume_oz)/2);
+  return (millis_per_oz * volume_oz);
 }
