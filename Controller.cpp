@@ -444,6 +444,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
   static int cal_state = CAL_SELECT;
   static int cal_pump = 1;
   static int millis_pumped = 0;
+  static float ozs_pumped = 0;
   int return_value = 0;
 
   //clear the button push that entered this function
@@ -687,21 +688,91 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     }
   }
 
-
   if(cal_state == CAL_CHECK)
   {
-    char_concatenate(displaied_text[1], "", cal_state_names[4], 21);
-    char_concatenate(displaied_text[1], displaied_text[1], " : ", 21);
-    int ozs = (millis_pumped / product_pump_millis(cal_pump, 1));
-    char_append_digits(displaied_text[1], ozs, 21);
+    static bool b_inited = false;
+    static int cursor_position = 1;
+    static bool b_save = false;
+    float difference = 0;
+
+    if(b_inited == false)
+    {
+      ozs_pumped = ((float)millis_pumped / (float)product_pump_millis(cal_pump, 1));
+      b_inited = true;
+    }
+
+    if(*buttons_pressed == BUTTON_LEFT && cursor_position < 3)
+      cursor_position++;
+    else if(*buttons_pressed == BUTTON_RIGHT && cursor_position > 0)
+      cursor_position--;
+    else if(*buttons_pressed == BUTTON_DOWN)
+    {
+      cursor_position == 1 ? difference -= 0.1:0;
+      cursor_position == 2 ? difference -= 1.0:0;
+      cursor_position == 3 ? difference -= 10.0:0;
+    }
+    else if(*buttons_pressed == BUTTON_UP)
+    {
+      cursor_position == 1 ? difference += 0.1:0;
+      cursor_position == 2 ? difference += 1.0:0;
+      cursor_position == 3 ? difference += 10.0:0;
+    }
+    else if(*buttons_pressed == BUTTON_ENTER && cursor_position == 0)
+      b_save = true;
+
+    if(*buttons_pressed != BUTTON_RETURN)
+      *buttons_pressed = 0;
+
+    clear_char_array(displaied_text[1], 21);
+    char_concatenate(displaied_text[1], "", "Enter Volume Pumped", 21);
 
     clear_char_array(displaied_text[2], 21);
-    clear_char_array(displaied_text[3], 21);
+    char_concatenate(displaied_text[2], "", "Ounces : ", 21);
+    if((ozs_pumped + difference > 0) && (ozs_pumped + difference < 100))
+      ozs_pumped += difference;
+    char buf[7];
+    sprintf(buf, "%04.1f", ozs_pumped);
+    char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
 
-    if(*buttons_pressed == BUTTON_ENTER)
+    clear_char_array(displaied_text[3], 21);
+    if(cursor_position == 0)
+      char_concatenate(displaied_text[3], "", "             >SAVE< ", 21);
+    if(cursor_position == 1)
+      char_concatenate(displaied_text[3], "", "            ^ SAVE  ", 21);
+    if(cursor_position == 2)
+      char_concatenate(displaied_text[3], "", "          ^   SAVE  ", 21);
+    if(cursor_position == 3)
+      char_concatenate(displaied_text[3], "", "         ^    SAVE  ", 21);
+
+    if(b_save == true || *buttons_pressed == BUTTON_RETURN)
     {
+      if(b_save)
+      {
+        clear_char_array(displaied_text[1], 21);
+        clear_char_array(displaied_text[2], 21);
+        clear_char_array(displaied_text[3], 21);
+        //char_concatenate(displaied_text[2], "", " Calibration Saved ", 21);
+        char_concatenate(displaied_text[1], "", "ounces: ", 21);
+        char_concatenate(displaied_text[1], displaied_text[1], buf, 21);
+        char_concatenate(displaied_text[2], "", "millis: ", 21);
+        sprintf(buf, "%d", millis_pumped);
+        char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
+        char_concatenate(displaied_text[3], "", "oz/min: ", 21);
+        long oz_min = ((60000.0 / (double)millis_pumped) * ((double)ozs_pumped));
+        sprintf(buf, "%d", oz_min);
+        char_concatenate(displaied_text[3], displaied_text[3], buf, 21);
+        return_value = 7500;
+      }
+      else
+      {
+        return_value = 1;
+      }
+      b_inited = false;
+      cursor_position = 1;
+      b_save = false;
+      difference = 0;
       cal_state = CAL_SELECT;
-      return_value = 1;
+      ozs_pumped = 0;
     }
     if(*buttons_pressed != BUTTON_RETURN)
       *buttons_pressed = 0;
