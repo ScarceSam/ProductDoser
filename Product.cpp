@@ -111,3 +111,10 @@ uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz)
 
   return (millis_per_oz * volume_oz);
 }
+
+bool product_save_calibration(uint8_t product_number, uint8_t oz_min)
+{
+  bool return_value = false;
+
+  return return_value;
+}

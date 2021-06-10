@@ -15,3 +15,5 @@ uint8_t product_load(void);
 char* product_label(uint8_t product_number);
 
 uint32_t product_pump_millis(uint8_t product_number, uint8_t volume_oz);
+
+bool product_save_calibration(uint8_t product_number, uint8_t oz_min);
