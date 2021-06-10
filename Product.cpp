@@ -116,5 +116,13 @@ bool product_save_calibration(uint8_t product_number, uint8_t oz_min)
 {
   bool return_value = false;
 
+  /*TODO:
+   * product_name[7] = '\0';
+   * char_append_digits(product_name, product_number, 10);
+   * return_value = SDcard_write_int(product_name, "calibration", oz_min);
+   */
+  product[product_number].cal_oz_per_min = oz_min;
+  return_value = true;
+
   return return_value;
 }
