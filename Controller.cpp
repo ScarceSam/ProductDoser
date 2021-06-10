@@ -749,18 +749,19 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
       if(b_save)
       {
         clear_char_array(displaied_text[1], 21);
+        char_concatenate(displaied_text[1], "", " Saving Calibration ", 21);
+
         clear_char_array(displaied_text[2], 21);
-        clear_char_array(displaied_text[3], 21);
-        //char_concatenate(displaied_text[2], "", " Calibration Saved ", 21);
-        char_concatenate(displaied_text[1], "", "ounces: ", 21);
-        char_concatenate(displaied_text[1], displaied_text[1], buf, 21);
-        char_concatenate(displaied_text[2], "", "millis: ", 21);
-        sprintf(buf, "%d", millis_pumped);
-        char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
-        char_concatenate(displaied_text[3], "", "oz/min: ", 21);
+        char_concatenate(displaied_text[2], "", "  oz/min: ", 21);
         long oz_min = ((60000.0 / (double)millis_pumped) * ((double)ozs_pumped));
         sprintf(buf, "%d", oz_min);
-        char_concatenate(displaied_text[3], displaied_text[3], buf, 21);
+        char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
+
+        clear_char_array(displaied_text[3], 21);
+        if(product_save_calibration((cal_pump - 1), oz_min))
+          char_concatenate(displaied_text[3], "", " Saved ", 21);
+        else
+          char_concatenate(displaied_text[3], "", " ERROR ", 21);
         return_value = 7500;
       }
       else
