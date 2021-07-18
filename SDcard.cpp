@@ -443,3 +443,90 @@ void create_settings_file(void)
 
   saveFile.close();
 }
+
+uint8_t SDcard_write_int(const char* device, const char* setting, uint8_t new_value)
+{
+  uint8_t return_value = -1;
+  uint32_t location_in_file = 0;
+  uint8_t buf[64];
+
+  //find device name location in settings file
+  location_in_file = find_device_info(device);
+
+  if(location_in_file > 0)
+  {
+    //find the devices setting name in settings file
+    location_in_file = find_setting_info(location_in_file, setting);
+  }
+  else
+  {
+    return_value = 1; //could not find device in settings file
+  }
+
+  if(location_in_file > 0)
+  {
+    //copy first half of file
+    SD.remove("temp.txt");
+    saveFile = SD.open("temp.txt", FILE_WRITE);
+    static File oldFile;
+    oldFile = SD.open("settings.txt", FILE_READ);
+
+    for(int i = location_in_file; i > 0; i--)
+    {
+      saveFile.write(oldFile.read());
+    }
+
+    while (oldFile.read() != '\n');
+
+    //change int to formated string
+    sprintf(buf, " %d", new_value);
+
+    for(int i = 0; i < MAX_LEN; i++)
+    {
+      char temp_char = buf[i];
+      if(temp_char != '\0')
+      {
+        saveFile.write(temp_char);
+      }
+      else
+      {
+        saveFile.write('\n');
+        i = MAX_LEN;
+      }
+    }
+
+    size_t n;
+    while ((n = oldFile.read(buf, sizeof(buf))) > 0)
+    {
+      saveFile.write(buf, n);
+    }
+
+    saveFile.close();
+    oldFile.close();
+
+
+
+    SD.remove("settings.txt");
+    saveFile = SD.open("settings.txt", FILE_WRITE);
+    oldFile = SD.open("temp.txt", FILE_READ);
+
+    while ((n = oldFile.read(buf, sizeof(buf))) > 0)
+    {
+      saveFile.write(buf, n);
+    }
+
+    saveFile.close();
+    oldFile.close();
+    SD.remove("temp.txt");
+
+    return_value = 0;
+  }
+  else
+  {
+    //a value could not be found after the setting name in the file
+    return_value = 2;
+    Serial.println("error");
+  }
+
+  return return_value;
+}

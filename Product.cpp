@@ -122,6 +122,12 @@ bool product_save_calibration(uint8_t product_number, uint8_t oz_min)
    * return_value = SDcard_write_int(product_name, "calibration", oz_min);
    */
   product[product_number].cal_oz_per_min = oz_min;
+
+  char buff[21];
+  sprintf(buff, "product%d", (product_number + 1));
+
+  SDcard_write_int(buff, "calibration", oz_min);
+
   return_value = true;
 
   return return_value;
