@@ -695,6 +695,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     static int cursor_position = 1;
     static bool b_save = false;
     static bool b_saving = false;
+    static bool b_saved = false;
     static bool b_cal_next = false;
     float difference = 0;
 
@@ -760,13 +761,17 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
 
       clear_char_array(displaied_text[3], 21);
 
-      if(b_saving)
+      if(b_saved)
+      {
+        b_cal_next = true;
+      }
+      else if(b_saving)
       {
         if(product_save_calibration((cal_pump - 1), oz_min))
           char_concatenate(displaied_text[3], "", " Saved ", 21);
         else
           char_concatenate(displaied_text[3], "", " ERROR ", 21);
-        b_cal_next = true;
+        b_saved = true;
         return_value = 5000;
       }
       else
@@ -782,6 +787,7 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
       cursor_position = 1;
       b_save = false;
       b_saving = false;
+      b_saved = false;
       b_cal_next = false;
       difference = 0;
       cal_state = CAL_SELECT;
