@@ -427,6 +427,7 @@ void toggle_device(int device, bool b_state)
     }
   }
 }
+
 long controller_calibrate_product(char displaied_text[4][21], int* buttons_pressed)
 {
   /*
@@ -693,6 +694,8 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     static bool b_inited = false;
     static int cursor_position = 1;
     static bool b_save = false;
+    static bool b_saving = false;
+    static bool b_cal_next = false;
     float difference = 0;
 
     if(b_inited == false)
@@ -744,36 +747,46 @@ long controller_calibrate_product(char displaied_text[4][21], int* buttons_press
     if(cursor_position == 3)
       char_concatenate(displaied_text[3], "", "         ^    SAVE  ", 21);
 
-    if(b_save == true || *buttons_pressed == BUTTON_RETURN)
+    if(b_save)
     {
-      if(b_save)
+      clear_char_array(displaied_text[1], 21);
+      char_concatenate(displaied_text[1], "", " Saving Calibration ", 21);
+
+      clear_char_array(displaied_text[2], 21);
+      char_concatenate(displaied_text[2], "", "  oz/min: ", 21);
+      long oz_min = ((60000.0 / (double)millis_pumped) * ((double)ozs_pumped));
+      sprintf(buf, "%d", oz_min);
+      char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
+
+      clear_char_array(displaied_text[3], 21);
+
+      if(b_saving)
       {
-        clear_char_array(displaied_text[1], 21);
-        char_concatenate(displaied_text[1], "", " Saving Calibration ", 21);
-
-        clear_char_array(displaied_text[2], 21);
-        char_concatenate(displaied_text[2], "", "  oz/min: ", 21);
-        long oz_min = ((60000.0 / (double)millis_pumped) * ((double)ozs_pumped));
-        sprintf(buf, "%d", oz_min);
-        char_concatenate(displaied_text[2], displaied_text[2], buf, 21);
-
-        clear_char_array(displaied_text[3], 21);
         if(product_save_calibration((cal_pump - 1), oz_min))
           char_concatenate(displaied_text[3], "", " Saved ", 21);
         else
           char_concatenate(displaied_text[3], "", " ERROR ", 21);
-        return_value = 7500;
+        b_cal_next = true;
+        return_value = 5000;
       }
       else
       {
+        b_saving = true;
         return_value = 1;
       }
+    }
+
+    if(b_cal_next == true || *buttons_pressed == BUTTON_RETURN)
+    {
       b_inited = false;
       cursor_position = 1;
       b_save = false;
+      b_saving = false;
+      b_cal_next = false;
       difference = 0;
       cal_state = CAL_SELECT;
       ozs_pumped = 0;
+      return_value += 1;
     }
     if(*buttons_pressed != BUTTON_RETURN)
       *buttons_pressed = 0;
