@@ -6,6 +6,8 @@ void product_init(void);
 
 void product_pump_on(uint8_t product_number);
 
+void product_pump_off(uint8_t product_number);
+
 void product_all_pumps_off(void);
 
 uint8_t product_half_oz_per_ten_lbs(uint8_t product_number);

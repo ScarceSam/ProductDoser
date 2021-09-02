@@ -412,7 +412,7 @@ void toggle_device(int device, bool b_state)
     }
     else
     {
-      product_all_pumps_off();
+      product_pump_off(device - CONT_PUMP1 + 1);
     }
   }
   if((device >= CONT_WASHER1) && (device <= CONT_WASHER24))

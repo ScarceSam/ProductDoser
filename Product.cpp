@@ -44,6 +44,11 @@ void product_pump_on(uint8_t product_number)
   digitalWrite(product[product_number - 1].pump_pin, PUMP_ON);
 }
 
+void product_pump_off(uint8_t product_number)
+{
+  digitalWrite(product[product_number - 1].pump_pin, !PUMP_ON);
+}
+
 void product_all_pumps_off(void)
 {
   for(int i = 0; i < NUMBER_OF_PRODUCTS; i++)
