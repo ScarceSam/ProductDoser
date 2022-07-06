@@ -145,12 +145,12 @@ bool display_menu(int buttons_pressed)
 
 void change_menu_position(int* menu_location, int* menu_selection, int buttons_pressed)
 {
-  if((*menu_location < MENU_ROOT) && (buttons_pressed & BUTTON_ENTER))
+  if((*menu_location < MENU_ROOT) && (buttons_pressed == BUTTON_ENTER))
   {
     *menu_location = MENU_ROOT;
     *menu_selection = menu_get_child(*menu_location);
   }
-  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_ENTER))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed == BUTTON_ENTER))
   {
     int temp = *menu_selection;
     if(temp > MENU_ROOT && (!menu_is_function(temp) || state_paused()))
@@ -159,7 +159,7 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
       *menu_selection = menu_get_child(*menu_location);
     }
   }
-  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_RETURN))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed == BUTTON_RETURN))
   {
     *menu_selection = *menu_location;
     *menu_location = menu_get_parent(*menu_location);
@@ -168,13 +168,13 @@ void change_menu_position(int* menu_location, int* menu_selection, int buttons_p
       state_unpaused();
     }
   }
-  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_DOWN))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed == BUTTON_DOWN))
   {
     int temp = menu_get_next_sibling(*menu_selection);
     if(temp > MENU_ROOT)
       *menu_selection = temp;
   }
-  else if((*menu_location >= MENU_ROOT) && (buttons_pressed & BUTTON_UP))
+  else if((*menu_location >= MENU_ROOT) && (buttons_pressed == BUTTON_UP))
   {
     int temp = menu_get_prev_sibling(*menu_selection);
     if(temp > MENU_ROOT)
