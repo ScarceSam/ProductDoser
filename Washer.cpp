@@ -1,35 +1,25 @@
 #include <Arduino.h>
 #include "pinmap.h"
 #include "Washer.h"
-#include <Wire.h>
-#include "Adafruit_MCP23017.h"
 #include "SDcard.h"
 #include "Chars.h"
+#include <FlexCAN_T4.h>
+FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1; //from teensy receive
+CAN_message_t msg;
+
+uint32_t self_address = 0;
 
 #define NUMBER_OF_WASHERS 24
-#define NUMBER_OF_COM_PINS 4
-#define NUMBER_OF_PINS (NUMBER_OF_COM_PINS + 1)
-#define I2C_START_ADDRESS 0
-#define INPUTS_PER_EXPANSION 16
-#define WASHERS_PER_EXPANSION (INPUTS_PER_EXPANSION / NUMBER_OF_PINS) 
-#define USED_PINS_PER_EXPANSION (WASHERS_PER_EXPANSION * NUMBER_OF_PINS)
-#define VALVE_OPEN HIGH
-#define UPDATE_INTERVAL 50
-#define RELAY_ACTIVE 0
-#define WASHER_DEBOUNCE 100
 
 typedef struct {
   uint8_t number;
-  uint8_t i2cAddress;
-  uint8_t com_pin[NUMBER_OF_PINS];
-  uint8_t valve_pin;
+  uint8_t can_bus_address;
   uint8_t washer_size = 0;
   char washer_id[ID_LIMIT];
 } washer_t;
 
 
 static washer_t washer[NUMBER_OF_WASHERS];
-static Adafruit_MCP23017 mcp[8];
 static uint8_t washer_queue[24][2];
 static uint8_t enqueue_cursor = 0;
 static uint8_t dequeue_cursor = 0;
@@ -37,41 +27,13 @@ static uint8_t washers_enqueued = 0;
 
 void washer_init(void)
 {
-  for(int i = 0; i < 8; i++)
-  {
-    mcp[i].begin(i);
-    mcp[i].setupInterrupts(true, true, HIGH);
-    pinMode(MCP23017_INT_PIN, INPUT_PULLUP);
-  }
-
+  can1.begin();
+  can1.setBaudRate(250000);
+  
   for(int i = 0; i < NUMBER_OF_WASHERS; i++)
   {
     //chronologically label the washers
     washer[i].number = i+1;
-
-    //Assign the GPIO expander I2C address
-    washer[i].i2cAddress = I2C_START_ADDRESS + (i/WASHERS_PER_EXPANSION);
-
-    //Assign the GPIO expander pins
-    for(int j = 0; j < NUMBER_OF_PINS; j++)
-    {
-      //First assign the inputs from the washers
-      if(j < (NUMBER_OF_PINS - 1))
-      {
-        washer[i].com_pin[j] = (((i % USED_PINS_PER_EXPANSION) * NUMBER_OF_PINS) + j) % USED_PINS_PER_EXPANSION;
-        mcp[washer[i].i2cAddress].pinMode(washer[i].com_pin[j], INPUT);
-        mcp[washer[i].i2cAddress].pullUp(washer[i].com_pin[j], HIGH);
-        mcp[washer[i].i2cAddress].setupInterruptPin(washer[i].com_pin[j], FALLING);
-      }
-      
-      //The last pin is an output to the Washer valve
-      else
-      {
-        washer[i].valve_pin = (((i % USED_PINS_PER_EXPANSION) * NUMBER_OF_PINS) + j) % USED_PINS_PER_EXPANSION;
-        mcp[washer[i].i2cAddress].pinMode(washer[i].valve_pin, OUTPUT);
-        mcp[washer[i].i2cAddress].digitalWrite(washer[i].valve_pin, !VALVE_OPEN);
-      }
-    }
   }
 }
 
@@ -92,15 +54,12 @@ void washer_dequeue_next(uint8_t next_in_queue[])
 
 void washer_open_valve(uint8_t washer_number)
 {
-  mcp[washer[washer_number - 1].i2cAddress].digitalWrite(washer[washer_number - 1].valve_pin, VALVE_OPEN);
+  return; //TODO
 }
 
 void washer_close_all_valves(void)
 {
-  for(int i = 0; i < NUMBER_OF_WASHERS; i++)
-  {
-    mcp[washer[i].i2cAddress].digitalWrite(washer[i].valve_pin, !VALVE_OPEN);
-  }
+  return; //TODO
 }
 
 uint8_t washer_size(uint8_t washer_number)
@@ -110,45 +69,35 @@ uint8_t washer_size(uint8_t washer_number)
 
 void washer_pollWashers(void)
 {
-  if(digitalRead(MCP23017_INT_PIN) == HIGH)
-    return;
-
-  static uint32_t last_check = millis();
-  static uint32_t time_temp_queue[24][4]; //[washer_number]
-  static uint8_t temp_queued[24][4];
-  uint32_t current_check = millis();
-
-  if (current_check < (last_check + UPDATE_INTERVAL))
+  bool canBusFlag = 0;
+  Serial.println(millis());
+  canBusFlag = can1.read(msg);
+  if(canBusFlag)
   {
-    return;
-  }
 
-  for (int qwasher = 0; qwasher < NUMBER_OF_WASHERS; qwasher++)
-  {
-    for (int qpin = 0; qpin < NUMBER_OF_COM_PINS; qpin++)
+    char message_packet[8];
+    for ( uint8_t i = 0; i < msg.len; i++ )
     {
-      uint8_t check = mcp[washer[qwasher].i2cAddress].digitalRead(washer[qwasher].com_pin[qpin]);
+      message_packet[i] = (char)msg.buf[i];
+    }
+    uint32_t sender_address = msg.id;
+    uint8_t shortened_address = sender_address;
 
-      if (check != RELAY_ACTIVE)
+    for(int qwasher = 0; qwasher < NUMBER_OF_WASHERS; qwasher++)
+    {
+      //Serial.println(washer[qwasher].can_bus_address);
+      if(shortened_address == washer[qwasher].can_bus_address)
       {
-        time_temp_queue[qwasher][qpin] = 0;
-        temp_queued[qwasher][qpin] = 0;
-      }
-      else if ((check == RELAY_ACTIVE) && (time_temp_queue[qwasher][qpin] == 0))
-      {
-        time_temp_queue[qwasher][qpin] = current_check;
-      }
-      else if ((check == RELAY_ACTIVE) && (current_check > (time_temp_queue[qwasher][qpin] + WASHER_DEBOUNCE)) && (temp_queued[qwasher][qpin] == 0))
-      {
-        washer_queue[enqueue_cursor][0] = qwasher + 1;
-        washer_queue[enqueue_cursor][1] = qpin + 1;
-        temp_queued[qwasher][qpin] = 1;
-        enqueue_cursor = ((1 + enqueue_cursor) % NUMBER_OF_WASHERS);
-        washers_enqueued++;
+        if(message_packet[5] > '0' && message_packet[5] <= '4')
+        {
+          washer_queue[enqueue_cursor][0] = qwasher + 1;
+          washer_queue[enqueue_cursor][1] = (message_packet[5] - '0');
+          enqueue_cursor = ((1 + enqueue_cursor) % NUMBER_OF_WASHERS);
+          washers_enqueued++;
+        }
       }
     }
   }
-  last_check = millis();
 }
 
 uint8_t washer_peek_product_in_queue(uint8_t queue_position)
@@ -174,8 +123,17 @@ uint8_t washer_load(void)
     if(washer_capacity > 0)
     {
       washer[i].washer_size = washer_capacity;
+      //washers_loaded++;
+    }
+
+    uint8_t washer_address = 0;
+    SDcard_read_int(washer_name, "moduleid", &washer_address);
+    if(washer_address > 0)
+    {
+      washer[i].can_bus_address = washer_address;
       washers_loaded++;
     }
+
 
     char saved_name[ID_LIMIT];
     clear_char_array(saved_name, 10);
