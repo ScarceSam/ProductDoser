@@ -16,6 +16,7 @@ void toggle_led(void);
 void setup()
 {
   //Initialize sub systems
+  view_println("Initializing..");
   view_init();
   washer_init();
   feedline_init();

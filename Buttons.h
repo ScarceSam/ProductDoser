@@ -1,6 +1,5 @@
 #pragma once
-
-#define MAIN_BOARD_V02_01
+#include "Config.h"
 
 #if defined(MAIN_BOARD_V02_01) || defined(MAIN_BOARD_V02_02)
 

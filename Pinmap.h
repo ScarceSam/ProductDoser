@@ -1,6 +1,5 @@
 #pragma once
-
-#define MAIN_BOARD_V02_01
+#include "Config.h"
 
 #if defined(ARDUINO_TEENSY41)
 
