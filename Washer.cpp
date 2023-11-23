@@ -3,11 +3,7 @@
 #include "Washer.h"
 #include "SDcard.h"
 #include "Chars.h"
-#include <FlexCAN_T4.h>
-FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1; //from teensy receive
-CAN_message_t msg;
-
-uint32_t self_address = 0;
+#include <PDCanBus.h>
 
 #define NUMBER_OF_WASHERS 24
 
@@ -27,8 +23,7 @@ static uint8_t washers_enqueued = 0;
 
 void washer_init(void)
 {
-  can1.begin();
-  can1.setBaudRate(250000);
+  PDCB_init();
   
   for(int i = 0; i < NUMBER_OF_WASHERS; i++)
   {
@@ -70,17 +65,12 @@ uint8_t washer_size(uint8_t washer_number)
 void washer_pollWashers(void)
 {
   bool canBusFlag = 0;
-  Serial.println(millis());
-  canBusFlag = can1.read(msg);
+  canBusFlag = PDCB_PacketReceived();
   if(canBusFlag)
   {
 
     char message_packet[8];
-    for ( uint8_t i = 0; i < msg.len; i++ )
-    {
-      message_packet[i] = (char)msg.buf[i];
-    }
-    uint32_t sender_address = msg.id;
+    uint32_t sender_address = PDCB_PacketRetreive(message_packet);
     uint8_t shortened_address = sender_address;
 
     for(int qwasher = 0; qwasher < NUMBER_OF_WASHERS; qwasher++)
