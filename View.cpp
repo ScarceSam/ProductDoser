@@ -25,11 +25,11 @@ void view_init(void)
   //initialize the screen
   lcd.begin(DISPLAY_X, DISPLAY_Y);
 
-  pinMode(DISPLAY_R_PIN, OUTPUT);
+  //pinMode(DISPLAY_R_PIN, OUTPUT);
   pinMode(DISPLAY_G_PIN, OUTPUT);
   pinMode(DISPLAY_B_PIN, OUTPUT);
 
-  digitalWrite(DISPLAY_R_PIN, LOW);
+  //digitalWrite(DISPLAY_R_PIN, LOW);
   digitalWrite(DISPLAY_G_PIN, LOW);
   digitalWrite(DISPLAY_B_PIN, LOW);
 
