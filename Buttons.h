@@ -12,12 +12,12 @@
 
 #elif defined(MAIN_BOARD_V03_01)
 
-#define BUTTON_UP 20
-#define BUTTON_DOWN 19
-#define BUTTON_LEFT 18
-#define BUTTON_RIGHT 35
-#define BUTTON_ENTER 34
-#define BUTTON_RETURN 33
+#define BUTTON_UP 37
+#define BUTTON_DOWN 36
+#define BUTTON_LEFT 35
+#define BUTTON_RIGHT 34
+#define BUTTON_ENTER 33
+#define BUTTON_RETURN 38
 
 #else
 
