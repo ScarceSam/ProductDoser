@@ -327,6 +327,7 @@ int controller_manual_func(char displaied_text[4][21], int* buttons_pressed)
   }
   else
   {
+    *buttons_pressed = 0;
     b_running = true;
   }
 }
