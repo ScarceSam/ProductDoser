@@ -116,9 +116,9 @@ uint8_t washer_load(void)
       //washers_loaded++;
     }
 
-    uint8_t washer_address = 0;
+    uint8_t washer_address = 1;
     SDcard_read_int(washer_name, "moduleid", &washer_address);
-    if(washer_address > 0)
+    if(washer_address > 1)
     {
       washer[i].can_bus_address = washer_address;
       washers_loaded++;
