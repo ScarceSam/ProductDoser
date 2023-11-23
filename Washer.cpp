@@ -78,10 +78,10 @@ void washer_pollWashers(void)
       //Serial.println(washer[qwasher].can_bus_address);
       if(shortened_address == washer[qwasher].can_bus_address)
       {
-        if(message_packet[5] > '0' && message_packet[5] <= '4')
+        if(message_packet[0] == 'D' && message_packet[1] == 'P')
         {
           washer_queue[enqueue_cursor][0] = qwasher + 1;
-          washer_queue[enqueue_cursor][1] = (message_packet[5] - '0');
+          washer_queue[enqueue_cursor][1] = (message_packet[2] - '0');
           enqueue_cursor = ((1 + enqueue_cursor) % NUMBER_OF_WASHERS);
           washers_enqueued++;
         }
